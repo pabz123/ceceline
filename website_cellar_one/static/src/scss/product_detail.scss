@@ -1,0 +1,119 @@
+// ─────────────────────────────────────────────────────────────
+//  PRODUCT DETAIL PAGE — Cellar One additions
+//
+//  These rules style ONLY what product_cellar_one (in
+//  product_templates.xml) actually inserts into the native
+//  website_sale.product page:
+//    - .co-stock-badge-lg          (after #add_to_cart_wrap)
+//    - .co-detail-meta / .co-meta-item   (after description_sale)
+//    - .co-pairing-block / .co-pairing-title (after description_ecommerce)
+//
+//  Plus a restyle of Odoo's EXISTING native rating widget
+//  (portal_rating.rating_widget_stars_static →
+//  .o_website_rating_static + .fa-star*), which already renders
+//  as "(0.0)" on the live product page — we restyle it rather
+//  than building a parallel rating display.
+// ─────────────────────────────────────────────────────────────
+
+// ── Beverage meta grid ──────────────────────────────────────
+.co-detail-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-sm $spacing-lg;
+    padding: $spacing-md;
+    background: $color-gray-100;
+    border-radius: $radius-md;
+    margin: $spacing-md 0;
+    font-size: 0.875rem;
+
+    @media (max-width: #{$bp-mobile}) {
+        grid-template-columns: 1fr;
+    }
+
+    .co-meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        .co-meta-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: $color-gray-400;
+        }
+        .co-meta-value {
+            font-weight: 500;
+            color: $color-charcoal;
+        }
+    }
+}
+
+// ── Serving suggestion / food pairing blocks ────────────────
+.co-pairing-block {
+    .co-pairing-title {
+        font-family: var(--co-font-heading);
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: $color-charcoal;
+        margin-bottom: 4px;
+    }
+
+    p {
+        font-size: 0.875rem;
+        line-height: 1.65;
+    }
+}
+
+// ── Native rating widget restyle ─────────────────────────────
+// Renders as: <div class="o_website_rating_static" title="...">
+//               <i class="fa fa-star">×N <i class="fa fa-star-half-o">?
+//               <i class="fa fa-star-o">×M <small class="text-muted ms-1">(count)</small>
+//             </div>
+// wrapped in <a class="o_product_page_reviews_link" href="#o_product_page_reviews">
+.o_product_page_reviews_link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    margin-bottom: $spacing-md;
+    transition: opacity $transition-fast;
+
+    &:hover {
+        opacity: 0.8;
+        text-decoration: none;
+    }
+
+    .o_website_rating_static {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+
+        .fa-star,
+        .fa-star-half-o {
+            color: $color-gold-400;
+            font-size: 1rem;
+        }
+
+        .fa-star-o {
+            color: $color-gray-200;
+            font-size: 1rem;
+        }
+
+        small.text-muted {
+            font-size: 0.85rem;
+            color: $color-gray-400 !important;
+            margin-left: 4px;
+        }
+    }
+}
+
+// ── Live stock badge (large variant, placed after Add to Cart) ──
+.co-stock-badge-lg {
+    font-size: 0.875rem;
+    padding: 6px 14px;
+
+    .co-stock-dot {
+        width: 8px;
+        height: 8px;
+    }
+}

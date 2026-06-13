@@ -1,0 +1,213 @@
+// ─────────────────────────────────────────────────────────────
+//  BASE — Global resets, typography, page layout
+// ─────────────────────────────────────────────────────────────
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    background-color: var(--co-bg-page);
+    color: var(--co-text-primary);
+    font-family: var(--co-font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+// ─── Headings ────────────────────────────────────────────────
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: var(--co-font-heading);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--co-text-primary);
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+h3 { font-size: clamp(1.25rem, 2.5vw, 1.875rem); }
+h4 { font-size: 1.25rem; }
+
+// ─── Links ───────────────────────────────────────────────────
+a {
+    color: var(--co-burgundy);
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+        color: var(--co-gold-dark);
+        text-decoration: none;
+    }
+}
+
+// ─── Page container ──────────────────────────────────────────
+.o_main_navbar + #wrapwrap {
+    padding-top: 0; // we handle spacing in the navbar
+}
+
+#wrapwrap {
+    background: var(--co-bg-page);
+}
+
+.container,
+.container-fluid {
+    max-width: var(--co-container);
+}
+
+// ─── Section spacing ─────────────────────────────────────────
+.co-section {
+    padding: $spacing-3xl 0;
+
+    @media (max-width: #{$bp-tablet}) {
+        padding: $spacing-2xl 0;
+    }
+
+    @media (max-width: #{$bp-mobile}) {
+        padding: $spacing-xl 0;
+    }
+}
+
+// ─── Section headings ────────────────────────────────────────
+.co-section-header {
+    text-align: center;
+    margin-bottom: $spacing-2xl;
+
+    .co-section-label {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--co-gold-dark);
+        margin-bottom: $spacing-sm;
+    }
+
+    h2 {
+        margin-bottom: $spacing-md;
+        color: var(--co-text-primary);
+    }
+
+    p {
+        max-width: 560px;
+        margin: 0 auto;
+        color: var(--co-text-secondary);
+        font-size: 1.0625rem;
+    }
+}
+
+// ─── Gold divider accent ─────────────────────────────────────
+.co-divider {
+    display: block;
+    width: 48px;
+    height: 2px;
+    background: var(--co-gold);
+    margin: $spacing-md auto;
+    border-radius: $radius-pill;
+}
+
+// ─── Primary CTA button ──────────────────────────────────────
+.btn-co-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+    background: var(--co-gold);
+    color: $color-burgundy-800;
+    font-family: var(--co-font-body);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 14px 28px;
+    border: none;
+    border-radius: $radius-pill;
+    cursor: pointer;
+    transition: background $transition-base, transform $transition-fast, box-shadow $transition-base;
+    letter-spacing: 0.02em;
+
+    &:hover {
+        background: $color-gold-600;
+        color: $color-white;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(212,175,55,0.35);
+        text-decoration: none;
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+.btn-co-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+    background: transparent;
+    color: var(--co-burgundy);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    padding: 13px 27px;
+    border: 1.5px solid var(--co-burgundy);
+    border-radius: $radius-pill;
+    cursor: pointer;
+    transition: all $transition-base;
+
+    &:hover {
+        background: var(--co-burgundy);
+        color: $color-white;
+        text-decoration: none;
+    }
+}
+
+// ─── Badge pills (category labels, tags) ─────────────────────
+.co-badge {
+    display: inline-block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: $radius-pill;
+    line-height: 1.4;
+
+    &.co-badge-gold {
+        background: $color-gold-100;
+        color: $color-gold-600;
+    }
+    &.co-badge-burgundy {
+        background: $color-burgundy-100;
+        color: $color-burgundy-700;
+    }
+    &.co-badge-dark {
+        background: $color-burgundy-800;
+        color: $color-gold-200;
+    }
+}
+
+// ─── Image lazy load fade-in ─────────────────────────────────
+img[loading="lazy"] {
+    transition: opacity $transition-slow;
+    opacity: 0;
+
+    &.loaded {
+        opacity: 1;
+    }
+}
+
+// ─── Scrollbar styling (subtle brand touch) ──────────────────
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: $color-gray-100;
+}
+::-webkit-scrollbar-thumb {
+    background: $color-burgundy-600;
+    border-radius: $radius-pill;
+}

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <!-- ═══════════════════════════════════════════════════════
+         FOOTER — Cellar One footer content
+         Safe, non-destructive approach:
+
+         We do NOT replace any footer template (there are 8+
+         possible alternatives, plus the live site already uses a
+         custom one from kola_wine_snippets that we cannot inspect).
+
+         Instead, we APPEND our footer block AFTER the existing
+         <div id="footer"> — this element is common to every footer
+         variant in website/views/website_templates.xml, so this
+         xpath holds regardless of which footer theme is active.
+
+         This means: whatever footer the site currently has stays
+         in place, and our richer footer renders below it. If the
+         site owner later wants ONLY our footer, they can hide the
+         original via the website Theme editor (no code change
+         needed) — far safer than us guessing which template to
+         deactivate on a production instance we cannot see.
+    ════════════════════════════════════════════════════════ -->
+    <template id="cellar_one_footer_addon"
+              inherit_id="website.layout"
+              name="Cellar One Footer Addon">
+      <xpath expr="//div[@id='footer']" position="after">
+
+        <footer class="co-footer" data-anchor="True">
+
+          <!-- Newsletter strip -->
+          <div class="co-footer__newsletter">
+            <div class="container">
+              <div class="co-newsletter-inner">
+                <div class="co-newsletter-copy">
+                  <h4>Stay in the cellar loop</h4>
+                  <p>New arrivals, exclusive deals and tasting events — straight to your inbox.</p>
+                </div>
+                <form class="co-newsletter-form"
+                      action="/website_mass_mailing/subscribe" method="post"
+                      onsubmit="return false;">
+                  <input type="email" name="email"
+                         placeholder="your@email.com" required="required"/>
+                  <button type="submit">Subscribe</button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main footer body -->
+          <div class="co-footer__main">
+            <div class="container">
+              <div class="co-footer-grid">
+
+                <!-- Column 1: Brand + WhatsApp -->
+                <div class="co-footer__brand">
+                  <div class="co-footer-logo">
+                    <img src="/website_cellar_one/static/src/img/logo/cecelin_footer.png"
+                         alt="Cellar One Wines &amp; Spirits"
+                         loading="lazy"/>
+                  </div>
+                  <p class="co-footer-tagline">
+                    Uganda's premier destination for fine wines, premium spirits, and curated beverages.
+                    Delivered to your door across Kampala and Jinja.
+                  </p>
+
+                  <div class="co-whatsapp-ctас">
+                    <a href="https://wa.me/256749057433" target="_blank" rel="noopener"
+                       class="co-wa-btn">
+                      <div class="co-wa-icon">W</div>
+                      <div>
+                        <strong>+256 749 057 433</strong>
+                        <span class="co-wa-location">Kampala</span>
+                      </div>
+                    </a>
+                    <a href="https://wa.me/256749062744" target="_blank" rel="noopener"
+                       class="co-wa-btn">
+                      <div class="co-wa-icon">W</div>
+                      <div>
+                        <strong>+256 749 062 744</strong>
+                        <span class="co-wa-location">Jinja</span>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Column 2: Shop links (real category slugs from live site) -->
+                <div class="co-footer__col">
+                  <h5>Shop</h5>
+                  <ul>
+                    <li><a href="/shop/category/wines-7">All Wines</a></li>
+                    <li><a href="/shop/category/wines-red-wines-11">Red Wines</a></li>
+                    <li><a href="/shop/category/wines-white-wines-12">White Wines</a></li>
+                    <li><a href="/shop/category/wines-sparkling-wines-13">Sparkling Wines</a></li>
+                    <li><a href="/shop/category/spirits-8">All Spirits</a></li>
+                    <li><a href="/shop/category/beer-9">Beer</a></li>
+                    <li><a href="/shop/category/cider-10">Cider</a></li>
+                  </ul>
+                </div>
+
+                <!-- Column 3: Help links -->
+                <div class="co-footer__col">
+                  <h5>Help</h5>
+                  <ul>
+                    <li><a href="/my/orders">My Orders</a></li>
+                    <li><a href="/shop/wishlist">My Wishlist</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="/contactus">Contact Us</a></li>
+                    <li><a href="/locations-maps">Find Us</a></li>
+                    <li><a href="/web/login">Sign In</a></li>
+                  </ul>
+                </div>
+
+                <!-- Column 4: Contact + Map -->
+                <div class="co-footer__contact">
+                  <h5>Find Us</h5>
+
+                  <div class="co-contact-item">
+                    <span class="co-contact-icon">📍</span>
+                    <span>Plot 15, Kampala Road, Kampala, Uganda</span>
+                  </div>
+                  <div class="co-contact-item">
+                    <span class="co-contact-icon">✉️</span>
+                    <a href="mailto:info@cecelinewines.com" style="color:inherit;">
+                      info@cecelinewines.com
+                    </a>
+                  </div>
+                  <div class="co-contact-item">
+                    <span class="co-contact-icon">🕐</span>
+                    <span>Mon–Sat 9am–8pm · Sun 10am–6pm</span>
+                  </div>
+
+                  <!-- Google Maps embed -->
+                  <div class="co-map-embed">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7572!2d32.5811!3d0.3136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMCwzMTM2!5e0!3m2!1sen!2sug!4v1700000000"
+                      allowfullscreen=""
+                      loading="lazy"
+                      referrerpolicy="no-referrer-when-downgrade"
+                      title="Cellar One location">
+                    </iframe>
+                  </div>
+                </div>
+
+              </div><!-- /co-footer-grid -->
+            </div><!-- /container -->
+          </div><!-- /co-footer__main -->
+
+          <hr class="co-footer__divider"/>
+
+          <!-- Bottom bar -->
+          <div class="co-footer__bottom">
+            <div class="container">
+              <div class="co-footer-bottom-inner">
+
+                <p class="co-copyright">
+                  © <t t-esc="datetime.date.today().year"/> Cellar One Wines and Spirits.
+                  All rights reserved.
+                </p>
+
+                <!-- Social icons (real links from live site) -->
+                <div class="co-social-icons">
+                  <a href="https://www.facebook.com/profile.php?id=61581820687239" target="_blank"
+                     rel="noopener" class="co-social-icon" title="Facebook">f</a>
+                  <a href="https://www.instagram.com/cecelinebeveragesug/" target="_blank"
+                     rel="noopener" class="co-social-icon" title="Instagram">in</a>
+                  <a href="https://x.com/cecelineug" target="_blank"
+                     rel="noopener" class="co-social-icon" title="X / Twitter">𝕏</a>
+                  <a href="https://www.youtube.com/@cecelinebeveragesug" target="_blank"
+                     rel="noopener" class="co-social-icon" title="YouTube">▶</a>
+                  <a href="https://wa.me/256749057433" target="_blank"
+                     rel="noopener" class="co-social-icon" title="WhatsApp">W</a>
+                </div>
+
+              </div>
+
+              <!-- Age disclaimer -->
+              <p class="co-age-disclaimer">
+                `🔞` Please drink responsibly. Not for sale to persons under the age of 18.
+                Alcohol can damage your health if not used responsibly.
+              </p>
+            </div>
+          </div>
+
+        </footer>
+
+      </xpath>
+    </template>
+  </data>
+</odoo>

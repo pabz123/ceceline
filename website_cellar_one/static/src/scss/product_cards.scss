@@ -1,0 +1,237 @@
+// ─────────────────────────────────────────────────────────────
+//  PRODUCT CARDS — Restyling website_sale's real markup
+//
+//  Root element per card: <form class="oe_product_cart h-100 d-flex co-product-card">
+//    ├─ <div class="oe_product_image co-card-img">
+//    │     └─ <a class="oe_product_image_link">
+//    │           ├─ <span class="oe_product_image_img_wrapper"> (image)
+//    │           ├─ .co-card-badges (our addition)
+//    │           └─ <span class="o_ribbon ..."> (sale ribbon, native)
+//    └─ <div class="o_wsale_product_information co-card-body">
+//          ├─ <h6 class="o_wsale_products_item_title"> (name)
+//          ├─ .co-card-category, .co-card-meta, .co-card-rating,
+//          │   .co-stock-badge (our additions, inserted after title)
+//          └─ <div class="o_wsale_product_sub">
+//                └─ <div class="product_price"> (price, native)
+// ─────────────────────────────────────────────────────────────
+
+// ── Grid container ──────────────────────────────────────────
+// website_sale wraps cards in a Bootstrap row of <div class="col...">.
+// We override to a CSS grid for consistent card sizing without
+// fighting Bootstrap's column math.
+#products_grid .o_wsale_products_grid_table_wrapper,
+.oe_website_sale .o_wsale_products_grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: $spacing-lg;
+
+    > .o_wsale_products_grid_table_cell,
+    > div[class*="col-"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: none !important;
+        padding: 0 !important;
+    }
+
+    @media (max-width: #{$bp-mobile}) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: $spacing-md;
+    }
+
+    @media (max-width: 400px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ── Card root ────────────────────────────────────────────────
+.co-product-card.oe_product_cart {
+    background: var(--co-bg-card);
+    border-radius: var(--co-radius-card);
+    border: 1px solid $color-gray-200;
+    box-shadow: $shadow-card;
+    overflow: hidden;
+    transition: transform $transition-base, box-shadow $transition-base, border-color $transition-base;
+    flex-direction: column;
+    text-decoration: none;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: $shadow-hover;
+        border-color: rgba($color-burgundy-600, 0.25);
+
+        .oe_product_image_img_wrapper img,
+        .oe_product_image_img_wrapper {
+            transform: scale(1.04);
+        }
+    }
+}
+
+// ── Image area ───────────────────────────────────────────────
+.co-product-card .co-card-img.oe_product_image {
+    aspect-ratio: 3 / 4;
+    background: $color-gray-100;
+    position: relative;
+    flex-grow: 0;
+
+    .oe_product_image_link {
+        height: 100%;
+    }
+
+    .oe_product_image_img_wrapper {
+        transition: transform $transition-slow;
+
+        img {
+            object-fit: cover;
+            transition: transform $transition-slow;
+        }
+    }
+
+    // Native "sale" ribbon — restyle to match our gold/burgundy palette
+    .o_ribbon {
+        top: $spacing-sm;
+        right: $spacing-sm;
+        border-radius: $radius-pill;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        padding: 3px 10px;
+    }
+}
+
+// ── Badges (Best Seller / New) — our addition ───────────────
+.co-product-card .co-card-badges {
+    position: absolute;
+    top: $spacing-sm;
+    left: $spacing-sm;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+// ── Card body ────────────────────────────────────────────────
+.co-product-card .co-card-body.o_wsale_product_information {
+    padding: $spacing-md;
+    gap: 4px;
+
+    .co-card-category {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: $color-gold-600;
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    // Product name — native element, restyled
+    .o_wsale_products_item_title {
+        margin-bottom: 2px;
+
+        a {
+            font-family: var(--co-font-heading);
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.3;
+            color: $color-charcoal;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+
+            &:hover { color: $color-burgundy-700; }
+        }
+    }
+
+    .co-card-meta {
+        font-size: 0.8rem;
+        color: $color-gray-400;
+        margin-bottom: 2px;
+    }
+
+    // Price row — native element, restyled
+    .o_wsale_product_sub {
+        margin-top: auto;
+        padding-top: $spacing-xs;
+
+        .product_price {
+            .h6 {
+                font-size: 1.1rem;
+                font-weight: 700;
+                color: $color-burgundy-700;
+                font-family: var(--co-font-body);
+                margin: 0;
+            }
+
+            del .small {
+                font-size: 0.8rem;
+                color: $color-gray-400;
+                font-weight: 400;
+            }
+        }
+    }
+}
+
+// ── Rating row — our addition, custom markup ─────────────────
+.co-product-card .co-card-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 2px 0;
+
+    .co-stars {
+        display: flex;
+        gap: 1px;
+    }
+
+    .co-star {
+        font-size: 0.75rem;
+        color: $color-gray-200;
+        line-height: 1;
+
+        &.filled { color: $color-gold-400; }
+    }
+
+    .co-rating-count {
+        font-size: 0.75rem;
+        color: $color-gray-400;
+        margin-left: 2px;
+    }
+}
+
+// ── Stock badge slot — our addition ──────────────────────────
+.co-product-card .co-stock-badge {
+    margin-top: $spacing-xs;
+}
+
+// ── Quick-add button (native .o_wsale_product_btn) ───────────
+.co-product-card .o_wsale_product_btn {
+    .btn {
+        border-radius: $radius-pill;
+        background: $color-gold-400;
+        border-color: $color-gold-400;
+        color: $color-burgundy-800;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            background: $color-gold-600;
+            border-color: $color-gold-600;
+            color: $color-white;
+        }
+    }
+}
+
+// ── Empty state ──────────────────────────────────────────────
+.co-empty-products {
+    text-align: center;
+    padding: $spacing-3xl $spacing-md;
+
+    .co-empty-icon { font-size: 3rem; margin-bottom: $spacing-md; }
+    h3 { font-size: 1.25rem; color: $color-charcoal; margin-bottom: $spacing-sm; }
+    p  { color: $color-gray-400; font-size: 0.9rem; }
+}
+

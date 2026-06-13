@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <!-- ═══════════════════════════════════════════════════════
+         PRODUCT CARD — Cellar One enhancements
+         Non-destructive: we INSERT into the real products_item
+         structure (oe_product_cart / o_wsale_product_information /
+         o_wsale_products_item_title / product_price), then RESKIN
+         those existing classes via SCSS. We do not replace the
+         <form> — that would break the cart AJAX (a-submit) wiring.
+    ════════════════════════════════════════════════════════ -->
+    <template id="products_item_cellar_one"
+              inherit_id="website_sale.products_item"
+              name="Cellar One Product Card Enhancements">
+
+      <!-- Add our card class to the root form for SCSS targeting,
+           without touching its existing classes/attrs -->
+      <xpath expr="//form[hasclass('oe_product_cart')]" position="attributes">
+        <attribute name="class" add="co-product-card" separator=" "/>
+      </xpath>
+
+      <!-- Mark the image wrapper for our aspect-ratio + hover styling -->
+      <xpath expr="//div[hasclass('oe_product_image')]" position="attributes">
+        <attribute name="class" add="co-card-img" separator=" "/>
+      </xpath>
+
+      <!-- Badges: Best Seller / New Arrival, placed top-left over the image.
+           cellar_is_best_seller / cellar_is_new_arrival are optional fields
+           added by this module — if a product doesn't have them set
+           (e.g. on the production catalog before this module adds the
+           fields' default), this block simply renders nothing. -->
+      <xpath expr="//div[hasclass('oe_product_image')]/a" position="inside">
+        <div class="co-card-badges">
+          <t t-if="product.cellar_is_best_seller">
+            <span class="co-badge co-badge-gold">⭐ Best Seller</span>
+          </t>
+          <t t-if="product.cellar_is_new_arrival">
+            <span class="co-badge co-badge-burgundy">New</span>
+          </t>
+        </div>
+      </xpath>
+
+      <!-- Mark the title/info wrapper for spacing -->
+      <xpath expr="//div[hasclass('o_wsale_product_information')]" position="attributes">
+        <attribute name="class" add="co-card-body" separator=" "/>
+      </xpath>
+
+      <!-- Category label, above the product name -->
+      <xpath expr="//h6[hasclass('o_wsale_products_item_title')]" position="before">
+        <t t-if="product.public_categ_ids">
+          <span class="co-card-category">
+            <t t-esc="product.public_categ_ids[0].name"/>
+          </span>
+        </t>
+      </xpath>
+
+      <!-- Star rating + live stock badge, after the title -->
+      <xpath expr="//h6[hasclass('o_wsale_products_item_title')]" position="after">
+
+        <!-- Volume / ABV meta (optional fields — render only if set) -->
+        <t t-if="product.cellar_volume">
+          <div class="co-card-meta">
+            <t t-esc="product.cellar_volume"/>
+            <t t-if="product.cellar_alcohol_pct"> · <t t-esc="product.cellar_alcohol_pct"/>% ABV</t>
+          </div>
+        </t>
+
+        <!-- Rating — reuses Odoo's existing rating_avg/rating_count fields,
+             which are already populated (showing as "(0.0)" on the live
+             site), so this is real data, not a placeholder. -->
+        <div class="co-card-rating">
+          <div class="co-stars" t-att-data-rating="product.rating_avg">
+            <t t-foreach="range(1, 6)" t-as="i">
+              <span t-attf-class="co-star #{'filled' if i &lt;= product.rating_avg else ''}">★</span>
+            </t>
+          </div>
+          <t t-if="product.rating_count">
+            <span class="co-rating-count">(<t t-esc="product.rating_count"/>)</span>
+          </t>
+        </div>
+
+        <!-- Live stock badge — hydrated by stock_badge.js via
+             /cellar/stock/&lt;product_variant_id&gt; -->
+        <div class="co-stock-badge loading"
+             t-att-data-stock-product-id="product.product_variant_ids[:1].id">
+          <span class="co-stock-dot"></span>
+          <span class="co-stock-label">Checking…</span>
+        </div>
+
+      </xpath>
+
+    </template>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         PRODUCT DETAIL PAGE — Cellar One enhancements
+
+         The native template (website_sale.product) is a large,
+         deeply-coupled section handling variants, pricelists,
+         AJAX add-to-cart, and the existing rating widget
+         (portal_rating.rating_widget_stars_static, conditional on
+         is_view_active('website_sale.product_comment')).
+
+         Strategy: insert our additions at stable, well-known
+         anchors — #add_to_cart_wrap (real id, confirmed in source)
+         and the description_ecommerce block — without touching the
+         variant/cart machinery itself. The existing rating link is
+         RESTYLED via SCSS (ratings.scss), not duplicated.
+    ════════════════════════════════════════════════════════ -->
+    <template id="product_cellar_one"
+              inherit_id="website_sale.product"
+              name="Cellar One Product Detail Enhancements">
+
+      <!-- Live stock badge — placed right after the Add to Cart button.
+           #add_to_cart_wrap is a real, stable id in website_sale.product. -->
+      <xpath expr="//div[@id='add_to_cart_wrap']" position="after">
+        <div class="co-stock-badge co-stock-badge-lg loading mt-2"
+             t-att-data-stock-product-id="product_variant.id">
+          <span class="co-stock-dot"></span>
+          <span class="co-stock-label">Checking availability…</span>
+        </div>
+      </xpath>
+
+      <!-- Beverage meta grid (Volume / ABV / Origin / Variety) —
+           placed after the short description, before the long
+           description_ecommerce block. All fields optional; the
+           whole grid only renders if at least one field is set,
+           so products without these fields (i.e. most of the
+           existing catalog until someone fills them in) show
+           nothing extra here — no empty boxes. -->
+      <xpath expr="//p[@t-field='product.description_sale']" position="after">
+        <t t-if="product.cellar_volume or product.cellar_alcohol_pct or product.cellar_country_of_origin or product.cellar_grape_variety">
+          <div class="co-detail-meta">
+            <t t-if="product.cellar_volume">
+              <div class="co-meta-item">
+                <span class="co-meta-label">Volume</span>
+                <span class="co-meta-value"><t t-esc="product.cellar_volume"/></span>
+              </div>
+            </t>
+            <t t-if="product.cellar_alcohol_pct">
+              <div class="co-meta-item">
+                <span class="co-meta-label">Alcohol</span>
+                <span class="co-meta-value"><t t-esc="product.cellar_alcohol_pct"/>% ABV</span>
+              </div>
+            </t>
+            <t t-if="product.cellar_country_of_origin">
+              <div class="co-meta-item">
+                <span class="co-meta-label">Origin</span>
+                <span class="co-meta-value"><t t-esc="product.cellar_country_of_origin"/></span>
+              </div>
+            </t>
+            <t t-if="product.cellar_grape_variety">
+              <div class="co-meta-item">
+                <span class="co-meta-label">Variety</span>
+                <span class="co-meta-value"><t t-esc="product.cellar_grape_variety"/></span>
+              </div>
+            </t>
+          </div>
+        </t>
+      </xpath>
+
+      <!-- Food pairing + serving suggestion — appended after the
+           long-form ecommerce description. Optional, renders only
+           if content exists. -->
+      <xpath expr="//div[@t-field='product.description_ecommerce']" position="after">
+        <t t-if="product.cellar_serving_suggestion">
+          <div class="co-pairing-block mt-3">
+            <h6 class="co-pairing-title">Serving Suggestion</h6>
+            <p class="text-muted"><t t-esc="product.cellar_serving_suggestion"/></p>
+          </div>
+        </t>
+        <t t-if="product.cellar_food_pairing">
+          <div class="co-pairing-block mt-2">
+            <h6 class="co-pairing-title">Food Pairing</h6>
+            <p class="text-muted"><t t-esc="product.cellar_food_pairing"/></p>
+          </div>
+        </t>
+      </xpath>
+
+    </template>
+
+  </data>
+</odoo>

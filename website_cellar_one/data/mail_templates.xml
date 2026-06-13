@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- ═══════════════════════════════════════════════════════
+       EMAIL VERIFICATION MAIL TEMPLATE
+       Triggered on signup by auth_signup module
+  ════════════════════════════════════════════════════════ -->
+  <record id="mail_template_email_verification" model="mail.template">
+    <field name="name">Cellar One: Verify Your Email</field>
+    <field name="model_id" ref="base.model_res_users"/>
+    <field name="email_from">noreply@cecelinewines.com</field>
+    <field name="email_to">{{ object.email }}</field>
+    <field name="subject">Verify your Cellar One account</field>
+    <field name="body_html"><![CDATA[
+<table width="100%" cellpadding="0" cellspacing="0"
+       style="background:#FAF7F2;padding:40px 0;font-family:'Inter',Arial,sans-serif;">
+  <tr>
+    <td align="center">
+      <table width="580" cellpadding="0" cellspacing="0"
+             style="background:#FFFFFF;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+        <!-- Header -->
+        <tr>
+          <td style="background:#2D1219;padding:32px 40px;text-align:center;">
+            <div style="font-family:Georgia,serif;font-size:24px;font-weight:700;color:#FFFFFF;">
+              Cellar <span style="color:#D4AF37;">One</span>
+            </div>
+            <p style="color:rgba(255,255,255,0.65);font-size:13px;margin:8px 0 0;">
+              Uganda's Premier Wines &amp; Spirits
+            </p>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding:40px;">
+            <div style="text-align:center;margin-bottom:28px;">
+              <div style="font-size:40px;">📧</div>
+            </div>
+            <h2 style="font-family:Georgia,serif;font-size:22px;color:#1C1C1E;text-align:center;margin:0 0 12px;">
+              Verify your email address
+            </h2>
+            <p style="color:#3D3D3F;font-size:15px;line-height:1.7;text-align:center;margin:0 0 28px;">
+              Hi <strong>{{ object.name }}</strong>, welcome to Cellar One!<br/>
+              Click the button below to confirm your email and start shopping.
+            </p>
+
+            <!-- CTA Button -->
+            <div style="text-align:center;margin-bottom:32px;">
+              <a href="{{ ctx.get('token_url', '/') }}"
+                 style="display:inline-block;background:#D4AF37;color:#2D1219;
+                        font-weight:700;font-size:15px;padding:14px 36px;
+                        border-radius:9999px;text-decoration:none;letter-spacing:0.02em;">
+                Verify My Email
+              </a>
+            </div>
+
+            <p style="color:#8E8E93;font-size:13px;text-align:center;line-height:1.6;">
+              This link expires in 24 hours. If you didn't create an account,
+              you can safely ignore this email.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="background:#F2F2F7;padding:20px 40px;text-align:center;
+                     border-top:1px solid #E5E5EA;">
+            <p style="color:#8E8E93;font-size:12px;margin:0 0 6px;">
+              © {{ datetime.date.today().year }} Ceceline Beverages Ltd · Kampala, Uganda
+            </p>
+            <p style="color:#8E8E93;font-size:11px;margin:0;">
+              🔞 Drink responsibly. Must be 18+ to purchase alcohol.
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+    ]]></field>
+    <field name="auto_delete" eval="True"/>
+  </record>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       POST-PURCHASE REVIEW REQUEST
+       Triggered 24h after delivery by ir.actions.server
+  ════════════════════════════════════════════════════════ -->
+  <record id="mail_template_review_request" model="mail.template">
+    <field name="name">Cellar One: Leave a Review</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="email_from">noreply@cecelinewines.com</field>
+    <field name="email_to">{{ object.partner_id.email }}</field>
+    <field name="subject">How was your order? Leave a review 🍷</field>
+    <field name="body_html"><![CDATA[
+<table width="100%" cellpadding="0" cellspacing="0"
+       style="background:#FAF7F2;padding:40px 0;font-family:'Inter',Arial,sans-serif;">
+  <tr>
+    <td align="center">
+      <table width="580" cellpadding="0" cellspacing="0"
+             style="background:#FFFFFF;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+        <!-- Header -->
+        <tr>
+          <td style="background:#2D1219;padding:32px 40px;text-align:center;">
+            <div style="font-family:Georgia,serif;font-size:24px;font-weight:700;color:#FFFFFF;">
+              Cellar <span style="color:#D4AF37;">One</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding:40px;">
+            <div style="text-align:center;margin-bottom:24px;font-size:36px;">⭐</div>
+            <h2 style="font-family:Georgia,serif;font-size:22px;color:#1C1C1E;text-align:center;margin:0 0 12px;">
+              How was your order?
+            </h2>
+            <p style="color:#3D3D3F;font-size:15px;line-height:1.7;text-align:center;margin:0 0 24px;">
+              Hi <strong>{{ object.partner_id.name }}</strong>!<br/>
+              We hope you're enjoying your order #{{ object.name }}.
+              Your review helps other customers choose great wines.
+            </p>
+
+            <!-- Products listed -->
+            {% for line in object.order_line %}
+            {% if line.product_id.type == 'consu' %}
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;
+                        border:1px solid #E5E5EA;border-radius:8px;margin-bottom:8px;">
+              <div style="flex:1;">
+                <div style="font-weight:600;font-size:14px;color:#1C1C1E;">{{ line.product_id.name }}</div>
+              </div>
+              <a href="/shop/product/{{ line.product_id.product_tmpl_id.id }}"
+                 style="background:#D4AF37;color:#2D1219;font-weight:600;font-size:12px;
+                        padding:7px 14px;border-radius:9999px;text-decoration:none;white-space:nowrap;">
+                Rate This ★
+              </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+            <div style="text-align:center;margin-top:28px;">
+              <a href="/shop"
+                 style="display:inline-block;background:#5C1A2E;color:#FFFFFF;
+                        font-weight:600;font-size:14px;padding:12px 28px;
+                        border-radius:9999px;text-decoration:none;">
+                Shop Again 🍷
+              </a>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="background:#F2F2F7;padding:20px 40px;text-align:center;border-top:1px solid #E5E5EA;">
+            <p style="color:#8E8E93;font-size:12px;margin:0;">
+              © {{ datetime.date.today().year }} Ceceline Beverages Ltd · Kampala, Uganda ·
+              <a href="/unsubscribe" style="color:#8E8E93;">Unsubscribe</a>
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+    ]]></field>
+    <field name="auto_delete" eval="True"/>
+  </record>
+
+</odoo>

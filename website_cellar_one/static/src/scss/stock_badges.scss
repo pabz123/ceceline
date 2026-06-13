@@ -1,0 +1,93 @@
+// ─────────────────────────────────────────────────────────────
+//  STOCK BADGES
+// ─────────────────────────────────────────────────────────────
+
+.co-stock-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: $radius-pill;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+
+    .co-stock-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    &.in-stock {
+        background: $color-success-bg;
+        color: $color-success;
+
+        .co-stock-dot {
+            background: $color-success;
+        }
+    }
+
+    &.low-stock {
+        background: $color-warning-bg;
+        color: $color-warning;
+
+        .co-stock-dot {
+            background: $color-warning;
+        }
+    }
+
+    &.out-of-stock {
+        background: $color-danger-bg;
+        color: $color-danger;
+
+        .co-stock-dot {
+            background: $color-danger;
+            animation: none; // no pulse when OOS
+        }
+    }
+
+    &.loading {
+        background: $color-gray-100;
+        color: $color-gray-400;
+
+        .co-stock-dot {
+            background: $color-gray-400;
+            animation: none;
+        }
+    }
+}
+
+// Larger variant for product detail page
+.co-stock-badge-lg {
+    font-size: 0.875rem;
+    padding: 6px 14px;
+
+    .co-stock-dot {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(0.75); }
+}
+
+// ── Add to cart disabled state when OOS ─────────────────────
+.o_add_to_cart_btn,
+#add_to_cart,
+.a-submit.btn-co-primary {
+    &.oo-disabled,
+    &:disabled,
+    &[disabled] {
+        background: $color-gray-200 !important;
+        color: $color-gray-400 !important;
+        cursor: not-allowed !important;
+        transform: none !important;
+        box-shadow: none !important;
+        pointer-events: none;
+    }
+}

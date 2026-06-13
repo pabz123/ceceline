@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PRODUCT CATEGORIES — intentionally NOT created here.
+
+       The live cecelinewines.com catalog already has a working
+       category tree (wines-7, spirits-8, beer-9, cider-10, and
+       sub-categories like wines-red-wines-11, etc. — confirmed
+       from the live site's navigation and shop URLs). Creating
+       our own product.public.category records here would risk
+       duplicating these under different IDs and splitting the
+       catalog across two parallel taxonomies.
+
+       If the receiving system's categories differ from the slugs
+       referenced in the menu entries below and footer_template.xml,
+       update those hrefs to match — no new categories need to be
+       defined by this module.
+  ════════════════════════════════════════════════════════ -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       MAIN NAVIGATION MENU ITEMS
+
+       website.menu records, added as children of the site's
+       main_menu (the root menu rendered by
+       website.template_header_default via
+       `website.menu_id.child_id`). This is the standard,
+       supported way to add nav items — it works regardless of
+       which header template variant is active, and shows up
+       correctly in Website > Site > Menu Editor for the site
+       owner to reorder/edit afterwards.
+
+       sequence values are spaced by 10 so the site owner can
+       insert their own items between ours without renumbering.
+
+       URLs point at the real category slugs visible on the live
+       site. If those slugs differ once installed on the actual
+       production catalog, the site owner can fix them via the
+       Menu Editor UI in under a minute — no code change needed.
+  ════════════════════════════════════════════════════════ -->
+
+  <record id="menu_wines" model="website.menu">
+    <field name="name">Wines</field>
+    <field name="url">/shop/category/wines-7</field>
+    <field name="parent_id" ref="website.main_menu"/>
+    <field name="sequence">15</field>
+  </record>
+
+  <record id="menu_spirits" model="website.menu">
+    <field name="name">Spirits</field>
+    <field name="url">/shop/category/spirits-8</field>
+    <field name="parent_id" ref="website.main_menu"/>
+    <field name="sequence">25</field>
+  </record>
+
+  <record id="menu_beer_cider" model="website.menu">
+    <field name="name">Beer &amp; Cider</field>
+    <field name="url">/shop/category/beer-9</field>
+    <field name="parent_id" ref="website.main_menu"/>
+    <field name="sequence">35</field>
+  </record>
+
+  <record id="menu_deals" model="website.menu">
+    <field name="name">Deals</field>
+    <field name="url">/shop?on_sale=1</field>
+    <field name="parent_id" ref="website.main_menu"/>
+    <field name="sequence">45</field>
+  </record>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       WEBSITE LOGO — OPTIONAL, MANUAL STEP REQUIRED
+
+       website.logo is a binary field read by
+       website.option_header_brand_logo via
+       `<span t-field="website.logo" .../>`. It cannot be set
+       to a static file path — it must be base64 image data on
+       the `website` record itself.
+
+       This record is commented out by default. To use the real
+       Cellar One logo:
+
+         1. Place ce_logo.png at:
+              static/src/img/logo/ce_logo.png
+            (already done if you ran the curl download step)
+         2. Uncomment the <record> below. The `file=` attribute
+            tells Odoo's data loader to read that file from the
+            module and base64-encode it automatically — no manual
+            base64 step needed.
+         3. Confirm the record id matches the target website. On a
+            single-website instance this is website.default_website;
+            on multi-website instances, find the correct external id
+            via Settings > Technical > Websites.
+
+       Leaving this commented out is safe: the site simply keeps
+       whatever logo it currently has. See README "Logo Setup".
+  ════════════════════════════════════════════════════════ -->
+
+  <!--
+  <record id="website.default_website" model="website">
+    <field name="logo" type="base64" file="website_cellar_one/static/src/img/logo/ce_logo.png"/>
+  </record>
+  -->
+
+</odoo>

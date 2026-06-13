@@ -1,0 +1,387 @@
+// ─────────────────────────────────────────────────────────────
+//  FOOTER — Premium custom footer, beyond Odoo default
+// ─────────────────────────────────────────────────────────────
+
+.co-footer {
+    background: $color-burgundy-900;
+    color: rgba($color-white, 0.75);
+    font-size: 0.875rem;
+    position: relative;
+    overflow: hidden;
+
+    // subtle diagonal texture
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 40px,
+            rgba($color-gold-400, 0.015) 40px,
+            rgba($color-gold-400, 0.015) 41px
+        );
+        pointer-events: none;
+    }
+
+    // ── Top newsletter strip ─────────────────────────────────
+    &__newsletter {
+        background: linear-gradient(135deg, $color-burgundy-700 0%, $color-burgundy-800 100%);
+        border-bottom: 1px solid rgba($color-gold-400, 0.2);
+        padding: $spacing-xl 0;
+
+        .co-newsletter-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: $spacing-xl;
+            flex-wrap: wrap;
+
+            @media (max-width: #{$bp-tablet}) {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .co-newsletter-copy {
+            h4 {
+                font-family: var(--co-font-heading);
+                font-size: 1.25rem;
+                color: $color-white;
+                margin-bottom: 4px;
+            }
+            p {
+                font-size: 0.875rem;
+                color: rgba($color-white, 0.65);
+                margin: 0;
+            }
+        }
+
+        .co-newsletter-form {
+            display: flex;
+            gap: 0;
+            border-radius: $radius-pill;
+            overflow: hidden;
+            border: 1px solid rgba($color-white, 0.2);
+            min-width: 320px;
+
+            @media (max-width: #{$bp-mobile}) {
+                min-width: 0;
+                width: 100%;
+            }
+
+            input[type="email"] {
+                flex: 1;
+                padding: 12px 20px;
+                background: rgba($color-white, 0.08);
+                border: none;
+                color: $color-white;
+                font-size: 0.9rem;
+                font-family: var(--co-font-body);
+                outline: none;
+
+                &::placeholder { color: rgba($color-white, 0.4); }
+            }
+
+            button {
+                padding: 12px 22px;
+                background: $color-gold-400;
+                color: $color-burgundy-800;
+                border: none;
+                font-weight: 600;
+                font-size: 0.875rem;
+                cursor: pointer;
+                white-space: nowrap;
+                transition: background $transition-fast;
+
+                &:hover { background: $color-gold-600; color: $color-white; }
+            }
+        }
+    }
+
+    // ── Main footer body ─────────────────────────────────────
+    &__main {
+        padding: $spacing-3xl 0 $spacing-2xl;
+
+        .co-footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: $spacing-2xl;
+
+            @media (max-width: #{$bp-desktop}) {
+                grid-template-columns: 1fr 1fr;
+                gap: $spacing-xl;
+            }
+
+            @media (max-width: #{$bp-mobile}) {
+                grid-template-columns: 1fr;
+                gap: $spacing-lg;
+            }
+        }
+    }
+
+    // ── Brand column ─────────────────────────────────────────
+    &__brand {
+        .co-footer-logo {
+            margin-bottom: $spacing-md;
+
+            img {
+                height: 40px;
+                width: auto;
+                filter: brightness(0) invert(1);
+                opacity: 0.9;
+            }
+
+            .co-footer-brand-text {
+                font-family: var(--co-font-heading);
+                font-size: 1.375rem;
+                color: $color-white;
+                font-weight: 700;
+
+                span { color: $color-gold-400; }
+            }
+        }
+
+        .co-footer-tagline {
+            font-size: 0.875rem;
+            color: rgba($color-white, 0.6);
+            line-height: 1.7;
+            margin-bottom: $spacing-lg;
+            max-width: 280px;
+        }
+
+        // WhatsApp buttons
+        .co-whatsapp-ctас {
+            display: flex;
+            flex-direction: column;
+            gap: $spacing-sm;
+        }
+
+        .co-wa-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: $spacing-sm;
+            padding: 9px 16px;
+            border-radius: $radius-pill;
+            border: 1px solid rgba($color-white, 0.15);
+            color: rgba($color-white, 0.85);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all $transition-fast;
+            width: fit-content;
+
+            .co-wa-icon {
+                width: 20px;
+                height: 20px;
+                background: #25D366;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.7rem;
+                color: $color-white;
+                flex-shrink: 0;
+            }
+
+            .co-wa-location {
+                font-size: 0.7rem;
+                color: rgba($color-white, 0.5);
+                display: block;
+            }
+
+            &:hover {
+                background: rgba(#25D366, 0.15);
+                border-color: #25D366;
+                color: $color-white;
+                text-decoration: none;
+            }
+        }
+    }
+
+    // ── Link columns ─────────────────────────────────────────
+    &__col {
+        h5 {
+            font-family: var(--co-font-body);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: $color-gold-400;
+            margin-bottom: $spacing-md;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            li a {
+                color: rgba($color-white, 0.65);
+                font-size: 0.875rem;
+                text-decoration: none;
+                transition: color $transition-fast;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+
+                &::before {
+                    content: '›';
+                    color: $color-gold-400;
+                    font-size: 1rem;
+                    line-height: 1;
+                    opacity: 0;
+                    transform: translateX(-4px);
+                    transition: opacity $transition-fast, transform $transition-fast;
+                }
+
+                &:hover {
+                    color: $color-white;
+
+                    &::before {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
+                }
+            }
+        }
+    }
+
+    // ── Contact & map column ─────────────────────────────────
+    &__contact {
+        h5 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: $color-gold-400;
+            margin-bottom: $spacing-md;
+        }
+
+        .co-contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: $spacing-sm;
+            margin-bottom: $spacing-sm;
+            font-size: 0.875rem;
+            color: rgba($color-white, 0.65);
+
+            .co-contact-icon {
+                flex-shrink: 0;
+                margin-top: 2px;
+                color: $color-gold-400;
+                font-size: 0.875rem;
+            }
+        }
+
+        // Google Maps embed
+        .co-map-embed {
+            margin-top: $spacing-md;
+            border-radius: $radius-md;
+            overflow: hidden;
+            border: 1px solid rgba($color-white, 0.1);
+
+            iframe {
+                width: 100%;
+                height: 140px;
+                display: block;
+                border: none;
+                filter: grayscale(30%) invert(5%);
+            }
+        }
+    }
+
+    // ── Divider ──────────────────────────────────────────────
+    &__divider {
+        border: none;
+        border-top: 1px solid rgba($color-white, 0.08);
+        margin: 0;
+    }
+
+    // ── Bottom bar ───────────────────────────────────────────
+    &__bottom {
+        padding: $spacing-lg 0;
+
+        .co-footer-bottom-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: $spacing-md;
+
+            @media (max-width: #{$bp-mobile}) {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .co-copyright {
+            font-size: 0.8rem;
+            color: rgba($color-white, 0.4);
+
+            a {
+                color: rgba($color-white, 0.55);
+                &:hover { color: $color-gold-400; }
+            }
+        }
+
+        // Social icons row
+        .co-social-icons {
+            display: flex;
+            align-items: center;
+            gap: $spacing-sm;
+
+            .co-social-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: $radius-md;
+                border: 1px solid rgba($color-white, 0.12);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: rgba($color-white, 0.6);
+                font-size: 0.875rem;
+                text-decoration: none;
+                transition: all $transition-fast;
+
+                &:hover {
+                    border-color: $color-gold-400;
+                    color: $color-gold-400;
+                    background: rgba($color-gold-400, 0.08);
+                    text-decoration: none;
+                }
+            }
+        }
+
+        // Age disclaimer
+        .co-age-disclaimer {
+            width: 100%;
+            text-align: center;
+            font-size: 0.75rem;
+            color: rgba($color-white, 0.3);
+            margin-top: $spacing-sm;
+            padding-top: $spacing-sm;
+            border-top: 1px solid rgba($color-white, 0.05);
+        }
+
+        // Payment icons
+        .co-payment-icons {
+            display: flex;
+            align-items: center;
+            gap: $spacing-sm;
+
+            img, .co-payment-icon {
+                height: 22px;
+                width: auto;
+                opacity: 0.45;
+                filter: brightness(0) invert(1);
+                transition: opacity $transition-fast;
+
+                &:hover { opacity: 0.75; }
+            }
+        }
+    }
+}

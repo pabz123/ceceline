@@ -1,0 +1,281 @@
+// ─────────────────────────────────────────────────────────────
+//  RATINGS & REVIEWS
+// ─────────────────────────────────────────────────────────────
+
+// ── Summary block (product detail page) ─────────────────────
+.co-rating-summary {
+    display: flex;
+    gap: $spacing-xl;
+    align-items: center;
+    padding: $spacing-lg;
+    background: $color-gray-100;
+    border-radius: $radius-lg;
+    margin-bottom: $spacing-xl;
+
+    @media (max-width: #{$bp-mobile}) {
+        flex-direction: column;
+        gap: $spacing-md;
+    }
+
+    &__score {
+        text-align: center;
+        flex-shrink: 0;
+
+        .co-big-score {
+            font-family: var(--co-font-heading);
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: $color-burgundy-700;
+            line-height: 1;
+        }
+
+        .co-stars-lg {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            margin: 6px 0 4px;
+
+            .co-star {
+                font-size: 1.125rem;
+                color: $color-gray-200;
+
+                &.filled { color: $color-gold-400; }
+                &.half   { color: $color-gold-200; }
+            }
+        }
+
+        .co-review-count {
+            font-size: 0.8rem;
+            color: $color-gray-400;
+        }
+    }
+
+    &__breakdown {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    &__bar-row {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        font-size: 0.8125rem;
+
+        .co-star-label {
+            width: 48px;
+            color: $color-gray-700;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+
+            span { color: $color-gold-400; font-size: 0.75rem; }
+        }
+
+        .co-bar-track {
+            flex: 1;
+            height: 8px;
+            background: $color-gray-200;
+            border-radius: $radius-pill;
+            overflow: hidden;
+
+            .co-bar-fill {
+                height: 100%;
+                background: $color-gold-400;
+                border-radius: $radius-pill;
+                transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+        }
+
+        .co-bar-pct {
+            width: 34px;
+            text-align: right;
+            color: $color-gray-400;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+    }
+}
+
+// ── Individual review card ───────────────────────────────────
+.co-review-card {
+    padding: $spacing-lg;
+    border-radius: $radius-lg;
+    border: 1px solid $color-gray-200;
+    background: $color-white;
+    transition: box-shadow $transition-base;
+
+    &:hover {
+        box-shadow: $shadow-card;
+    }
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: $spacing-md;
+        margin-bottom: $spacing-sm;
+    }
+
+    &__author {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+
+        .co-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: $color-burgundy-100;
+            color: $color-burgundy-700;
+            font-weight: 700;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .co-author-info {
+            .co-author-name {
+                font-weight: 600;
+                font-size: 0.9rem;
+                color: $color-charcoal;
+            }
+
+            .co-verified {
+                display: inline-flex;
+                align-items: center;
+                gap: 3px;
+                font-size: 0.7rem;
+                color: $color-success;
+                font-weight: 500;
+            }
+        }
+    }
+
+    &__date {
+        font-size: 0.75rem;
+        color: $color-gray-400;
+        white-space: nowrap;
+    }
+
+    &__stars {
+        display: flex;
+        gap: 2px;
+        margin-bottom: $spacing-sm;
+
+        .co-star {
+            font-size: 0.875rem;
+            color: $color-gray-200;
+
+            &.filled { color: $color-gold-400; }
+        }
+    }
+
+    &__title {
+        font-weight: 600;
+        font-size: 0.9375rem;
+        color: $color-charcoal;
+        margin-bottom: 4px;
+    }
+
+    &__body {
+        font-size: 0.875rem;
+        line-height: 1.65;
+        color: $color-gray-700;
+    }
+}
+
+// ── Write review form ────────────────────────────────────────
+.co-review-form {
+    background: $color-cream;
+    border: 1px solid $color-gray-200;
+    border-radius: $radius-lg;
+    padding: $spacing-xl;
+
+    h4 {
+        font-family: var(--co-font-heading);
+        font-size: 1.25rem;
+        margin-bottom: $spacing-lg;
+    }
+
+    // Interactive star picker
+    .co-star-picker {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        gap: 4px;
+        margin-bottom: $spacing-lg;
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        label {
+            font-size: 2rem;
+            color: $color-gray-200;
+            cursor: pointer;
+            transition: color $transition-fast, transform $transition-fast;
+
+            &:hover,
+            &:hover ~ label {
+                color: $color-gold-400;
+                transform: scale(1.1);
+            }
+        }
+
+        input[type="radio"]:checked ~ label {
+            color: $color-gold-400;
+        }
+    }
+
+    .form-group {
+        margin-bottom: $spacing-md;
+
+        label {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: $color-gray-700;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid $color-gray-200;
+            border-radius: $radius-md;
+            font-family: var(--co-font-body);
+            font-size: 0.9375rem;
+            color: $color-charcoal;
+            background: $color-white;
+            transition: border-color $transition-fast, box-shadow $transition-fast;
+            outline: none;
+            resize: vertical;
+
+            &::placeholder { color: $color-gray-400; }
+
+            &:focus {
+                border-color: $color-burgundy-600;
+                box-shadow: 0 0 0 3px rgba($color-burgundy-600, 0.12);
+            }
+        }
+
+        textarea { min-height: 120px; }
+    }
+}
+
+// ── Reviews list grid ────────────────────────────────────────
+.co-reviews-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+
+    @media (min-width: #{$bp-desktop}) {
+        grid-template-columns: 1fr 1fr;
+    }
+}
