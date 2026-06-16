@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SHOP SIDEBAR — Modern Categories & Filters
+  ════════════════════════════════════════════════════════ -->
+  <template id="custom_products_categories_list" inherit_id="website_sale.products_categories_list" name="Cellar One Categories">
+    <xpath expr="//h6" position="replace">
+      <h5 class="o_categories_collapse_title mb-3 fw-bold" style="color: var(--co-text-primary); font-family: var(--co-font-heading);">Categories</h5>
+    </xpath>
+    
+    <!-- We will style the recursive categories list entirely through SCSS to match cecelinewines.com exactly -->
+  </template>
+
+  <!-- Override the attribute filters to look cleaner -->
+  <template id="custom_products_attributes" inherit_id="website_sale.products_attributes" name="Cellar One Attributes">
+    <xpath expr="//div[@id='wsale_products_attributes_collapse']" position="attributes">
+      <attribute name="class" add="co-modern-filters" separator=" "/>
+    </xpath>
+  </template>
+
+</odoo>

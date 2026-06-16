@@ -1,61 +1,62 @@
 // ─────────────────────────────────────────────────────────────
 //  NAVBAR — Sticky, transparent-to-solid on scroll
+//
+//  Odoo 17 renders:
+//    <header id="top" class="o_header_standard">
+//      <nav class="navbar navbar-light o_colored_level o_cc ...">
+//  We must override both header#top and the nav inside it.
 // ─────────────────────────────────────────────────────────────
 
-.o_main_navbar,
-#top {
+// Override Odoo's color customization variables on the header
+header#top,
+header#top nav.navbar {
     position: sticky;
     top: 0;
     z-index: $z-navbar;
-    background: $color-burgundy-800;
-    border-bottom: 1px solid rgba($color-gold-400, 0.15);
-    box-shadow: $shadow-navbar;
-    transition: background $transition-base;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     padding: 0;
-    min-height: 68px;
+    min-height: 80px;
+    background-color: $color-white !important;
+    border-bottom: 1px solid $color-gray-200 !important;
+    --o-cc1-bg: #{$color-white} !important;
+    transition: background $transition-base;
 
-    &.scrolled {
-        background: rgba($color-burgundy-900, 0.97);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+    &.scrolled,
+    &.scrolled nav.navbar {
+        background-color: rgba($color-white, 0.98) !important;
+        backdrop-filter: blur($glass-blur);
+        -webkit-backdrop-filter: blur($glass-blur);
     }
 
     // ── Logo ──────────────────────────────────────────────────
     .navbar-brand,
-    .o_logo {
+    .o_logo,
+    .co-navbar-brand {
         padding: $spacing-sm $spacing-md;
+        margin-right: auto;
+    }
 
-        img {
-            height: 44px;
-            width: auto;
-            filter: brightness(0) invert(1); // white logo on dark bg
-        }
-
-        .co-brand-text {
-            font-family: var(--co-font-heading);
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: $color-white;
-            letter-spacing: 0.04em;
-
-            span {
-                color: $color-gold-400;
-            }
-        }
+    // Hide Odoo default contact information in header
+    header#top .s_text_block.o_nav-link_secondary,
+    header#top [href^="tel:"],
+    header#top .fa-phone,
+    header#top .fa-envelope,
+    header#top [href^="mailto:"] {
+        display: none !important;
     }
 
     // ── Nav links ────────────────────────────────────────────
-    .navbar-nav,
-    .o_main_navbar .navbar-nav {
+    .navbar-nav {
         align-items: center;
-        gap: 4px;
+        gap: 16px;
 
         .nav-item > .nav-link,
         > li > a {
             font-family: var(--co-font-body);
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: rgba($color-white, 0.85);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: $color-charcoal !important;
             padding: $spacing-sm $spacing-md;
             border-radius: $radius-md;
             letter-spacing: 0.02em;
@@ -69,16 +70,16 @@
                 left: 50%;
                 transform: translateX(-50%) scaleX(0);
                 width: calc(100% - 24px);
-                height: 1.5px;
-                background: $color-gold-400;
+                height: 2px;
+                background: $color-burgundy-800;
                 border-radius: $radius-pill;
                 transition: transform $transition-base;
             }
 
             &:hover,
             &.active {
-                color: $color-gold-400;
-                background: rgba($color-white, 0.06);
+                color: $color-burgundy-800 !important;
+                background: rgba($color-burgundy-800, 0.04);
                 text-decoration: none;
 
                 &::after {
@@ -145,76 +146,83 @@
         }
     }
 
-    // ── Right-side icons (search, cart, account) ─────────────
+    // ── Minimal Action Icons ───────────────────────────────────
     .co-navbar-actions {
-        display: flex;
-        align-items: center;
-        gap: $spacing-sm;
-
         .co-nav-icon-btn {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             width: 40px;
             height: 40px;
-            border-radius: $radius-md;
-            color: rgba($color-white, 0.85);
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: background $transition-fast, color $transition-fast;
-            position: relative;
+            border-radius: 50%;
+            transition: all $transition-fast;
 
-            &:hover {
-                background: rgba($color-white, 0.1);
-                color: $color-gold-400;
-            }
-
-            // Cart item count badge
-            .co-cart-count {
-                position: absolute;
-                top: 4px;
-                right: 4px;
-                background: $color-gold-400;
-                color: $color-burgundy-800;
-                font-size: 0.6rem;
-                font-weight: 700;
-                width: 16px;
-                height: 16px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                line-height: 1;
+            &:hover, &[aria-expanded="true"] {
+                background: $color-gray-100;
+                color: $color-burgundy-700 !important;
             }
         }
 
-        .btn-co-nav-cta {
-            background: $color-gold-400;
-            color: $color-burgundy-800;
-            font-size: 0.8125rem;
-            font-weight: 600;
-            padding: 8px 18px;
-            border-radius: $radius-pill;
-            border: none;
-            cursor: pointer;
-            transition: background $transition-base;
-            white-space: nowrap;
+        .co-nav-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: #e53e3e;
+            color: $color-white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 4px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid $color-white;
+        }
 
-            &:hover {
-                background: $color-gold-600;
-                color: $color-white;
-                text-decoration: none;
+        .co-nav-account-dropdown .dropdown-menu {
+            border-radius: $radius-md;
+            padding: $spacing-sm;
+
+            .dropdown-item {
+                border-radius: $radius-sm;
+                padding: 8px 12px;
+                font-weight: 500;
+                font-size: 0.85rem;
+
+                &:hover {
+                    background: $color-gray-100;
+                }
+
+                &.text-danger:hover {
+                    background: rgba(#e53e3e, 0.1);
+                }
             }
         }
     }
 
+    .navbar-nav {
+        > li > a {
+            color: $color-charcoal !important;
+            padding: 14px 20px;
+            
+            &:hover, &.active {
+                color: #e53e3e !important; // Red active state
+                background: transparent;
+                
+                &::after {
+                    display: none; // Disable pill underline from previous design
+                }
+            }
+        }
+    }
     // ── Mobile hamburger ─────────────────────────────────────
     .navbar-toggler {
-        border: 1.5px solid rgba($color-white, 0.3);
+        border: 1.5px solid rgba($color-white, 0.3) !important;
         border-radius: $radius-sm;
         padding: 6px 10px;
-        color: $color-white;
+        color: $color-white !important;
 
         &:focus { box-shadow: none; }
 

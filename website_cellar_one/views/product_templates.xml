@@ -180,5 +180,126 @@
 
     </template>
 
+    <!-- ═══════════════════════════════════════════════════════
+         PRODUCT COMMENT & RATINGS — Cellar One Premium UI
+         Replaces standard Odoo thread with scorecard, review list
+         grid, and interactive star-picker form.
+    ════════════════════════════════════════════════════════ -->
+    <template id="product_comment_cellar_one" inherit_id="website_sale.product_comment" name="Cellar One Custom Discussion and Rating">
+        <xpath expr="//div[@id='o_product_page_reviews_content']" position="replace">
+            <div id="o_product_page_reviews_content" class="collapse show mt-4">
+                
+                <!-- Ratings Scorecard & Star breakdown -->
+                <div class="co-rating-summary" id="co-rating-summary" t-att-data-product-tmpl-id="product.id">
+                    
+                    <!-- Left column: Big Scorecard -->
+                    <div class="co-rating-summary__score">
+                        <div class="co-big-score">—</div>
+                        <div class="co-stars-lg">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                        <div class="co-review-count">0 reviews</div>
+                    </div>
+                    
+                    <!-- Right column: Star Breakdown Bars -->
+                    <div class="co-rating-summary__breakdown">
+                        <t t-foreach="range(5, 0, -1)" t-as="star_num">
+                            <div class="co-rating-summary__bar-row" t-att-data-star="star_num">
+                                <span class="co-star-label">
+                                    <t t-esc="star_num"/> <span>★</span>
+                                </span>
+                                <div class="co-bar-track">
+                                    <div class="co-bar-fill" style="width: 0%;"></div>
+                                </div>
+                                <span class="co-bar-pct">0%</span>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <!-- Left: Reviews List (2-column layout) -->
+                    <div class="col-lg-8">
+                        <h4 class="fw-bold mb-4" style="font-family: var(--co-font-heading); color: var(--co-burgundy);">Customer Feedback</h4>
+                        
+                        <div class="co-reviews-grid" id="co-reviews-list">
+                            <t t-set="ratings" t-value="product.sudo().rating_ids.filtered(lambda r: r.consumed and not r.is_internal)"/>
+                            <t t-if="not ratings">
+                                <div class="p-4 bg-white border rounded text-center text-muted">
+                                    No reviews yet. Be the first to share your thoughts!
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <t t-foreach="ratings" t-as="rating">
+                                    <div class="co-review-card">
+                                        <div class="co-review-card__header">
+                                            <div class="co-review-card__author">
+                                                <div class="co-avatar">
+                                                    <t t-esc="rating.partner_id.name[0].upper() if rating.partner_id else 'G'"/>
+                                                </div>
+                                                <div class="co-author-info">
+                                                    <div class="co-author-name">
+                                                        <t t-esc="rating.partner_id.name if rating.partner_id else 'Guest User'"/>
+                                                    </div>
+                                                    <span class="co-verified"><i class="fa fa-check-circle"></i> Verified Buyer</span>
+                                                </div>
+                                            </div>
+                                            <span class="co-review-card__date" t-field="rating.create_date" t-options="{'widget': 'date'}"/>
+                                        </div>
+                                        <div class="co-review-card__stars">
+                                            <t t-foreach="range(1, 6)" t-as="i">
+                                                <span t-attf-class="co-star #{'filled' if i &lt;= rating.rating else ''}">★</span>
+                                            </t>
+                                        </div>
+                                        <div class="co-review-card__body">
+                                            <t t-esc="rating.feedback"/>
+                                        </div>
+                                    </div>
+                                </t>
+                            </t>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: AJAX Rating Submission Form -->
+                    <div class="col-lg-4">
+                        <div class="co-review-form">
+                            <form id="co-review-form" t-att-data-product-tmpl-id="product.id">
+                                <h4>Write a Review</h4>
+                                
+                                <div class="form-group mb-3">
+                                    <label>Your Rating</label>
+                                    <div class="co-star-picker">
+                                        <input type="radio" id="star5" name="picker-rating" value="5"/>
+                                        <label for="star5" title="5 stars">★</label>
+                                        <input type="radio" id="star4" name="picker-rating" value="4"/>
+                                        <label for="star4" title="4 stars">★</label>
+                                        <input type="radio" id="star3" name="picker-rating" value="3"/>
+                                        <label for="star3" title="3 stars">★</label>
+                                        <input type="radio" id="star2" name="picker-rating" value="2"/>
+                                        <label for="star2" title="2 stars">★</label>
+                                        <input type="radio" id="star1" name="picker-rating" value="1"/>
+                                        <label for="star1" title="1 star">★</label>
+                                    </div>
+                                    <input type="hidden" id="co-review-rating" value="0"/>
+                                </div>
+                                
+                                <div class="form-group mb-4">
+                                    <label for="co-review-comment">Review Details</label>
+                                    <textarea id="co-review-comment" placeholder="What did you think of the flavor, body, or aroma?" required="required"></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn w-100 rounded-pill py-2 text-white text-uppercase fw-bold" style="background-color: var(--co-burgundy); border: 1.5px solid var(--co-gold); letter-spacing: 1px; font-size: 0.85rem;">
+                                    Submit Review
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </xpath>
+    </template>
+
   </data>
 </odoo>
+

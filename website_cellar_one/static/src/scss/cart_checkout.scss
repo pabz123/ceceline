@@ -1,0 +1,92 @@
+// ─────────────────────────────────────────────────────────────
+//  CART & CHECKOUT MODERNIZATION
+// ─────────────────────────────────────────────────────────────
+
+.co-premium-cart, .co-premium-checkout {
+    background-color: #f9f9fa;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    
+    .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    }
+    
+    // The cart table
+    .co-cart-table {
+        border-collapse: separate;
+        border-spacing: 0 10px;
+        border: none !important;
+        
+        thead {
+            th {
+                border-bottom: none !important;
+                border-top: none !important;
+                color: var(--co-text-secondary);
+                text-transform: uppercase;
+                font-size: 0.8rem;
+                font-weight: 600;
+                padding: 10px 15px;
+            }
+        }
+        
+        tbody {
+            tr {
+                background-color: white;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+                border-radius: 12px;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                
+                &:hover {
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                    transform: translateY(-2px);
+                }
+                
+                td {
+                    border: none !important;
+                    vertical-align: middle;
+                    padding: 15px;
+                    
+                    &:first-child {
+                        border-top-left-radius: 12px;
+                        border-bottom-left-radius: 12px;
+                    }
+                    &:last-child {
+                        border-top-right-radius: 12px;
+                        border-bottom-right-radius: 12px;
+                    }
+                }
+            }
+        }
+    }
+
+    // Checkout forms
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid var(--co-border);
+        padding: 0.75rem 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        
+        &:focus {
+            border-color: var(--co-burgundy);
+            box-shadow: 0 0 0 3px rgba(144, 27, 44, 0.1);
+        }
+    }
+    
+    .btn-primary {
+        background-color: var(--co-burgundy);
+        border-color: var(--co-burgundy);
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        
+        &:hover {
+            background-color: var(--co-burgundy-dark);
+            border-color: var(--co-burgundy-dark);
+        }
+    }
+}

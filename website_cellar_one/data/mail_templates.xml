@@ -21,7 +21,7 @@
 
         <!-- Header -->
         <tr>
-          <td style="background:#2D1219;padding:32px 40px;text-align:center;">
+          <td style="background:#16161A;padding:32px 40px;text-align:center;">
             <div style="font-family:Georgia,serif;font-size:24px;font-weight:700;color:#FFFFFF;">
               Cellar <span style="color:#D4AF37;">One</span>
             </div>
@@ -48,7 +48,7 @@
             <!-- CTA Button -->
             <div style="text-align:center;margin-bottom:32px;">
               <a href="{{ ctx.get('token_url', '/') }}"
-                 style="display:inline-block;background:#D4AF37;color:#2D1219;
+                 style="display:inline-block;background:#D4AF37;color:#16161A;
                         font-weight:700;font-size:15px;padding:14px 36px;
                         border-radius:9999px;text-decoration:none;letter-spacing:0.02em;">
                 Verify My Email
@@ -104,7 +104,7 @@
 
         <!-- Header -->
         <tr>
-          <td style="background:#2D1219;padding:32px 40px;text-align:center;">
+          <td style="background:#16161A;padding:32px 40px;text-align:center;">
             <div style="font-family:Georgia,serif;font-size:24px;font-weight:700;color:#FFFFFF;">
               Cellar <span style="color:#D4AF37;">One</span>
             </div>
@@ -133,7 +133,7 @@
                 <div style="font-weight:600;font-size:14px;color:#1C1C1E;">{{ line.product_id.name }}</div>
               </div>
               <a href="/shop/product/{{ line.product_id.product_tmpl_id.id }}"
-                 style="background:#D4AF37;color:#2D1219;font-weight:600;font-size:12px;
+                 style="background:#D4AF37;color:#16161A;font-weight:600;font-size:12px;
                         padding:7px 14px;border-radius:9999px;text-decoration:none;white-space:nowrap;">
                 Rate This ★
               </a>
@@ -143,7 +143,7 @@
 
             <div style="text-align:center;margin-top:28px;">
               <a href="/shop"
-                 style="display:inline-block;background:#5C1A2E;color:#FFFFFF;
+                 style="display:inline-block;background:#16161A;color:#FFFFFF;
                         font-weight:600;font-size:14px;padding:12px 28px;
                         border-radius:9999px;text-decoration:none;">
                 Shop Again 🍷

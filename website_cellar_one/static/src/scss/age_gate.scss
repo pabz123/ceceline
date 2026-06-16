@@ -15,9 +15,9 @@
     &__backdrop {
         position: absolute;
         inset: 0;
-        background: rgba($color-burgundy-900, 0.96);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        background: $glass-bg;
+        backdrop-filter: blur($glass-blur);
+        -webkit-backdrop-filter: blur($glass-blur);
     }
 
     &__modal {

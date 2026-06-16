@@ -1,46 +1,52 @@
 /** @odoo-module **/
 // ─────────────────────────────────────────────────────────────
 //  AGE GATE — Shows once per session using sessionStorage
+//  Uses Odoo 17 publicWidget for reliable lifecycle binding.
 // ─────────────────────────────────────────────────────────────
 
-import { ready } from "@web/core/utils/concurrency";
+import publicWidget from "@web/legacy/js/public/public_widget";
 
 const AGE_GATE_KEY = 'cellar_one_age_verified';
 
-function initAgeGate() {
-    // Already verified this session → skip
-    if (sessionStorage.getItem(AGE_GATE_KEY)) return;
+publicWidget.registry.CellarOneAgeGate = publicWidget.Widget.extend({
+    selector: '#co-age-gate',
 
-    const gate = document.getElementById('co-age-gate');
-    if (!gate) return;
+    start() {
+        // Already verified this session → hide and skip
+        if (sessionStorage.getItem(AGE_GATE_KEY)) {
+            this.el.classList.add('hidden');
+            return this._super(...arguments);
+        }
 
-    gate.classList.remove('hidden');
-    document.body.style.overflow = 'hidden'; // prevent scroll behind modal
+        // Show the gate
+        this.el.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
 
-    const btnYes   = gate.querySelector('.co-age-yes');
-    const btnNo    = gate.querySelector('.co-age-no');
-    const bodyEl   = gate.querySelector('.co-age-gate__body');
-    const deniedEl = gate.querySelector('.co-age-gate__denied');
+        const btnYes   = this.el.querySelector('.co-age-yes');
+        const btnNo    = this.el.querySelector('.co-age-no');
+        const bodyEl   = this.el.querySelector('.co-age-gate__body');
+        const deniedEl = this.el.querySelector('.co-age-gate__denied');
 
-    if (btnYes) {
-        btnYes.addEventListener('click', () => {
-            sessionStorage.setItem(AGE_GATE_KEY, '1');
-            gate.classList.add('hidden');
-            document.body.style.overflow = '';
-        });
-    }
+        if (btnYes) {
+            btnYes.addEventListener('click', () => {
+                sessionStorage.setItem(AGE_GATE_KEY, '1');
+                this.el.classList.add('hidden');
+                document.body.style.overflow = '';
+            });
+        }
 
-    if (btnNo) {
-        btnNo.addEventListener('click', () => {
-            if (bodyEl)   bodyEl.style.display   = 'none';
-            if (deniedEl) deniedEl.style.display = 'block';
-            // Redirect away after 2s
-            setTimeout(() => {
-                window.location.href = 'https://www.drinkaware.co.ug/';
-            }, 2000);
-        });
-    }
-}
+        if (btnNo) {
+            btnNo.addEventListener('click', () => {
+                if (bodyEl)   bodyEl.style.display   = 'none';
+                if (deniedEl) deniedEl.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = 'https://www.drinkaware.co.ug/';
+                }, 2000);
+            });
+        }
 
-// Run when DOM is ready
-document.addEventListener('DOMContentLoaded', initAgeGate);
+        return this._super(...arguments);
+    },
+});
+
+export default publicWidget.registry.CellarOneAgeGate;

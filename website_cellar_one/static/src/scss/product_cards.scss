@@ -16,52 +16,62 @@
 // ─────────────────────────────────────────────────────────────
 
 // ── Grid container ──────────────────────────────────────────
-// website_sale wraps cards in a Bootstrap row of <div class="col...">.
-// We override to a CSS grid for consistent card sizing without
-// fighting Bootstrap's column math.
-#products_grid .o_wsale_products_grid_table_wrapper,
-.oe_website_sale .o_wsale_products_grid {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: $spacing-lg;
+// Odoo 17 wraps cards in a <table> element. We must override
+// the table display properties to make it behave as a CSS grid.
+#products_grid table.table {
+    display: block !important;
+    
+    tbody {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: $spacing-lg;
+        width: 100%;
+    }
 
-    > .o_wsale_products_grid_table_cell,
-    > div[class*="col-"] {
+    tr {
+        display: contents !important;
+    }
+
+    td.oe_product {
+        display: block !important;
         width: 100% !important;
-        max-width: 100% !important;
-        flex: none !important;
         padding: 0 !important;
+        height: 100%;
     }
 
     @media (max-width: #{$bp-mobile}) {
-        grid-template-columns: repeat(2, 1fr);
-        gap: $spacing-md;
+        tbody {
+            grid-template-columns: repeat(2, 1fr);
+            gap: $spacing-md;
+        }
     }
 
     @media (max-width: 400px) {
-        grid-template-columns: 1fr;
+        tbody {
+            grid-template-columns: 1fr;
+        }
     }
 }
 
 // ── Card root ────────────────────────────────────────────────
 .co-product-card.oe_product_cart {
-    background: var(--co-bg-card);
-    border-radius: var(--co-radius-card);
-    border: 1px solid $color-gray-200;
-    box-shadow: $shadow-card;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     overflow: hidden;
-    transition: transform $transition-base, box-shadow $transition-base, border-color $transition-base;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     flex-direction: column;
     text-decoration: none;
 
     &:hover {
         transform: translateY(-4px);
-        box-shadow: $shadow-hover;
-        border-color: rgba($color-burgundy-600, 0.25);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+        border-color: #cbd5e1;
 
         .oe_product_image_img_wrapper img,
         .oe_product_image_img_wrapper {
-            transform: scale(1.04);
+            transform: scale(1.05);
         }
     }
 }
@@ -79,10 +89,20 @@
 
     .oe_product_image_img_wrapper {
         transition: transform $transition-slow;
+        width: 100%;
+        height: 100%;
 
         img {
-            object-fit: cover;
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
             transition: transform $transition-slow;
+            
+            // Fix for Odoo's blurry default placeholder image when products have no images
+            &[src*="placeholder"] {
+                object-fit: scale-down !important;
+                opacity: 0.2;
+            }
         }
     }
 
@@ -156,9 +176,9 @@
 
         .product_price {
             .h6 {
-                font-size: 1.1rem;
+                font-size: 1.15rem;
                 font-weight: 700;
-                color: $color-burgundy-700;
+                color: #e53e3e; // Red price matching Pinterest
                 font-family: var(--co-font-body);
                 margin: 0;
             }
@@ -204,26 +224,76 @@
     margin-top: $spacing-xs;
 }
 
-// ── Quick-add button (native .o_wsale_product_btn) ───────────
-.co-product-card .o_wsale_product_btn {
-    .btn {
-        border-radius: $radius-pill;
-        background: $color-gold-400;
-        border-color: $color-gold-400;
-        color: $color-burgundy-800;
-        width: 38px;
-        height: 38px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+// ── Quick-add button (native .o_wsale_product_btn) with luxury hover transition ──
+.co-product-card {
+    .o_wsale_product_sub {
+        max-height: 50px;
+        opacity: 1;
+        transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, padding 0.3s ease;
+    }
 
-        &:hover {
-            background: $color-gold-600;
-            border-color: $color-gold-600;
-            color: $color-white;
+    .o_wsale_product_btn {
+        width: 100%;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        margin-top: 0;
+        transform: none !important;
+        position: static;
+        display: block;
+        padding: 0;
+        transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, margin-top 0.3s ease;
+        
+        .btn {
+            border-radius: 4px;
+            background: var(--co-burgundy);
+            border: 1.5px solid var(--co-gold);
+            color: #ffffff;
+            width: 100%;
+            height: auto;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+
+            &::after {
+                content: "Add to Cart";
+            }
+
+            i.fa-shopping-cart {
+                display: none;
+            }
+
+            &:hover {
+                background: var(--co-gold);
+                border-color: #1c1c1e;
+                color: #1c1c1e;
+                box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+            }
+        }
+    }
+
+    &:hover {
+        .o_wsale_product_sub {
+            max-height: 0;
+            opacity: 0;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        .o_wsale_product_btn {
+            max-height: 50px;
+            opacity: 1;
+            margin-top: 8px;
         }
     }
 }
+
 
 // ── Empty state ──────────────────────────────────────────────
 .co-empty-products {

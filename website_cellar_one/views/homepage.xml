@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <template id="cellar_one_homepage" inherit_id="website.homepage" name="Cellar One Homepage">
+      <xpath expr="//div[@id='wrap']" position="inside">
+        
+        <!-- Luxury Editorial Hero Section -->
+        <section class="co-luxury-hero position-relative overflow-hidden d-flex align-items-center" style="background-color: var(--co-cream); min-height: 85vh; border-bottom: 1px solid rgba(197, 168, 128, 0.22);">
+            <!-- Decorative Background Glow -->
+            <div class="co-hero-ambient-glow" style="position: absolute; top: -10%; right: -10%; width: 50%; height: 60%; background: radial-gradient(circle, rgba(197, 168, 128, 0.12) 0%, transparent 70%); pointer-events: none; z-index: 1;"></div>
+            
+            <div class="container position-relative" style="z-index: 2; padding: 80px 0;">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6 text-start">
+                        <!-- Luxury Label -->
+                        <span class="text-uppercase fw-bold mb-3 d-inline-flex align-items-center gap-2" style="color: var(--co-gold-dark); letter-spacing: 5px; font-size: 0.8rem;">
+                            <span style="width: 12px; height: 1px; background-color: var(--co-gold-dark);"></span>
+                            Est. 2018 · Cellar One
+                        </span>
+                        
+                        <!-- High Contrast Title -->
+                        <h1 class="display-3 fw-bold mb-4" style="font-family: var(--co-font-heading); line-height: 1.1; letter-spacing: -0.01em; color: #111111 !important;">
+                            Curated Vintages<br/>
+                            <span style="font-style: italic; font-weight: 400; color: var(--co-gold-dark);">For Connoisseurs</span>
+                        </h1>
+                        
+                        <div class="co-hero-divider my-4" style="width: 60px; height: 1.5px; background-color: var(--co-gold-dark);"></div>
+                        
+                        <!-- High Contrast Description -->
+                        <p class="lead mb-5" style="font-family: var(--co-font-body); font-weight: 300; color: var(--co-text-secondary) !important; font-size: 1.15rem; max-width: 520px; line-height: 1.8;">
+                            Discover exceptional vintages and rare spirits handpicked by our expert sommeliers. Imported directly from the world's most historical vineyards.
+                        </p>
+                        
+                        <!-- Premium Action CTAs -->
+                        <div class="d-flex flex-wrap gap-3">
+                            <a href="/shop" class="btn btn-lg rounded-pill px-5 py-3 co-hero-cta-primary" style="background-color: var(--co-gold); border-color: var(--co-gold); color: #111111; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s ease;">
+                                Explore Catalog
+                            </a>
+                            <a href="/location" class="btn btn-lg btn-outline-dark rounded-pill px-5 py-3 text-uppercase fw-bold" style="font-size: 0.9rem; letter-spacing: 2px; border-width: 1.5px; color: #111111; border-color: rgba(17,17,17,0.4); transition: all 0.3s ease;">
+                                Visit Boutique
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 d-none d-lg-block">
+                        <div class="co-hero-spotlight position-relative mx-auto" style="width: 400px; height: 480px;">
+                            <!-- Gold frame border overlay -->
+                            <div class="co-spotlight-frame" style="position: absolute; top: 15px; left: 15px; width: calc(100% - 30px); height: calc(100% - 30px); border: 1px solid var(--co-gold); z-index: 1; pointer-events: none; border-radius: 4px;"></div>
+                            
+                            <!-- Main Showcase -->
+                            <div class="co-spotlight-img-wrap overflow-hidden" style="width: 100%; height: 100%; border-radius: 4px; box-shadow: 0 20px 45px rgba(0,0,0,0.08); background-color: #FAF8F5;">
+                                <img src="/website_cellar_one/static/src/img/hero_banner.png" alt="Cellar One Bottle Showcase" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.95; transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Perks / Trust Bar -->
+        <section class="co-trust-bar py-4 bg-white border-bottom">
+            <div class="container">
+                <div class="row text-center g-4">
+                    <div class="col-md-3 col-6">
+                        <div class="co-perk-item d-flex align-items-center justify-content-center gap-3">
+                            <span class="co-perk-icon fs-4" style="color: var(--co-gold);">🍷</span>
+                            <div class="text-start">
+                                <h6 class="fw-bold mb-0" style="font-size: 0.9rem; color: #111111;">Sommelier Selection</h6>
+                                <p class="text-muted small mb-0 text-truncate">Expertly hand-curated bottles</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="co-perk-item d-flex align-items-center justify-content-center gap-3">
+                            <span class="co-perk-icon fs-4" style="color: var(--co-gold);">🚚</span>
+                            <div class="text-start">
+                                <h6 class="fw-bold mb-0" style="font-size: 0.9rem; color: #111111;">Express Delivery</h6>
+                                <p class="text-muted small mb-0 text-truncate">Kampala &amp; Jinja regions</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="co-perk-item d-flex align-items-center justify-content-center gap-3">
+                            <span class="co-perk-icon fs-4" style="color: var(--co-gold);">💬</span>
+                            <div class="text-start">
+                                <h6 class="fw-bold mb-0" style="font-size: 0.9rem; color: #111111;">WhatsApp Concierge</h6>
+                                <p class="text-muted small mb-0 text-truncate">Direct ordering support</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="co-perk-item d-flex align-items-center justify-content-center gap-3">
+                            <span class="co-perk-icon fs-4" style="color: var(--co-gold);">🔒</span>
+                            <div class="text-start">
+                                <h6 class="fw-bold mb-0" style="font-size: 0.9rem; color: #111111;">100% Authenticity</h6>
+                                <p class="text-muted small mb-0 text-truncate">Direct authenticated imports</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Circular Categories Navigation -->
+        <section class="co-category-strip py-5" style="background-color: var(--co-cream);">
+            <div class="container text-center py-3">
+                <div class="text-center mb-5">
+                    <span class="text-uppercase fw-bold" style="color: var(--co-gold-dark); letter-spacing: 3px; font-size: 0.75rem;">Classifications</span>
+                    <h2 class="mt-2" style="font-family: var(--co-font-heading); color: #111111; font-weight: 700; font-size: 2.2rem; letter-spacing: -0.01em;">Shop By Category</h2>
+                    <div class="co-divider mx-auto mt-2 mb-3" style="width: 50px; height: 1.5px; background-color: var(--co-gold);"></div>
+                    <p class="text-muted">Explore our curated collections by beverage classification</p>
+                </div>
+                <t t-set="cat_wines" t-value="request.env['product.public.category'].sudo().search([('name', '=ilike', 'wines')], limit=1)"/>
+                <t t-set="cat_spirits" t-value="request.env['product.public.category'].sudo().search([('name', '=ilike', 'spirits')], limit=1)"/>
+                <t t-set="cat_beer" t-value="request.env['product.public.category'].sudo().search([('name', '=ilike', 'beer')], limit=1)"/>
+                <t t-set="cat_cider" t-value="request.env['product.public.category'].sudo().search([('name', '=ilike', 'cider')], limit=1)"/>
+                <div class="d-flex flex-wrap justify-content-center gap-5 mt-4">
+                    <a t-attf-href="/shop/category/#{cat_wines.id if cat_wines else ''}" class="co-category-circle-link text-decoration-none">
+                        <div class="co-category-circle" style="background-color: #ffffff; border: 1px solid rgba(197, 168, 128, 0.3); width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: all 0.4s ease; overflow: hidden;">
+                            <img src="/website_cellar_one/static/src/img/cat_wines.png" style="width: 100%; height: 100%; object-fit: cover;" alt="Wines"/>
+                        </div>
+                        <h6 class="mt-3 fw-bold text-uppercase text-dark small" style="letter-spacing: 2px; font-size: 0.75rem;">Wines</h6>
+                    </a>
+                    <a t-attf-href="/shop/category/#{cat_spirits.id if cat_spirits else ''}" class="co-category-circle-link text-decoration-none">
+                        <div class="co-category-circle" style="background-color: #ffffff; border: 1px solid rgba(197, 168, 128, 0.3); width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: all 0.4s ease; overflow: hidden;">
+                            <img src="/website_cellar_one/static/src/img/cat_spirits.png" style="width: 100%; height: 100%; object-fit: cover;" alt="Spirits"/>
+                        </div>
+                        <h6 class="mt-3 fw-bold text-uppercase text-dark small" style="letter-spacing: 2px; font-size: 0.75rem;">Spirits</h6>
+                    </a>
+                    <a t-attf-href="/shop/category/#{cat_beer.id if cat_beer else ''}" class="co-category-circle-link text-decoration-none">
+                        <div class="co-category-circle" style="background-color: #ffffff; border: 1px solid rgba(197, 168, 128, 0.3); width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: all 0.4s ease; overflow: hidden;">
+                            <img src="/website_cellar_one/static/src/img/cat_beer.png" style="width: 100%; height: 100%; object-fit: cover;" alt="Beer"/>
+                        </div>
+                        <h6 class="mt-3 fw-bold text-uppercase text-dark small" style="letter-spacing: 2px; font-size: 0.75rem;">Beer</h6>
+                    </a>
+                    <a t-attf-href="/shop/category/#{cat_cider.id if cat_cider else ''}" class="co-category-circle-link text-decoration-none">
+                        <div class="co-category-circle" style="background-color: #ffffff; border: 1px solid rgba(197, 168, 128, 0.3); width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: all 0.4s ease; overflow: hidden;">
+                            <img src="/website_cellar_one/static/src/img/cat_cider.png" style="width: 100%; height: 100%; object-fit: cover;" alt="Cider"/>
+                        </div>
+                        <h6 class="mt-3 fw-bold text-uppercase text-dark small" style="letter-spacing: 2px; font-size: 0.75rem;">Cider</h6>
+                    </a>
+                </div>
+                </div>
+        </section>
+
+        <!-- Dynamic Curated Vintages / Live Products Grid -->
+        <section class="co-live-vintages py-5 bg-white border-top border-bottom">
+            <div class="container py-4">
+                <div class="text-center mb-5">
+                    <span class="text-uppercase fw-bold" style="color: var(--co-gold-dark); letter-spacing: 3px; font-size: 0.75rem;">Sommelier Selections</span>
+                    <h2 class="mt-2" style="font-family: var(--co-font-heading); color: #111111; font-weight: 700; font-size: 2.2rem; letter-spacing: -0.01em;">Featured Vintages</h2>
+                    <div class="co-divider mx-auto mt-2 mb-3" style="width: 50px; height: 1.5px; background-color: var(--co-gold);"></div>
+                    <p class="text-muted">Directly loaded from our boutique reserves</p>
+                </div>
+
+                <!-- Fetch dynamic products from Odoo database -->
+                <t t-set="live_products" t-value="request.env['product.template'].sudo().search([('website_published', '=', True)], limit=4)"/>
+
+                <t t-if="live_products">
+                    <div class="row g-0" style="border: 1px solid rgba(197,168,128,0.18); border-radius: 4px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
+                        <t t-foreach="live_products" t-as="prod">
+                            <div class="col-lg-3 col-md-6 text-center co-home-prod-cell" style="border: 1px solid rgba(197,168,128,0.08); background-color: #ffffff; padding: 25px; transition: all 0.3s ease;">
+                                <a t-att-href="prod.website_url" class="text-decoration-none">
+                                    <div class="co-home-prod-img-wrap position-relative overflow-hidden mb-3 mx-auto" style="width: 100%; height: 260px;">
+                                        <img t-att-src="website.image_url(prod, 'image_512')" class="h-100 w-auto" style="object-fit: contain; transition: transform 0.6s ease;" t-att-alt="prod.name"/>
+                                        <!-- Stock status dynamic loader -->
+                                        <div class="co-stock-badge-container position-absolute top-0 start-0 p-2" t-att-data-product-id="prod.product_variant_id.id if prod.product_variant_id else prod.id">
+                                            <!-- JS will inject styled stock badges -->
+                                        </div>
+                                    </div>
+                                    <span class="text-muted small text-uppercase" style="letter-spacing: 1px; font-size: 0.65rem;" t-esc="prod.public_categ_ids[0].name if prod.public_categ_ids else 'Exclusive'"/>
+                                    <h5 class="fw-bold mt-1 text-dark text-truncate" style="font-size: 0.95rem; font-family: var(--co-font-body);" t-esc="prod.name"/>
+                                    
+                                    <!-- Stars Rating -->
+                                    <div class="text-warning my-2" style="font-size: 0.8rem; letter-spacing: 1.5px;">
+                                        <t t-if="prod.rating_count">
+                                            <t t-foreach="range(1, 6)" t-as="i">
+                                                <span t-attf-style="color: #{'var(--co-gold)' if i &lt;= prod.rating_avg else '#e0e0e0'};">★</span>
+                                            </t>
+                                            <span class="text-muted small ms-1" style="font-size: 0.75rem;">(<t t-esc="prod.rating_count"/>)</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="text-muted small italic">No reviews yet</span>
+                                        </t>
+                                    </div>
+                                    <t t-set="combination_info" t-value="prod._get_combination_info(only_template=True)"/>
+                                    <div class="mt-2 font-weight-bold" style="font-size: 1.05rem; font-weight: 700;">
+                                        <t t-if="combination_info['has_discounted_price']">
+                                            <span style="color: #d9534f; margin-right: 8px;">
+                                                <span t-esc="combination_info['price']" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                            </span>
+                                            <span style="color: #999999; text-decoration: line-through; font-size: 0.85rem; font-weight: 400;">
+                                                <span t-esc="combination_info['list_price']" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                            </span>
+                                        </t>
+                                        <t t-else="">
+                                            <span style="color: var(--co-gold-dark);">
+                                                <span t-esc="combination_info['price']" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                            </span>
+                                        </t>
+                                    </div>
+                                </a>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+                <t t-else="">
+                    <!-- Fallback placeholders if DB is empty -->
+                    <div class="row g-0" style="border: 1px solid rgba(197,168,128,0.18); border-radius: 4px; overflow: hidden;">
+                        <div class="col-lg-3 col-md-6 text-center co-home-prod-cell" style="border: 1px solid rgba(197,168,128,0.08); background-color: #ffffff; padding: 25px;">
+                            <div class="mb-3 mx-auto" style="width: 100%; height: 260px; display: flex; align-items: center; justify-content: center; background: #fbf9f6; overflow: hidden; border-radius: 4px;">
+                                <img src="/website_cellar_one/static/src/img/featured_champagne.png" style="width: 100%; height: 100%; object-fit: cover;" alt="Saint Celine"/>
+                            </div>
+                            <span class="text-muted small text-uppercase" style="letter-spacing: 1px; font-size: 0.65rem;">Wine</span>
+                            <h5 class="fw-bold mt-1 text-dark text-truncate" style="font-size: 0.95rem;">Saint Celine Natural Sweet Red</h5>
+                            <div class="text-warning my-2" style="font-size: 0.8rem; letter-spacing: 1.5px;">
+                                <span style="color: var(--co-gold);">★★★★★</span>
+                                <span class="text-muted small ms-1" style="font-size: 0.75rem;">(5)</span>
+                            </div>
+                            <div style="font-weight: 700; font-size: 1.05rem;">
+                                <span style="color: #d9534f; margin-right: 8px;">UGX 32,300</span>
+                                <span style="color: #999999; text-decoration: line-through; font-size: 0.85rem; font-weight: 400;">UGX 38,000</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 text-center co-home-prod-cell" style="border: 1px solid rgba(197,168,128,0.08); background-color: #ffffff; padding: 25px;">
+                            <div class="mb-3 mx-auto" style="width: 100%; height: 260px; display: flex; align-items: center; justify-content: center; background: #fbf9f6; overflow: hidden; border-radius: 4px;">
+                                <img src="/website_cellar_one/static/src/img/hero_banner.png" style="width: 100%; height: 100%; object-fit: cover;" alt="Cabernet"/>
+                            </div>
+                            <span class="text-muted small text-uppercase" style="letter-spacing: 1px; font-size: 0.65rem;">Wine</span>
+                            <h5 class="fw-bold mt-1 text-dark text-truncate" style="font-size: 0.95rem;">Premium Cabernet Sauvignon</h5>
+                            <div class="text-warning my-2" style="font-size: 0.8rem; letter-spacing: 1.5px;">
+                                <span style="color: var(--co-gold);">★★★★</span><span style="color: #e0e0e0;">★</span>
+                                <span class="text-muted small ms-1" style="font-size: 0.75rem;">(6)</span>
+                            </div>
+                            <div style="font-weight: 700; font-size: 1.05rem;">
+                                <span style="color: #d9534f; margin-right: 8px;">UGX 93,500</span>
+                                <span style="color: #999999; text-decoration: line-through; font-size: 0.85rem; font-weight: 400;">UGX 110,000</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 text-center co-home-prod-cell" style="border: 1px solid rgba(197,168,128,0.08); background-color: #ffffff; padding: 25px;">
+                            <div class="mb-3 mx-auto" style="width: 100%; height: 260px; display: flex; align-items: center; justify-content: center; background: #fbf9f6; overflow: hidden; border-radius: 4px;">
+                                <img src="/website_cellar_one/static/src/img/featured_whisky.png" style="width: 100%; height: 100%; object-fit: cover;" alt="Whiskey"/>
+                            </div>
+                            <span class="text-muted small text-uppercase" style="letter-spacing: 1px; font-size: 0.65rem;">Spirits</span>
+                            <h5 class="fw-bold mt-1 text-dark text-truncate" style="font-size: 0.95rem;">Aged Single Malt Whiskey</h5>
+                            <div class="text-warning my-2" style="font-size: 0.8rem; letter-spacing: 1.5px;">
+                                <span style="color: var(--co-gold);">★★★★★</span>
+                                <span class="text-muted small ms-1" style="font-size: 0.75rem;">(5)</span>
+                            </div>
+                            <div style="font-weight: 700; font-size: 1.05rem;">
+                                <span style="color: #d9534f; margin-right: 8px;">UGX 288,000</span>
+                                <span style="color: #999999; text-decoration: line-through; font-size: 0.85rem; font-weight: 400;">UGX 320,000</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 text-center co-home-prod-cell" style="border: 1px solid rgba(197,168,128,0.08); background-color: #ffffff; padding: 25px;">
+                            <div class="mb-3 mx-auto" style="width: 100%; height: 260px; display: flex; align-items: center; justify-content: center; background: #fbf9f6; overflow: hidden; border-radius: 4px;">
+                                <span class="fs-1">🍺</span>
+                            </div>
+                            <span class="text-muted small text-uppercase" style="letter-spacing: 1px; font-size: 0.65rem;">Beer</span>
+                            <h5 class="fw-bold mt-1 text-dark text-truncate" style="font-size: 0.95rem;">Tusker Lager 500ml Can (6-Pack)</h5>
+                            <div class="text-warning my-2" style="font-size: 0.8rem; letter-spacing: 1.5px;">
+                                <span style="color: var(--co-gold);">★★★★</span><span style="color: #e0e0e0;">★</span>
+                                <span class="text-muted small ms-1" style="font-size: 0.75rem;">(10)</span>
+                            </div>
+                            <div style="font-weight: 700; font-size: 1.05rem;">
+                                <span style="color: #d9534f; margin-right: 8px;">UGX 36,100</span>
+                                <span style="color: #999999; text-decoration: line-through; font-size: 0.85rem; font-weight: 400;">UGX 38,000</span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </section>
+
+        <!-- Flagship Bottle Showcase -->
+        <section class="co-bottle-showcase py-5" style="background-color: var(--co-cream);">
+            <div class="container py-5">
+                <div class="text-center mb-5">
+                    <span class="text-uppercase fw-bold" style="color: var(--co-gold-dark); letter-spacing: 3px; font-size: 0.75rem;">Boutique Highlight</span>
+                    <h2 class="mt-2" style="font-family: var(--co-font-heading); color: #111111; font-weight: 700; font-size: 2.2rem; margin-top: 5px;">Our Flagship Selection</h2>
+                    <div class="co-divider mx-auto mt-2 mb-3" style="width: 50px; height: 1.5px; background-color: var(--co-gold);"></div>
+                    <p class="text-muted">A closer look at this month's featured sommelier choice</p>
+                </div>
+                
+                <div class="row align-items-center mt-5">
+                    <!-- Left side: callouts -->
+                    <div class="col-md-4 text-md-end text-center">
+                        <div class="co-showcase-callout mb-5 p-3" style="border-right: 1px solid rgba(197,168,128,0.3); transition: all 0.3s ease;">
+                            <h5 class="fw-bold" style="color: var(--co-charcoal);">Nose (Aroma)</h5>
+                            <p class="text-muted small">Rich and complex bouquet displaying dark cherry, ripe plums, vanilla, and fine oak undertones.</p>
+                        </div>
+                        <div class="co-showcase-callout mb-0 p-3" style="border-right: 1px solid rgba(197,168,128,0.3); transition: all 0.3s ease;">
+                            <h5 class="fw-bold" style="color: var(--co-charcoal);">Palate (Taste)</h5>
+                            <p class="text-muted small">Full-bodied, smooth tannins with a lingering finish. Notes of dark chocolate, berry fruits, and subtle spice.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Center: Large Bottle Image -->
+                    <div class="col-md-4 text-center my-4 my-md-0">
+                        <t t-set="flagship_prod" t-value="request.env['product.template'].sudo().search([('name', '=ilike', 'Premium Cabernet Sauvignon')], limit=1)"/>
+                        <div class="co-showcase-bottle-wrapper position-relative d-inline-block">
+                            <div class="co-bottle-glow" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 180px; height: 180px; background: radial-gradient(circle, rgba(197, 168, 128, 0.22) 0%, transparent 70%); z-index: -1;"></div>
+                            <img t-att-src="website.image_url(flagship_prod, 'image_512') if flagship_prod else '/website_cellar_one/static/src/img/hero_banner.png'" alt="Flagship Bottle" class="img-fluid" style="max-height: 400px; filter: drop-shadow(0 20px 45px rgba(0,0,0,0.12)); transition: all 0.5s ease;"/>
+                        </div>
+                        <div class="mt-4">
+                            <h4 class="fw-bold mb-1" style="font-family: var(--co-font-heading); color: #111111; letter-spacing: 1px;">Cabernet Sauvignon</h4>
+                            <span class="badge px-3 py-2 rounded-pill fw-bold" style="background-color: var(--co-gold-dark); color: #ffffff; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;">Special Reserva</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Right side: callouts -->
+                    <div class="col-md-4 text-md-start text-center">
+                        <div class="co-showcase-callout mb-5 p-3" style="border-left: 1px solid rgba(197,168,128,0.3); transition: all 0.3s ease;">
+                            <h5 class="fw-bold" style="color: var(--co-charcoal);">Perfect Pairing</h5>
+                            <p class="text-muted small">Accompanies beautifully with prime cuts of grilled ribeye steak, roasted lamb, or slow-cooked game dishes.</p>
+                        </div>
+                        <div class="co-showcase-callout mb-0 p-3" style="border-left: 1px solid rgba(197,168,128,0.3); transition: all 0.3s ease;">
+                            <h5 class="fw-bold" style="color: var(--co-charcoal);">Optimal Service</h5>
+                            <p class="text-muted small">Serve at a cellar temperature of 16-18°C. We recommend decanting for at least 30 minutes before serving.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Curated Collections Section -->
+        <section class="co-featured-collections py-5 bg-white">
+            <div class="container py-4">
+                <div class="text-center mb-5">
+                    <span class="text-uppercase fw-bold" style="color: var(--co-gold-dark); letter-spacing: 3px; font-size: 0.75rem;">Premium Collections</span>
+                    <h2 class="mt-2" style="font-family: var(--co-font-heading); color: #111111; font-size: 2.2rem; font-weight: 700; letter-spacing: -0.01em;">Curated For Connoisseurs</h2>
+                    <div class="co-divider mx-auto mt-2 mb-3" style="width: 50px; height: 1.5px; background-color: var(--co-gold);"></div>
+                    <p class="text-muted mx-auto" style="max-width: 600px;">Explore our hand-selected categories featuring the world's most sought-after luxury beverages.</p>
+                </div>
+                
+                <div class="row g-4">
+                    <!-- Featured Whisky -->
+                    <div class="col-md-6">
+                        <div class="card border-0 overflow-hidden co-pinterest-card" style="border-radius: 4px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 1px solid rgba(197,168,128,0.18);">
+                            <div class="position-relative" style="height: 420px;">
+                                <img src="/website_cellar_one/static/src/img/featured_whisky.png" class="w-100 h-100 co-zoom-img" style="object-fit: cover; transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);" alt="Premium Whisky"/>
+                                <div class="position-absolute w-100 h-100 top-0 start-0" style="background: linear-gradient(to top, rgba(12, 12, 14, 0.9) 0%, rgba(12, 12, 14, 0.2) 60%, transparent 100%);"></div>
+                                <div class="position-absolute bottom-0 start-0 p-4 w-100 text-start">
+                                    <span class="text-uppercase fw-bold small d-inline-block mb-1" style="color: var(--co-gold); letter-spacing: 2px;">Premium Scotch</span>
+                                    <h3 class="text-white mb-2 fw-bold" style="font-family: var(--co-font-heading); color: #FAF8F5 !important;">Single Malt Whisky</h3>
+                                    <p class="mb-4 small" style="max-width: 340px; color: rgba(250, 248, 245, 0.85);">Rich, complex, peat-smoked and aged in oak barrels to absolute perfection.</p>
+                                    <a href="/shop/category/spirits-28" class="btn btn-outline-light rounded-pill px-4 text-uppercase fw-bold btn-sm" style="letter-spacing: 2px; border-width: 1.5px; font-size: 0.75rem; color: #FAF8F5; border-color: rgba(250,248,245,0.4);">Shop Whisky</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Featured Champagne -->
+                    <div class="col-md-6">
+                        <div class="card border-0 overflow-hidden co-pinterest-card" style="border-radius: 4px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); border: 1px solid rgba(197,168,128,0.18);">
+                            <div class="position-relative" style="height: 420px;">
+                                <img src="/website_cellar_one/static/src/img/featured_champagne.png" class="w-100 h-100 co-zoom-img" style="object-fit: cover; transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);" alt="Luxury Champagne"/>
+                                <div class="position-absolute w-100 h-100 top-0 start-0" style="background: linear-gradient(to top, rgba(12, 12, 14, 0.9) 0%, rgba(12, 12, 14, 0.2) 60%, transparent 100%);"></div>
+                                <div class="position-absolute bottom-0 start-0 p-4 w-100 text-start">
+                                    <span class="text-uppercase fw-bold small d-inline-block mb-1" style="color: var(--co-gold); letter-spacing: 2px;">French Imports</span>
+                                    <h3 class="text-white mb-2 fw-bold" style="font-family: var(--co-font-heading); color: #FAF8F5 !important;">Luxury Champagne</h3>
+                                    <p class="mb-4 small" style="max-width: 340px; color: rgba(250, 248, 245, 0.85);">Celebrate life's finest moments with exquisite sparkles and delicate bubbles.</p>
+                                    <a href="/shop/category/wines-27" class="btn btn-outline-light rounded-pill px-4 text-uppercase fw-bold btn-sm" style="letter-spacing: 2px; border-width: 1.5px; font-size: 0.75rem; color: #FAF8F5; border-color: rgba(250,248,245,0.4);">Shop Champagne</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vineyard Promo Banner — LIGHT LUXURY THEME -->
+        <section class="co-vineyard-promo position-relative py-5" style="min-height: 480px; display: flex; align-items: center;">
+            <div class="co-promo-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden;">
+                <img src="/website_cellar_one/static/src/img/hero_banner.png" alt="Vineyard background" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.65) blur(1px);"/>
+            </div>
+            <div class="container position-relative" style="z-index: 1;">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <div class="co-promo-glass-card p-5" style="background: rgba(250, 248, 245, 0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--co-gold); border-radius: 4px; box-shadow: 0 25px 50px rgba(0,0,0,0.08);">
+                            <span class="text-uppercase fw-bold small" style="color: var(--co-gold-dark); letter-spacing: 4px; font-size: 0.8rem;">Exclusive Selection</span>
+                            
+                            <!-- Light theme title -->
+                            <h2 class="display-5 fw-bold mt-2 mb-4" style="font-family: var(--co-font-heading); color: #111111 !important; letter-spacing: -0.01em;">
+                                Private Vineyard Imports
+                            </h2>
+                            
+                            <div class="co-divider mx-auto my-3" style="width: 60px; height: 1.5px; background-color: var(--co-gold);"></div>
+                            
+                            <!-- Light theme description -->
+                            <p class="lead mb-4" style="font-size: 1.05rem; font-weight: 300; line-height: 1.8; color: #333333 !important;">
+                                Discover our range of limited-edition bottles sourced from small, family-owned vineyards in Bordeaux, Tuscany, and Mendoza. Available exclusively to Cellar One members.
+                            </p>
+                            
+                            <a href="/shop" class="btn btn-outline-dark rounded-pill px-5 py-3 text-uppercase fw-bold" style="letter-spacing: 2px; border-width: 1.5px; border-color: var(--co-gold-dark); color: var(--co-gold-dark); transition: all 0.3s ease; font-size: 0.85rem;">
+                                Explore Exclusives
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Heritage Timeline -->
+        <section class="co-heritage-timeline py-5 bg-white">
+            <div class="container py-5">
+                <div class="text-center mb-5">
+                    <span class="text-uppercase fw-bold" style="color: var(--co-gold-dark); letter-spacing: 3px; font-size: 0.85rem;">Our Story</span>
+                    <h2 style="font-family: var(--co-font-heading); color: #111111; font-weight: 700; font-size: 2.2rem; margin-top: 5px;">Milestones of Quality</h2>
+                    <div class="co-divider mx-auto mt-2 mb-3" style="width: 50px; height: 1.5px; background-color: var(--co-gold);"></div>
+                    <p class="text-muted">A timeline of our pursuit of fine taste</p>
+                </div>
+                
+                <div class="row mt-5 position-relative">
+                    <!-- Timeline horizontal connector line -->
+                    <div class="co-timeline-line d-none d-md-block" style="position: absolute; top: 40px; left: 10%; width: 80%; height: 1.5px; background-color: var(--co-gold); opacity: 0.3; z-index: 0;"></div>
+                    
+                    <!-- Timeline Milestone 1 -->
+                    <div class="col-md-4 text-center mb-5 mb-md-0 position-relative" style="z-index: 1;">
+                        <div class="co-timeline-node mx-auto mb-4" style="width: 24px; height: 24px; border-radius: 50%; background-color: #ffffff; border: 2.5px solid var(--co-gold); box-shadow: 0 0 12px rgba(197,168,128,0.3); transition: all 0.3s ease;"></div>
+                        <h3 class="fw-bold" style="font-family: var(--co-font-heading); color: var(--co-gold-dark);">Kampala</h3>
+                        <h5 class="fw-bold mt-2" style="color: #111111; font-size: 1.05rem;">Bukoto Boutique</h5>
+                        <p class="text-muted small px-3">Established our flagship boutique on Bukoto-Kisasi Road (Kirabo Complex) in Kampala, offering a handpicked selection of imported premium wines and spirits.</p>
+                    </div>
+                    
+                    <!-- Timeline Milestone 2 -->
+                    <div class="col-md-4 text-center mb-5 mb-md-0 position-relative" style="z-index: 1;">
+                        <div class="co-timeline-node mx-auto mb-4" style="width: 24px; height: 24px; border-radius: 50%; background-color: #ffffff; border: 2.5px solid var(--co-gold); box-shadow: 0 0 12px rgba(197,168,128,0.3); transition: all 0.3s ease;"></div>
+                        <h3 class="fw-bold" style="font-family: var(--co-font-heading); color: var(--co-gold-dark);">Jinja</h3>
+                        <h5 class="fw-bold mt-2" style="color: #111111; font-size: 1.05rem;">Lubas Road Boutique</h5>
+                        <p class="text-muted small px-3">Expanded our boutique footprint to Jinja City, opening our second retail store on Lubas Road (Vrajdan Building) to serve the Eastern region.</p>
+                    </div>
+                    
+                    <!-- Timeline Milestone 3 -->
+                    <div class="col-md-4 text-center position-relative" style="z-index: 1;">
+                        <div class="co-timeline-node mx-auto mb-4" style="width: 24px; height: 24px; border-radius: 50%; background-color: #ffffff; border: 2.5px solid var(--co-gold); box-shadow: 0 0 12px rgba(197,168,128,0.3); transition: all 0.3s ease;"></div>
+                        <h3 class="fw-bold" style="font-family: var(--co-font-heading); color: var(--co-gold-dark);">Online</h3>
+                        <h5 class="fw-bold mt-2" style="color: #111111; font-size: 1.05rem;">E-Boutique &amp; Concierge</h5>
+                        <p class="text-muted small px-3">Launched our online digital ordering portal at cecelinewines.com paired with our WhatsApp delivery service, offering express dispatch across both regions.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="co-testimonials py-5" style="background-color: var(--co-cream); border-top: 1px solid rgba(197,168,128,0.15);">
+            <div class="container py-5">
+                <div class="text-center mb-5">
+                    <span class="text-uppercase fw-bold" style="color: var(--co-gold-dark); letter-spacing: 3px; font-size: 0.75rem;">Client Reviews</span>
+                    <h2 class="mt-2" style="font-family: var(--co-font-heading); color: #111111; font-weight: 700; font-size: 2.2rem; letter-spacing: -0.01em;">What Our Clients Say</h2>
+                    <div class="co-divider mx-auto mt-2 mb-3" style="width: 50px; height: 1.5px; background-color: var(--co-gold);"></div>
+                    <p class="text-muted">Trusted by thousands of beverage enthusiasts and connoisseurs across Uganda.</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card border-0 p-4" style="border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); background: white; height: 100%; border: 1px solid rgba(197,168,128,0.12);">
+                            <div class="text-warning mb-3" style="font-size: 0.8rem; letter-spacing: 2px;">★★★★★</div>
+                            <p class="text-muted italic small mb-4" style="font-style: italic; line-height: 1.7;">"Exceptional customer service! Ordering through WhatsApp is super fast and my bottles arrived beautifully packaged within Kampala in under 2 hours. Highly recommended."</p>
+                            <div class="mt-auto">
+                                <h6 class="fw-bold mb-0" style="color: #111111;">Amos N.</h6>
+                                <span class="text-muted small">Verified Collector</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 p-4" style="border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); background: white; height: 100%; border: 1px solid rgba(197,168,128,0.12);">
+                            <div class="text-warning mb-3" style="font-size: 0.8rem; letter-spacing: 2px;">★★★★★</div>
+                            <p class="text-muted italic small mb-4" style="font-style: italic; line-height: 1.7;">"I visited the Kampala boutique for a private wine tasting event. The sommelier's knowledge was outstanding, and I found some rare vintage Single Malts that aren't sold anywhere else."</p>
+                            <div class="mt-auto">
+                                <h6 class="fw-bold mb-0" style="color: #111111;">Sarah K.</h6>
+                                <span class="text-muted small">Restaurateur</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 p-4" style="border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); background: white; height: 100%; border: 1px solid rgba(197,168,128,0.12);">
+                            <div class="text-warning mb-3" style="font-size: 0.8rem; letter-spacing: 2px;">★★★★★</div>
+                            <p class="text-muted italic small mb-4" style="font-style: italic; line-height: 1.7;">"Fast delivery and completely genuine quality. Cellar One has become my default store for all corporate gifting. Their selection of champagne is unmatched in Uganda."</p>
+                            <div class="mt-auto">
+                                <h6 class="fw-bold mb-0" style="color: #111111;">David O.</h6>
+                                <span class="text-muted small">Corporate Client</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+      </xpath>
+    </template>
+  </data>
+</odoo>

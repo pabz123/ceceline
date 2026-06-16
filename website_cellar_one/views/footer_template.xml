@@ -22,9 +22,7 @@
          needed) — far safer than us guessing which template to
          deactivate on a production instance we cannot see.
     ════════════════════════════════════════════════════════ -->
-    <template id="cellar_one_footer_addon"
-              inherit_id="website.layout"
-              name="Cellar One Footer Addon">
+    <template id="cellar_one_footer_addon" inherit_id="website.layout" name="Cellar One Custom Footer">
       <xpath expr="//div[@id='footer']" position="after">
 
         <footer class="co-footer" data-anchor="True">
@@ -68,7 +66,7 @@
                   <div class="co-whatsapp-ctас">
                     <a href="https://wa.me/256749057433" target="_blank" rel="noopener"
                        class="co-wa-btn">
-                      <div class="co-wa-icon">W</div>
+                      <div class="co-wa-icon"><i class="fa fa-whatsapp"/></div>
                       <div>
                         <strong>+256 749 057 433</strong>
                         <span class="co-wa-location">Kampala</span>
@@ -76,7 +74,7 @@
                     </a>
                     <a href="https://wa.me/256749062744" target="_blank" rel="noopener"
                        class="co-wa-btn">
-                      <div class="co-wa-icon">W</div>
+                      <div class="co-wa-icon"><i class="fa fa-whatsapp"/></div>
                       <div>
                         <strong>+256 749 062 744</strong>
                         <span class="co-wa-location">Jinja</span>
@@ -88,14 +86,21 @@
                 <!-- Column 2: Shop links (real category slugs from live site) -->
                 <div class="co-footer__col">
                   <h5>Shop</h5>
+                  <t t-set="cat_wines" t-value="request.env['product.public.category'].sudo().search([('name', '=ilike', 'wines')], limit=1)"/>
+                  <t t-set="cat_red" t-value="request.env['product.public.category'].sudo().search([('name', '=ilike', 'red wines')], limit=1)"/>
+                  <t t-set="cat_white" t-value="request.env['product.public.category'].sudo().search([('name', '=ilike', 'white wines')], limit=1)"/>
+                  <t t-set="cat_sparkling" t-value="request.env['product.public.category'].sudo().search([('name', '=ilike', 'sparkling wines')], limit=1)"/>
+                  <t t-set="cat_spirits" t-value="request.env['product.public.category'].sudo().search([('name', '=ilike', 'spirits')], limit=1)"/>
+                  <t t-set="cat_beer" t-value="request.env['product.public.category'].sudo().search([('name', '=ilike', 'beer')], limit=1)"/>
+                  <t t-set="cat_cider" t-value="request.env['product.public.category'].sudo().search([('name', '=ilike', 'cider')], limit=1)"/>
                   <ul>
-                    <li><a href="/shop/category/wines-7">All Wines</a></li>
-                    <li><a href="/shop/category/wines-red-wines-11">Red Wines</a></li>
-                    <li><a href="/shop/category/wines-white-wines-12">White Wines</a></li>
-                    <li><a href="/shop/category/wines-sparkling-wines-13">Sparkling Wines</a></li>
-                    <li><a href="/shop/category/spirits-8">All Spirits</a></li>
-                    <li><a href="/shop/category/beer-9">Beer</a></li>
-                    <li><a href="/shop/category/cider-10">Cider</a></li>
+                    <li><a t-attf-href="/shop/category/#{cat_wines.id if cat_wines else ''}">All Wines</a></li>
+                    <li><a t-attf-href="/shop/category/#{cat_red.id if cat_red else ''}">Red Wines</a></li>
+                    <li><a t-attf-href="/shop/category/#{cat_white.id if cat_white else ''}">White Wines</a></li>
+                    <li><a t-attf-href="/shop/category/#{cat_sparkling.id if cat_sparkling else ''}">Sparkling Wines</a></li>
+                    <li><a t-attf-href="/shop/category/#{cat_spirits.id if cat_spirits else ''}">All Spirits</a></li>
+                    <li><a t-attf-href="/shop/category/#{cat_beer.id if cat_beer else ''}">Beer</a></li>
+                    <li><a t-attf-href="/shop/category/#{cat_cider.id if cat_cider else ''}">Cider</a></li>
                   </ul>
                 </div>
 
@@ -107,7 +112,7 @@
                     <li><a href="/shop/wishlist">My Wishlist</a></li>
                     <li><a href="/faq">FAQ</a></li>
                     <li><a href="/contactus">Contact Us</a></li>
-                    <li><a href="/locations-maps">Find Us</a></li>
+                    <li><a href="/location">Find Us</a></li>
                     <li><a href="/web/login">Sign In</a></li>
                   </ul>
                 </div>
@@ -117,17 +122,17 @@
                   <h5>Find Us</h5>
 
                   <div class="co-contact-item">
-                    <span class="co-contact-icon">📍</span>
-                    <span>Plot 15, Kampala Road, Kampala, Uganda</span>
+                    <span class="co-contact-icon"><i class="fa fa-map-marker"/></span>
+                    <span>Kirabo Complex - Ground Floor, Plot No 2101, Bukoto Kisasi Road, Kampala, Uganda</span>
                   </div>
                   <div class="co-contact-item">
-                    <span class="co-contact-icon">✉️</span>
-                    <a href="mailto:info@cecelinewines.com" style="color:inherit;">
-                      info@cecelinewines.com
+                    <span class="co-contact-icon"><i class="fa fa-envelope"/></span>
+                    <a href="mailto:admin@cecelinebeverages.com" style="color:inherit;">
+                      admin@cecelinebeverages.com
                     </a>
                   </div>
                   <div class="co-contact-item">
-                    <span class="co-contact-icon">🕐</span>
+                    <span class="co-contact-icon"><i class="fa fa-clock-o"/></span>
                     <span>Mon–Sat 9am–8pm · Sun 10am–6pm</span>
                   </div>
 
@@ -155,22 +160,22 @@
               <div class="co-footer-bottom-inner">
 
                 <p class="co-copyright">
-                  © <t t-esc="datetime.date.today().year"/> Cellar One Wines and Spirits.
+                  © <t t-esc="datetime.date.today().year"/> Ceceline Wines and Spirits.
                   All rights reserved.
                 </p>
 
                 <!-- Social icons (real links from live site) -->
                 <div class="co-social-icons">
                   <a href="https://www.facebook.com/profile.php?id=61581820687239" target="_blank"
-                     rel="noopener" class="co-social-icon" title="Facebook">f</a>
+                     rel="noopener" class="co-social-icon" title="Facebook"><i class="fa fa-facebook"/></a>
                   <a href="https://www.instagram.com/cecelinebeveragesug/" target="_blank"
-                     rel="noopener" class="co-social-icon" title="Instagram">in</a>
+                     rel="noopener" class="co-social-icon" title="Instagram"><i class="fa fa-instagram"/></a>
                   <a href="https://x.com/cecelineug" target="_blank"
-                     rel="noopener" class="co-social-icon" title="X / Twitter">𝕏</a>
+                     rel="noopener" class="co-social-icon" title="X / Twitter"><i class="fa fa-twitter"/></a>
                   <a href="https://www.youtube.com/@cecelinebeveragesug" target="_blank"
-                     rel="noopener" class="co-social-icon" title="YouTube">▶</a>
+                     rel="noopener" class="co-social-icon" title="YouTube"><i class="fa fa-youtube-play"/></a>
                   <a href="https://wa.me/256749057433" target="_blank"
-                     rel="noopener" class="co-social-icon" title="WhatsApp">W</a>
+                     rel="noopener" class="co-social-icon" title="WhatsApp"><i class="fa fa-whatsapp"/></a>
                 </div>
 
               </div>

@@ -13,14 +13,14 @@
          ratings.js.
     ════════════════════════════════════════════════════════ -->
     <template id="layout_additions" inherit_id="website.layout" name="Cellar One Layout Additions">
-      <xpath expr="//div[@id='wrapwrap']" position="before">
+      <xpath expr="//div[@id='wrapwrap']" position="inside">
 
         <!-- Age Gate -->
         <div id="co-age-gate" class="co-age-gate hidden">
           <div class="co-age-gate__backdrop"></div>
           <div class="co-age-gate__modal">
             <div class="co-age-gate__header">
-              <div class="co-age-gate-logo">Cellar <span>One</span></div>
+              <img src="/website_cellar_one/static/src/img/logo/cecelin.png" alt="Cellar One" style="height: 50px; margin-bottom: 0.5rem;"/>
               <div class="co-age-gate-icon">🍷</div>
               <h2>Welcome to Cellar One</h2>
               <p>Uganda's premier wines &amp; spirits destination</p>
@@ -57,25 +57,364 @@
 
 
     <!-- ═══════════════════════════════════════════════════════
-         NAVBAR — WhatsApp quick-order CTA
-
-         Stable anchor: #o_main_nav is the real container id inside
-         website.template_header_default (confirmed in source). We
-         append a WhatsApp button after the brand/menu block, inside
-         the existing nav row, rather than replacing any part of the
-         navbar's login/search/account markup (which is wired to
-         portal session JS we should not disturb).
+         NAVBAR — Two Tier Restructure
     ════════════════════════════════════════════════════════ -->
-    <template id="navbar_whatsapp_cta"
+    <template id="custom_two_tier_navbar"
               inherit_id="website.template_header_default"
-              name="Cellar One Navbar WhatsApp CTA">
-      <xpath expr="//div[@id='o_main_nav']" position="inside">
-        <a href="https://wa.me/256749057433" target="_blank" rel="noopener"
-           class="btn-co-nav-cta d-none d-xl-inline-flex align-items-center gap-1 ms-2 order-last">
-          <i class="fa fa-whatsapp"/> Order via WhatsApp
-        </a>
+              name="Cellar One Navbar">
+      
+      <!-- Completely replace the default o_main_nav desktop container -->
+      <xpath expr="//div[@id='o_main_nav']" position="replace">
+        <div id="o_main_nav" class="o_main_nav container d-flex align-items-center justify-content-between py-3">
+           
+           <!-- Left: Exact Logo (Composite Red Logo) -->
+           <a href="/" class="co-navbar-brand d-flex align-items-center text-decoration-none" style="margin-right: 2rem; gap: 4px;">
+               <img src="/website_cellar_one/static/src/img/logo/cecelin_footer.png" alt="Icon" style="height: 50px; width: auto; object-fit: contain;" loading="lazy"></img>
+               <img src="/website_cellar_one/static/src/img/logo/ce_logo.png" alt="Cellar One" style="height: 45px; width: auto; object-fit: contain;" loading="lazy"></img>
+           </a>
+
+           <!-- Center: Navigation Menus -->
+           <div class="co-navbar-menu d-none d-lg-flex mx-auto">
+               <t t-call="website.navbar_nav">
+                   <t t-set="_nav_class" t-valuef=""/>
+                   <t t-foreach="website.menu_id.child_id" t-as="submenu">
+                       <t t-call="website.submenu">
+                           <t t-set="item_class" t-valuef="nav-item mx-2"/>
+                           <t t-set="link_class" t-valuef="nav-link fw-bold text-uppercase text-dark"/>
+                       </t>
+                   </t>
+               </t>
+           </div>
+
+           <!-- Right: Actions (WhatsApp, Cart, Wishlist, Account) -->
+           <div class="co-navbar-actions d-flex align-items-center gap-4">
+               <a t-if="not request.env.user._is_public() and (request.session.get('website_sale_cart_quantity') or (website.sale_get_order() and website.sale_get_order().cart_quantity))"
+                  href="https://wa.me/256749057433" target="_blank" rel="noopener"
+                  class="co-nav-icon-btn d-flex align-items-center gap-2 text-success fw-bold text-decoration-none">
+                  <i class="fa fa-whatsapp fs-5"/> <span class="d-none d-xl-inline">Order</span>
+               </a>
+               
+               <a href="/shop/wishlist" class="co-nav-icon-btn position-relative text-dark text-decoration-none">
+                  <i class="fa fa-heart-o fs-5"/>
+                  <t t-set="wish_qty" t-value="0"/>
+                  <span class="co-nav-badge d-none" t-esc="wish_qty"/>
+               </a>
+
+               <a href="/shop/cart" class="co-nav-icon-btn position-relative text-dark text-decoration-none">
+                  <i class="fa fa-shopping-cart fs-5"/>
+                  <t t-set="cart_qty" t-value="request.session.get('website_sale_cart_quantity', website.sale_get_order().cart_quantity if website.sale_get_order() else 0)"/>
+                  <span class="co-nav-badge" t-if="cart_qty &gt; 0" t-esc="cart_qty"/>
+               </a>
+
+               <t t-if="request.env.user._is_public()">
+                   <a href="/web/login" class="co-nav-icon-btn text-dark text-decoration-none">
+                      <i class="fa fa-user-o fs-5"/>
+                   </a>
+               </t>
+               <t t-else="">
+                   <div class="dropdown co-nav-account-dropdown">
+                       <a href="#" class="co-nav-icon-btn text-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
+                          <i class="fa fa-user-o fs-5"/>
+                       </a>
+                       <div class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2">
+                           <a href="/my/account" class="dropdown-item">My Account</a>
+                           <a href="/web/session/logout?redirect=/" class="dropdown-item text-danger">Sign Out</a>
+                       </div>
+                   </div>
+               </t>
+           </div>
+        </div>
       </xpath>
     </template>
+    
+    <!-- ═══════════════════════════════════════════════════════
+         FIND US / LOCATION PAGE
+    ════════════════════════════════════════════════════════ -->
+    <template id="location_page_template" name="Find Us — Store Locations">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                
+                <!-- Hero Section -->
+                <section class="co-location-hero text-center py-5">
+                    <div class="container py-3">
+                        <span class="co-location-subtitle text-uppercase fw-bold">Our Stores</span>
+                        <h1 class="co-location-title display-4 fw-bold mt-2">Find A Cellar One Store</h1>
+                        <p class="lead text-muted mx-auto" style="max-width: 600px;">Visit Uganda's premier wines and spirits boutiques for specialized collections and sommelier recommendations.</p>
+                    </div>
+                </section>
+
+                <!-- Stores Section -->
+                <section class="co-stores-section pb-5">
+                    <div class="container pb-5">
+                        <div class="row g-5">
+                            
+                            <!-- Store 1: Kampala -->
+                            <div class="col-lg-6">
+                                <div class="co-store-card">
+                                    <div class="co-store-map">
+                                        <iframe src="https://maps.google.com/maps?q=Kirabo%20Complex,%20Kampala,%20Uganda&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=&amp;output=embed" 
+                                                width="100%" height="280" style="border:0; border-radius: 12px;" allowfullscreen="true" loading="lazy"></iframe>
+                                    </div>
+                                    <div class="co-store-details mt-4">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h3 class="fw-bold">Kampala Store (Flagship)</h3>
+                                                <span class="badge bg-danger-subtle text-danger fw-bold">Flagship Boutique</span>
+                                            </div>
+                                            <a href="https://wa.me/256749057433" target="_blank" class="co-store-cta-btn"><i class="fa fa-whatsapp"></i> Chat</a>
+                                        </div>
+                                        
+                                        <ul class="list-unstyled space-y-3 mt-3">
+                                            <li>
+                                                <i class="fa fa-map-marker text-danger"></i>
+                                                <span>Kirabo Complex - Ground Floor, Plot No 2101, Bukoto Kisasi Road, Kampala, Uganda</span>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-clock-o text-danger"></i>
+                                                <span>Mon - Sat: 10:00 AM - 9:00 PM<br/>Sun: 12:00 PM - 6:00 PM</span>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-phone text-danger"></i>
+                                                <span>+256 749 057 433 / 020 0926053</span>
+                                            </li>
+                                            <li class="pt-2 border-top text-muted" style="font-size: 0.85rem;">
+                                                <span>TIN: 1038971346</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Store 2: Jinja -->
+                            <div class="col-lg-6">
+                                <div class="co-store-card">
+                                    <div class="co-store-map">
+                                        <iframe src="https://maps.google.com/maps?q=Vrajdan%20Building,%20Jinja,%20Uganda&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=&amp;output=embed" 
+                                                width="100%" height="280" style="border:0; border-radius: 12px;" allowfullscreen="true" loading="lazy"></iframe>
+                                    </div>
+                                    <div class="co-store-details mt-4">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h3 class="fw-bold">Jinja Store</h3>
+                                                <span class="badge bg-secondary-subtle text-secondary fw-bold">Branch Store</span>
+                                            </div>
+                                            <a href="https://wa.me/256749062744" target="_blank" class="co-store-cta-btn"><i class="fa fa-whatsapp"></i> Chat</a>
+                                        </div>
+                                        
+                                        <ul class="list-unstyled space-y-3 mt-3">
+                                            <li>
+                                                <i class="fa fa-map-marker text-danger"></i>
+                                                <span>Vrajdan Building - Shop No 23, Plot No 12, Lubas Road, Jinja, Uganda</span>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-clock-o text-danger"></i>
+                                                <span>Mon - Sat: 10:00 AM - 9:00 PM<br/>Sun: 12:00 PM - 6:00 PM</span>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-phone text-danger"></i>
+                                                <span>+256 749 062 744 / 020 0991455</span>
+                                            </li>
+                                            <li class="pt-2 border-top text-muted" style="font-size: 0.85rem;">
+                                                <span>TIN: 1038971346</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Services Section -->
+                <section class="co-store-services py-5" style="background-color: #f9f9fa; border-top: 1px solid #edf2f7;">
+                    <div class="container py-4">
+                        <div class="text-center mb-5">
+                            <h2 class="fw-bold" style="font-family: var(--co-font-heading); color: var(--co-burgundy);">Bespoke In-Store Services</h2>
+                            <p class="text-muted">Experience luxury beverages with our range of personalized services.</p>
+                        </div>
+                        
+                        <div class="row g-4 text-center">
+                            <div class="col-md-3">
+                                <div class="co-service-card p-4">
+                                    <div class="co-service-icon mb-3">🍷</div>
+                                    <h4 class="fw-bold mb-2">Private Tastings</h4>
+                                    <p class="text-muted small">Personalized wine and spirits tastings with our certified sommeliers.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="co-service-card p-4">
+                                    <div class="co-service-icon mb-3">🎓</div>
+                                    <h4 class="fw-bold mb-2">Expert Consult</h4>
+                                    <p class="text-muted small">Get personalized recommendations from our wines and spirits experts.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="co-service-card p-4">
+                                    <div class="co-service-icon mb-3">🌡️</div>
+                                    <h4 class="fw-bold mb-2">Cellar Storage</h4>
+                                    <p class="text-muted small">Professional climate-controlled storage for valuable wine collections.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="co-service-card p-4">
+                                    <div class="co-service-icon mb-3">🍾</div>
+                                    <h4 class="fw-bold mb-2">Private Events</h4>
+                                    <p class="text-muted small">Host exclusive wine tastings and corporate events at our venues.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+            </div>
+        </t>
+    </template>
+
+    <!-- Location Website Page Record -->
+    <record id="location_page_record" model="website.page">
+        <field name="name">Find Us</field>
+        <field name="url">/location</field>
+        <field name="view_id" ref="location_page_template"/>
+        <field name="is_published">True</field>
+        <field name="active">True</field>
+    </record>
+
+    <!-- FAQ Template -->
+    <template id="faq_page_template" name="FAQ — Frequently Asked Questions">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <!-- FAQ Hero Section -->
+                <section class="co-faq-hero text-center py-5" style="background-color: var(--co-bg-light); border-bottom: 1px solid var(--co-border);">
+                    <div class="container py-4">
+                        <span class="text-uppercase fw-bold" style="color: var(--co-gold-dark); letter-spacing: 2px; font-size: 0.85rem;">Help Center</span>
+                        <h1 class="display-5 fw-bold mt-2" style="font-family: var(--co-font-heading); color: var(--co-burgundy);">Frequently Asked Questions</h1>
+                        <p class="lead text-muted mx-auto" style="max-width: 600px; font-size: 1.1rem; margin-top: 1rem;">Find quick answers to common questions about our products, store locations, deliveries, and payment methods.</p>
+                    </div>
+                </section>
+
+                <!-- FAQ Accordion Section -->
+                <section class="py-5" style="background-color: var(--co-bg-warm);">
+                    <div class="container py-3">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="accordion accordion-flush shadow-sm" id="faqAccordion" style="border-radius: 12px; overflow: hidden;">
+                                    
+                                    <!-- Q1 -->
+                                    <div class="accordion-item border-bottom">
+                                        <h2 class="accordion-header" id="faq-head-1">
+                                            <button class="accordion-button fw-bold text-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-1" aria-expanded="false" aria-controls="faq-collapse-1" style="font-family: var(--co-font-heading); font-size: 1.1rem; padding: 1.25rem; background-color: #ffffff; color: var(--co-burgundy) !important;">
+                                                Where are your physical stores located in Uganda?
+                                            </button>
+                                        </h2>
+                                        <div id="faq-collapse-1" class="accordion-collapse collapse" aria-labelledby="faq-head-1" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body text-muted" style="background-color: #faf9f6; line-height: 1.6; font-size: 0.95rem;">
+                                                You can visit our boutique physical stores at:
+                                                <ul>
+                                                    <li><strong>Kampala Flagship:</strong> Kirabo Complex, Ground Floor, Plot No 2101, Bukoto Kisasi Road.</li>
+                                                    <li><strong>Jinja Branch:</strong> Vrajdan Building, Shop No 23, Plot No 12, Lubas Road, Jinja City.</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Q2 -->
+                                    <div class="accordion-item border-bottom">
+                                        <h2 class="accordion-header" id="faq-head-2">
+                                            <button class="accordion-button fw-bold text-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-2" aria-expanded="false" aria-controls="faq-collapse-2" style="font-family: var(--co-font-heading); font-size: 1.1rem; padding: 1.25rem; background-color: #ffffff;">
+                                                What are your store operating hours?
+                                            </button>
+                                        </h2>
+                                        <div id="faq-collapse-2" class="accordion-collapse collapse" aria-labelledby="faq-head-2" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body text-muted" style="background-color: #faf9f6; line-height: 1.6; font-size: 0.95rem;">
+                                                Our stores are open during the following hours:
+                                                <ul>
+                                                    <li><strong>Monday to Saturday:</strong> 10:00 AM – 9:00 PM</li>
+                                                    <li><strong>Sunday:</strong> 12:00 PM – 6:00 PM</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Q3 -->
+                                    <div class="accordion-item border-bottom">
+                                        <h2 class="accordion-header" id="faq-head-3">
+                                            <button class="accordion-button fw-bold text-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-3" aria-expanded="false" aria-controls="faq-collapse-3" style="font-family: var(--co-font-heading); font-size: 1.1rem; padding: 1.25rem; background-color: #ffffff;">
+                                                Do you deliver orders, and what are the delivery charges?
+                                            </button>
+                                        </h2>
+                                        <div id="faq-collapse-3" class="accordion-collapse collapse" aria-labelledby="faq-head-3" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body text-muted" style="background-color: #faf9f6; line-height: 1.6; font-size: 0.95rem;">
+                                                Yes, we provide express delivery service. Delivery fees depend on your exact location. Free delivery is available for orders above a certain threshold. You can see delivery options during checkout or coordinate delivery directly with us via WhatsApp.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Q4 -->
+                                    <div class="accordion-item border-bottom">
+                                        <h2 class="accordion-header" id="faq-head-4">
+                                            <button class="accordion-button fw-bold text-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-4" aria-expanded="false" aria-controls="faq-collapse-4" style="font-family: var(--co-font-heading); font-size: 1.1rem; padding: 1.25rem; background-color: #ffffff;">
+                                                Can I place an order directly on WhatsApp?
+                                            </button>
+                                        </h2>
+                                        <div id="faq-collapse-4" class="accordion-collapse collapse" aria-labelledby="faq-head-4" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body text-muted" style="background-color: #faf9f6; line-height: 1.6; font-size: 0.95rem;">
+                                                Absolutely! You can click the WhatsApp icon/link on the top-right header or bottom footer of our site to start a chat with our customer support and place your order directly.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Q5 -->
+                                    <div class="accordion-item border-bottom">
+                                        <h2 class="accordion-header" id="faq-head-5">
+                                            <button class="accordion-button fw-bold text-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-5" aria-expanded="false" aria-controls="faq-collapse-5" style="font-family: var(--co-font-heading); font-size: 1.1rem; padding: 1.25rem; background-color: #ffffff;">
+                                                Are all your beverages authentic and original imports?
+                                            </button>
+                                        </h2>
+                                        <div id="faq-collapse-5" class="accordion-collapse collapse" aria-labelledby="faq-head-5" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body text-muted" style="background-color: #faf9f6; line-height: 1.6; font-size: 0.95rem;">
+                                                Yes. We source our wines and spirits directly from authentic vineyards and licensed distributors worldwide. Every bottle in our catalog is guaranteed 100% original.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Q6 -->
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="faq-head-6">
+                                            <button class="accordion-button fw-bold text-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-6" aria-expanded="false" aria-controls="faq-collapse-6" style="font-family: var(--co-font-heading); font-size: 1.1rem; padding: 1.25rem; background-color: #ffffff;">
+                                                What payment methods do you accept?
+                                            </button>
+                                        </h2>
+                                        <div id="faq-collapse-6" class="accordion-collapse collapse" aria-labelledby="faq-head-6" data-bs-parent="#faqAccordion">
+                                            <div class="accordion-body text-muted" style="background-color: #faf9f6; line-height: 1.6; font-size: 0.95rem;">
+                                                We accept Cash on Delivery, Mobile Money (MTN Mobile Money, Airtel Money), and credit/debit card transactions. All transactions are securely processed.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                
+                                <div class="text-center mt-5">
+                                    <p class="text-muted">Still have questions?</p>
+                                    <a href="https://wa.me/256749057433" target="_blank" rel="noopener" class="btn btn-co-primary px-4 py-2" style="border-radius: 8px;">
+                                        <i class="fa fa-whatsapp me-2"/>Chat with us on WhatsApp
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <!-- FAQ Website Page Record -->
+    <record id="faq_page_record" model="website.page">
+        <field name="name">FAQ</field>
+        <field name="url">/faq</field>
+        <field name="view_id" ref="faq_page_template"/>
+        <field name="is_published">True</field>
+        <field name="active">True</field>
+    </record>
 
   </data>
 </odoo>

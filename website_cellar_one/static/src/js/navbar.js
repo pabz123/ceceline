@@ -1,66 +1,58 @@
 /** @odoo-module **/
 // ─────────────────────────────────────────────────────────────
-//  NAVBAR — Scroll-aware class, smooth parallax trigger
+//  NAVBAR — Scroll-aware class, smooth anchor scrolling
 // ─────────────────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', () => {
-    const navbar = document.querySelector('.o_main_navbar, #top');
-    const hero   = document.querySelector('.co-hero__bg');
+import publicWidget from "@web/legacy/js/public/public_widget";
 
-    if (!navbar) return;
+publicWidget.registry.CellarOneNavbar = publicWidget.Widget.extend({
+    selector: '#wrapwrap',
 
-    // ── Scroll: add .scrolled class ─────────────────────────
-    let ticking = false;
+    start() {
+        this.navbar = document.querySelector('.o_main_navbar, #top');
+        if (!this.navbar) return this._super(...arguments);
 
-    function onScroll() {
-        if (!ticking) {
+        this._ticking = false;
+        this._onScroll = this._onScroll.bind(this);
+        window.addEventListener('scroll', this._onScroll, { passive: true });
+
+        // Smooth anchor scrolling
+        this.el.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', (e) => {
+                const href = a.getAttribute('href');
+                if (!href || href === '#') return;
+                
+                try {
+                    const target = document.querySelector(href);
+                    if (!target) return;
+                    e.preventDefault();
+                    const navH = this.navbar.offsetHeight + 16;
+                    const top  = target.getBoundingClientRect().top + window.scrollY - navH;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                } catch (err) {
+                    // Ignore invalid selectors like "#/"
+                }
+            });
+        });
+
+        return this._super(...arguments);
+    },
+
+    _onScroll() {
+        if (!this._ticking) {
             requestAnimationFrame(() => {
                 const scrollY = window.scrollY;
-
-                // Toggle scrolled class for bg opacity
-                navbar.classList.toggle('scrolled', scrollY > 60);
-
-                // Parallax on hero bg
-                if (hero) {
-                    const offset = scrollY * 0.35;
-                    hero.style.transform = `scale(1.08) translateY(${offset}px)`;
-                }
-
-                ticking = false;
+                this.navbar.classList.toggle('scrolled', scrollY > 60);
+                this._ticking = false;
             });
-            ticking = true;
+            this._ticking = true;
         }
-    }
+    },
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    // ── Smooth anchor scrolling ──────────────────────────────
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', e => {
-            const target = document.querySelector(a.getAttribute('href'));
-            if (!target) return;
-            e.preventDefault();
-            const navH = navbar.offsetHeight + 16;
-            const top  = target.getBoundingClientRect().top + window.scrollY - navH;
-            window.scrollTo({ top, behavior: 'smooth' });
-        });
-    });
-
-    // ── Lazy image loading ───────────────────────────────────
-    if ('IntersectionObserver' in window) {
-        const imgObs = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    if (img.dataset.src) {
-                        img.src = img.dataset.src;
-                        img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
-                        imgObs.unobserve(img);
-                    }
-                }
-            });
-        }, { rootMargin: '200px' });
-
-        document.querySelectorAll('img[data-src]').forEach(img => imgObs.observe(img));
-    }
+    destroy() {
+        window.removeEventListener('scroll', this._onScroll);
+        this._super(...arguments);
+    },
 });
+
+export default publicWidget.registry.CellarOneNavbar;

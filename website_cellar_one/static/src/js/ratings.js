@@ -1,29 +1,23 @@
 /** @odoo-module **/
 // ─────────────────────────────────────────────────────────────
-//  RATINGS — Renders SVG stars, loads rating breakdown,
-//             handles star-picker interaction, submits reviews
+//  RATINGS — Star rendering, rating breakdown, review form
 // ─────────────────────────────────────────────────────────────
 
+import publicWidget from "@web/legacy/js/public/public_widget";
+
 // ── Star SVG renderer ────────────────────────────────────────
-/**
- * Render star icons into a container element.
- * @param {HTMLElement} el       - target element
- * @param {number}      average  - 0–5 (can be float e.g. 3.7)
- */
 function renderStars(el, average) {
     if (!el) return;
     el.innerHTML = '';
-
     for (let i = 1; i <= 5; i++) {
         const star = document.createElement('span');
         star.className = 'co-star';
-
         if (average >= i) {
             star.classList.add('filled');
             star.textContent = '★';
         } else if (average >= i - 0.5) {
             star.classList.add('half');
-            star.textContent = '★'; // half via CSS clip-path if desired
+            star.textContent = '★';
         } else {
             star.textContent = '☆';
         }
@@ -31,266 +25,167 @@ function renderStars(el, average) {
     }
 }
 
-// ── Load rating summary for a product ───────────────────────
-async function loadRatingSummary(productTemplateId) {
-    const summaryEl = document.getElementById('co-rating-summary');
-    if (!summaryEl) return;
+// ── Card rating widget (shop page) ──────────────────────────
+publicWidget.registry.CellarOneCardRating = publicWidget.Widget.extend({
+    selector: '.co-card-rating',
 
-    try {
-        const res = await fetch(`/cellar/rating/${productTemplateId}`, {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ jsonrpc: '2.0', method: 'call', id: 1, params: {} }),
-        });
-        const json = await res.json();
-        const data = json.result || { average: 0, count: 0, breakdown: {} };
-
-        // Big score
-        const scoreEl = summaryEl.querySelector('.co-big-score');
-        if (scoreEl) scoreEl.textContent = data.count ? data.average.toFixed(1) : '—';
-
-        // Stars
-        const starsEl = summaryEl.querySelector('.co-stars-lg');
-        if (starsEl) renderStars(starsEl, data.average);
-
-        // Count
-        const countEl = summaryEl.querySelector('.co-review-count');
-        if (countEl) countEl.textContent = `${data.count} review${data.count !== 1 ? 's' : ''}`;
-
-        // Breakdown bars
-        for (let star = 5; star >= 1; star--) {
-            const row = summaryEl.querySelector(`[data-star="${star}"]`);
-            if (!row) continue;
-            const pct  = data.breakdown[star]?.pct  ?? 0;
-            const cnt  = data.breakdown[star]?.count ?? 0;
-            const fill = row.querySelector('.co-bar-fill');
-            const pctEl= row.querySelector('.co-bar-pct');
-            if (fill)  fill.style.width = `${pct}%`;
-            if (pctEl) pctEl.textContent = cnt ? `${pct}%` : '0%';
+    start() {
+        // Render stars from the data attribute set in QWeb
+        const starsEl = this.el.querySelector('.co-stars');
+        if (starsEl) {
+            const avg = parseFloat(starsEl.dataset.rating || '0');
+            renderStars(starsEl, avg);
         }
+        return this._super(...arguments);
+    },
+});
 
-        // Inline summary on product card (if present)
-        document.querySelectorAll(`.co-card-rating[data-product-tmpl="${productTemplateId}"]`).forEach(el => {
-            const stars  = el.querySelector('.co-stars');
-            const countS = el.querySelector('.co-rating-count');
-            if (stars)  renderStars(stars, data.average);
-            if (countS) countS.textContent = data.count ? `(${data.count})` : '';
-        });
+// ── Rating summary widget (product detail page) ─────────────
+publicWidget.registry.CellarOneRatingSummary = publicWidget.Widget.extend({
+    selector: '#co-rating-summary',
 
-    } catch (err) {
-        console.warn('[CellarOne] Rating fetch failed', err);
-    }
-}
-
-// ── Hydrate all card star containers ────────────────────────
-async function hydrateCardRatings() {
-    const cards = document.querySelectorAll('.co-card-rating[data-product-tmpl]');
-    if (!cards.length) return;
-
-    const ids = new Set([...cards].map(c => parseInt(c.dataset.productTmpl, 10)).filter(Boolean));
-
-    let delay = 0;
-    ids.forEach(id => {
-        setTimeout(async () => {
-            try {
-                const res = await fetch(`/cellar/rating/${id}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ jsonrpc: '2.0', method: 'call', id: 1, params: {} }),
-                });
-                const json = await res.json();
-                const data = json.result || { average: 0, count: 0 };
-
-                document.querySelectorAll(`.co-card-rating[data-product-tmpl="${id}"]`).forEach(el => {
-                    const starsEl = el.querySelector('.co-stars');
-                    const countEl = el.querySelector('.co-rating-count');
-                    if (starsEl) renderStars(starsEl, data.average);
-                    if (countEl) countEl.textContent = data.count ? `(${data.count})` : '';
-                });
-            } catch (_) {}
-        }, delay);
-        delay += 60;
-    });
-}
-
-// ── Star picker (review form) ────────────────────────────────
-function initStarPicker() {
-    const picker = document.querySelector('.co-star-picker');
-    if (!picker) return;
-
-    const inputs = picker.querySelectorAll('input[type="radio"]');
-    const labels = picker.querySelectorAll('label');
-
-    inputs.forEach(input => {
-        input.addEventListener('change', () => {
-            // Update hidden rating field used by Odoo's rating.rating model
-            const hiddenField = document.getElementById('co-review-rating');
-            if (hiddenField) hiddenField.value = input.value;
-        });
-    });
-}
-
-// ── Review form submission ───────────────────────────────────
-function initReviewForm() {
-    const form = document.getElementById('co-review-form');
-    if (!form) return;
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const btn = form.querySelector('[type="submit"]');
-        const productTmplId = parseInt(form.dataset.productTmplId, 10);
-        const rating  = parseInt(form.querySelector('#co-review-rating')?.value || '0', 10);
-        const title   = form.querySelector('#co-review-title')?.value.trim();
-        const comment = form.querySelector('#co-review-comment')?.value.trim();
-
-        if (!rating) {
-            showFormError(form, 'Please select a star rating.');
-            return;
+    start() {
+        const tmplId = parseInt(this.el.dataset.productTmplId, 10);
+        if (tmplId) {
+            this._loadSummary(tmplId);
         }
-        if (!comment) {
-            showFormError(form, 'Please write a review comment.');
-            return;
-        }
+        this._initStarPicker();
+        this._initReviewForm();
+        return this._super(...arguments);
+    },
 
-        btn.disabled = true;
-        btn.textContent = 'Submitting…';
-
+    async _loadSummary(productTemplateId) {
         try {
-            // Odoo's native website_sale rating endpoint
-            const res = await fetch('/shop/product/rate', {
+            const res = await fetch(`/cellar/rating/${productTemplateId}`, {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    jsonrpc: '2.0',
-                    method:  'call',
-                    id: 1,
-                    params: {
-                        product_template_id: productTmplId,
-                        rating:              rating,
-                        title:               title || '',
-                        description:         comment,
-                    },
-                }),
+                body:    JSON.stringify({ jsonrpc: '2.0', method: 'call', id: 1, params: {} }),
             });
             const json = await res.json();
+            const data = json.result || { average: 0, count: 0, breakdown: {} };
 
-            if (json.result?.success) {
-                showFormSuccess(form, '✓ Thank you! Your review has been submitted.');
-                form.reset();
-                // Reload ratings after submission
-                setTimeout(() => loadRatingSummary(productTmplId), 800);
-            } else {
-                showFormError(form, json.result?.error || 'Something went wrong. Please try again.');
+            const scoreEl = this.el.querySelector('.co-big-score');
+            if (scoreEl) scoreEl.textContent = data.count ? data.average.toFixed(1) : '—';
+
+            const starsEl = this.el.querySelector('.co-stars-lg');
+            if (starsEl) renderStars(starsEl, data.average);
+
+            const countEl = this.el.querySelector('.co-review-count');
+            if (countEl) countEl.textContent = `${data.count} review${data.count !== 1 ? 's' : ''}`;
+
+            for (let star = 5; star >= 1; star--) {
+                const row = this.el.querySelector(`[data-star="${star}"]`);
+                if (!row) continue;
+                const pct  = data.breakdown[star]?.pct  ?? 0;
+                const cnt  = data.breakdown[star]?.count ?? 0;
+                const fill = row.querySelector('.co-bar-fill');
+                const pctEl= row.querySelector('.co-bar-pct');
+                if (fill)  fill.style.width = `${pct}%`;
+                if (pctEl) pctEl.textContent = cnt ? `${pct}%` : '0%';
             }
         } catch (err) {
-            showFormError(form, 'Network error. Please check your connection and try again.');
-        } finally {
-            btn.disabled = false;
-            btn.textContent = 'Submit Review';
+            console.warn('[CellarOne] Rating fetch failed', err);
         }
-    });
-}
+    },
 
-function showFormError(form, msg) {
-    let el = form.querySelector('.co-form-feedback');
-    if (!el) {
-        el = document.createElement('p');
-        el.className = 'co-form-feedback';
-        form.prepend(el);
-    }
-    el.style.color   = '#C0392B';
-    el.style.background = '#FDEDEC';
-    el.style.padding = '10px 14px';
-    el.style.borderRadius = '8px';
-    el.style.marginBottom = '16px';
-    el.style.fontSize = '0.875rem';
-    el.textContent = msg;
-}
+    _initStarPicker() {
+        const picker = this.el.querySelector('.co-star-picker');
+        if (!picker) return;
+        picker.querySelectorAll('input[type="radio"]').forEach(input => {
+            input.addEventListener('change', () => {
+                const hidden = document.getElementById('co-review-rating');
+                if (hidden) hidden.value = input.value;
+            });
+        });
+    },
 
-function showFormSuccess(form, msg) {
-    const el = form.querySelector('.co-form-feedback') || document.createElement('p');
-    el.className = 'co-form-feedback';
-    el.style.color = '#1A7F4B';
-    el.style.background = '#E8F5EE';
-    el.style.padding = '10px 14px';
-    el.style.borderRadius = '8px';
-    el.style.marginBottom = '16px';
-    el.style.fontSize = '0.875rem';
-    el.textContent = msg;
-    if (!el.parentNode) form.prepend(el);
-}
+    _initReviewForm() {
+        const form = this.el.querySelector('#co-review-form');
+        if (!form) return;
 
-// ── Product detail tabs ──────────────────────────────────────
-function initDetailTabs() {
-    const tabs   = document.querySelectorAll('.co-tab');
-    const panels = document.querySelectorAll('.co-tab-panel');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = form.querySelector('[type="submit"]');
+            const productTmplId = parseInt(form.dataset.productTmplId, 10);
+            const rating  = parseInt(form.querySelector('#co-review-rating')?.value || '0', 10);
+            const comment = form.querySelector('#co-review-comment')?.value.trim();
 
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const target = tab.dataset.tab;
+            if (!rating) { this._showFeedback(form, 'Please select a star rating.', true); return; }
+            if (!comment) { this._showFeedback(form, 'Please write a review.', true); return; }
 
-            tabs.forEach(t   => t.classList.remove('active'));
-            panels.forEach(p => p.classList.remove('active'));
+            btn.disabled = true;
+            btn.textContent = 'Submitting…';
 
-            tab.classList.add('active');
-            const panel = document.querySelector(`.co-tab-panel[data-tab="${target}"]`);
-            if (panel) panel.classList.add('active');
-
-            // Scroll to review section if that tab chosen
-            if (target === 'reviews') {
-                panel?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            try {
+                const res = await fetch('/shop/product/rate', {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0', method: 'call', id: 1,
+                        params: { product_template_id: productTmplId, rating, description: comment },
+                    }),
+                });
+                const json = await res.json();
+                if (json.result?.success) {
+                    this._showFeedback(form, '✓ Thank you! Your review has been submitted.', false);
+                    form.reset();
+                    setTimeout(() => this._loadSummary(productTmplId), 800);
+                } else {
+                    this._showFeedback(form, json.result?.error || 'Something went wrong.', true);
+                }
+            } catch (_) {
+                this._showFeedback(form, 'Network error. Please try again.', true);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Submit Review';
             }
         });
-    });
-}
+    },
 
-// ── Lightbox ─────────────────────────────────────────────────
-function initLightbox() {
-    const mainImg  = document.querySelector('.co-gallery-main img');
-    const lightbox = document.getElementById('co-lightbox');
-    if (!mainImg || !lightbox) return;
+    _showFeedback(form, msg, isError) {
+        let el = form.querySelector('.co-form-feedback');
+        if (!el) { el = document.createElement('p'); el.className = 'co-form-feedback'; form.prepend(el); }
+        el.style.cssText = `padding:10px 14px;border-radius:8px;margin-bottom:16px;font-size:0.875rem;color:${isError ? '#C0392B' : '#1A7F4B'};background:${isError ? '#FDEDEC' : '#E8F5EE'}`;
+        el.textContent = msg;
+    },
+});
 
-    const lbImg   = lightbox.querySelector('.co-lightbox__img');
-    const lbClose = lightbox.querySelector('.co-lightbox__close');
+// ── Lightbox widget ──────────────────────────────────────────
+publicWidget.registry.CellarOneLightbox = publicWidget.Widget.extend({
+    selector: '#co-lightbox',
 
-    mainImg.addEventListener('click', () => {
-        lbImg.src = mainImg.src;
-        lightbox.classList.add('open');
-        document.body.style.overflow = 'hidden';
-    });
+    start() {
+        this.lbImg   = this.el.querySelector('.co-lightbox__img');
+        this.lbClose = this.el.querySelector('.co-lightbox__close');
 
-    function closeLightbox() {
-        lightbox.classList.remove('open');
-        document.body.style.overflow = '';
-    }
+        const mainImg = document.querySelector('.co-gallery-main img');
+        if (mainImg) {
+            mainImg.addEventListener('click', () => {
+                this.lbImg.src = mainImg.src;
+                this.el.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            });
+        }
 
-    lbClose?.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+        this._closeLightbox = this._closeLightbox.bind(this);
+        this.lbClose?.addEventListener('click', this._closeLightbox);
+        this.el.addEventListener('click', (e) => { if (e.target === this.el) this._closeLightbox(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') this._closeLightbox(); });
 
-    // Thumbnail switching
-    document.querySelectorAll('.co-thumb').forEach(thumb => {
-        thumb.addEventListener('click', () => {
-            document.querySelectorAll('.co-thumb').forEach(t => t.classList.remove('active'));
-            thumb.classList.add('active');
-            mainImg.src = thumb.querySelector('img')?.src || mainImg.src;
+        // Thumbnail switching
+        document.querySelectorAll('.co-thumb').forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                document.querySelectorAll('.co-thumb').forEach(t => t.classList.remove('active'));
+                thumb.classList.add('active');
+                if (mainImg) mainImg.src = thumb.querySelector('img')?.src || mainImg.src;
+            });
         });
-    });
-}
 
-// ── Boot ─────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-    hydrateCardRatings();
-    initStarPicker();
-    initReviewForm();
-    initDetailTabs();
-    initLightbox();
+        return this._super(...arguments);
+    },
 
-    // Product detail page — load rating summary
-    const summaryEl = document.getElementById('co-rating-summary');
-    if (summaryEl) {
-        const tmplId = parseInt(summaryEl.dataset.productTmplId, 10);
-        if (tmplId) loadRatingSummary(tmplId);
-    }
+    _closeLightbox() {
+        this.el.classList.remove('open');
+        document.body.style.overflow = '';
+    },
 });

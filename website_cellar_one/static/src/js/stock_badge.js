@@ -4,86 +4,62 @@
 //  Updates badge text + colour + disables Add-to-Cart if OOS
 // ─────────────────────────────────────────────────────────────
 
+import publicWidget from "@web/legacy/js/public/public_widget";
+
 const STATUS_CLASSES = {
     in_stock:     'in-stock',
     low_stock:    'low-stock',
     out_of_stock: 'out-of-stock',
 };
 
-/**
- * Fetch stock for a single product and update its badge(s).
- * @param {number} productId  - product.product id
- */
-async function fetchAndUpdateStock(productId) {
-    const badges = document.querySelectorAll(
-        `[data-stock-product-id="${productId}"]`
-    );
-    if (!badges.length) return;
+publicWidget.registry.CellarOneStockBadge = publicWidget.Widget.extend({
+    selector: '.co-stock-badge[data-stock-product-id]',
 
-    try {
-        const res = await fetch(`/cellar/stock/${productId}`, {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ jsonrpc: '2.0', method: 'call', id: 1, params: {} }),
-        });
-        const json = await res.json();
-        const data = json.result || {};
+    start() {
+        const productId = parseInt(this.el.dataset.stockProductId, 10);
+        if (productId) {
+            this._fetchStock(productId);
+        }
+        return this._super(...arguments);
+    },
 
-        badges.forEach(badge => {
-            // Remove previous status classes
-            badge.classList.remove('in-stock', 'low-stock', 'out-of-stock', 'loading');
+    async _fetchStock(productId) {
+        try {
+            const res = await fetch(`/cellar/stock/${productId}`, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ jsonrpc: '2.0', method: 'call', id: 1, params: {} }),
+            });
+            const json = await res.json();
+            const data = json.result || {};
 
+            // Remove loading + previous status
+            this.el.classList.remove('in-stock', 'low-stock', 'out-of-stock', 'loading');
             const statusClass = STATUS_CLASSES[data.status] || 'out-of-stock';
-            badge.classList.add(statusClass);
+            this.el.classList.add(statusClass);
 
-            // Update dot + label
-            const dot = badge.querySelector('.co-stock-dot');
-            const lbl = badge.querySelector('.co-stock-label');
+            // Update label
+            const lbl = this.el.querySelector('.co-stock-label');
             if (lbl) lbl.textContent = data.label || 'Unavailable';
 
-            // Disable Add-to-Cart on OOS
+            // Disable Add-to-Cart if OOS
             if (data.status === 'out_of_stock') {
-                const addBtn = document.querySelector(
-                    `#add_to_cart, .o_add_to_cart_btn, [data-product-id="${productId}"] .a-submit`
-                );
+                const form = this.el.closest('form');
+                const addBtn = form?.querySelector('.a-submit, .o_add_to_cart_btn, #add_to_cart');
                 if (addBtn) {
                     addBtn.setAttribute('disabled', 'disabled');
                     addBtn.classList.add('oo-disabled');
                     addBtn.title = 'This product is currently out of stock';
                 }
             }
-        });
-
-    } catch (err) {
-        // Silently fail — don't break the page
-        console.warn('[CellarOne] Stock fetch failed for product', productId, err);
-        badges.forEach(b => {
-            b.classList.remove('loading');
-            b.classList.add('out-of-stock');
-            const lbl = b.querySelector('.co-stock-label');
+        } catch (err) {
+            console.warn('[CellarOne] Stock fetch failed for product', productId, err);
+            this.el.classList.remove('loading');
+            this.el.classList.add('out-of-stock');
+            const lbl = this.el.querySelector('.co-stock-label');
             if (lbl) lbl.textContent = 'Check availability';
-        });
-    }
-}
+        }
+    },
+});
 
-/**
- * Find all stock badges on the current page and hydrate them.
- */
-function initStockBadges() {
-    const badges = document.querySelectorAll('[data-stock-product-id]');
-    if (!badges.length) return;
-
-    // Collect unique product IDs
-    const productIds = new Set(
-        [...badges].map(b => parseInt(b.dataset.stockProductId, 10)).filter(Boolean)
-    );
-
-    // Stagger requests so we don't flood the server
-    let delay = 0;
-    productIds.forEach(id => {
-        setTimeout(() => fetchAndUpdateStock(id), delay);
-        delay += 80; // 80ms between each
-    });
-}
-
-document.addEventListener('DOMContentLoaded', initStockBadges);
+export default publicWidget.registry.CellarOneStockBadge;

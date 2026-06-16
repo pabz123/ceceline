@@ -1,0 +1,134 @@
+// ─────────────────────────────────────────────────────────────
+//  AUTHENTICATION PAGES — Login, Signup, Reset Password
+// ─────────────────────────────────────────────────────────────
+
+// Variables for styling consistency
+$auth-card-bg: #ffffff;
+$auth-border-color: #e2e8f0;
+$auth-input-focus: rgba(144, 27, 44, 0.15);
+
+// The Odoo auth container page background override
+body.o_connected_user, body {
+    .oe_website_login_container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        background-color: #f7fafc;
+        padding: 2rem 1rem;
+    }
+}
+
+// Clean premium layout card
+.co-auth-container {
+    background: $auth-card-bg;
+    border: 1px solid $auth-border-color;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+    padding: 2.5rem 2rem !important;
+    width: 100%;
+    max-width: 440px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+        font-family: var(--co-font-heading);
+        font-weight: 700;
+        font-size: 1.75rem;
+        letter-spacing: -0.01em;
+        margin-bottom: 0.5rem;
+    }
+
+    p.text-muted {
+        font-family: var(--co-font-body);
+        font-size: 0.95rem;
+        color: #718096 !important;
+        margin-bottom: 1.5rem;
+    }
+
+    // Input elements styling
+    .form-label {
+        font-family: var(--co-font-body);
+        font-size: 0.85rem !important;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: #4a5568 !important;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        font-family: var(--co-font-body);
+        font-size: 0.95rem;
+        color: #2d3748;
+        background-color: #ffffff;
+        border: 1.5px solid #cbd5e0;
+        height: 48px !important;
+        border-radius: 8px !important;
+        padding: 0.75rem 1rem;
+        transition: all 0.2s ease;
+
+        &::placeholder {
+            color: #a0aec0;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: var(--co-burgundy) !important;
+            box-shadow: 0 0 0 3px $auth-input-focus !important;
+        }
+    }
+
+    // Primary action button
+    .btn-primary {
+        background-color: var(--co-burgundy) !important;
+        border-color: var(--co-burgundy) !important;
+        color: #ffffff !important;
+        height: 48px !important;
+        font-family: var(--co-font-body);
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 12px rgba(144, 27, 44, 0.15);
+        transition: all 0.2s ease;
+
+        &:hover, &:focus {
+            background-color: #761221 !important;
+            border-color: #761221 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(144, 27, 44, 0.25);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+
+        &:disabled {
+            background-color: #cbd5e0 !important;
+            border-color: #cbd5e0 !important;
+            box-shadow: none;
+        }
+    }
+
+    // Link styling
+    a {
+        color: var(--co-burgundy);
+        font-weight: 600;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: #761221;
+            text-decoration: underline;
+        }
+    }
+
+    // Border and spacing
+    .border-top {
+        border-top: 1px solid $auth-border-color !important;
+    }
+}

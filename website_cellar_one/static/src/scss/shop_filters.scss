@@ -1,0 +1,210 @@
+// ─────────────────────────────────────────────────────────────
+//  SHOP SIDEBAR & SEARCH — Categories, Filters, Search Bar
+// ─────────────────────────────────────────────────────────────
+
+// Hide Odoo horizontal category filmstrip and categories lists outside the sidebar
+.o_wsale_filmstrip,
+.o_wsale_categories_list {
+    display: none !important;
+}
+
+// Style the sidebar wrapper
+.o_wsale_products_main_row {
+    .o_wsale_products_grid_before_classes {
+        padding-right: 1.5rem;
+
+        // Modern Category List matching cecelinewines.com
+        .wsale_products_categories_list,
+        .o_shop_collapse_category {
+            background-color: #f9f9fa !important;
+            border-radius: 16px;
+            padding: 1.5rem 1.25rem !important;
+            margin-bottom: 2rem;
+            border: 1px solid #edf2f7;
+
+            .o_categories_collapse_title {
+                font-family: var(--co-font-heading);
+                color: var(--co-text-primary);
+                font-size: 1.25rem;
+                font-weight: 700 !important;
+                margin-bottom: 1.25rem !important;
+                padding-bottom: 0.75rem;
+                border-bottom: 1.5px solid #edf2f7;
+            }
+
+            .nav {
+                padding-left: 0;
+                list-style: none;
+            }
+
+            .nav-item {
+                margin-bottom: 0.25rem;
+
+                .form-check {
+                    padding-left: 0 !important;
+                    margin-bottom: 0 !important;
+                    display: flex !important;
+                    align-items: center;
+                    width: 100%;
+
+                    input[type="radio"].form-check-input {
+                        display: inline-block !important;
+                        appearance: none !important;
+                        -webkit-appearance: none !important;
+                        position: static !important;
+                        margin: 0 10px 0 0 !important;
+                        width: 14px !important;
+                        height: 14px !important;
+                        border: 1.5px solid #a0aec0 !important;
+                        border-radius: 50% !important;
+                        background-color: #ffffff !important;
+                        outline: none !important;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                        flex-shrink: 0;
+
+                        &:checked {
+                            border-color: var(--co-burgundy) !important;
+                            background-color: var(--co-burgundy) !important;
+                            box-shadow: inset 0 0 0 2px #ffffff !important;
+                        }
+                    }
+
+                    label.form-check-label {
+                        cursor: pointer;
+                        font-family: var(--co-font-body);
+                        font-size: 0.95rem;
+                        font-weight: 500;
+                        color: #4a5568;
+                        transition: color 0.2s ease;
+                        padding: 6px 4px;
+                        display: inline-block;
+                        width: 100%;
+
+                        &:hover {
+                            color: var(--co-burgundy);
+                        }
+                    }
+
+                    input[type="radio"]:checked + label.form-check-label {
+                        color: var(--co-burgundy) !important;
+                        font-weight: 600 !important;
+                    }
+                }
+
+                // Sub-categories indentation and vertical guide lines
+                .accordion-collapse, .nav-hierarchy {
+                    padding-left: 0.75rem !important;
+                    border-left: 1.5px solid #e2e8f0 !important;
+                    margin-left: 6px !important;
+                    margin-top: 4px;
+                    list-style: none;
+                }
+            }
+        }
+
+        // Modern Sidebar Filters (Attributes)
+        .co-modern-filters {
+            background-color: #f9f9fa !important;
+            border-radius: 16px;
+            padding: 1.5rem 1.25rem !important;
+            border: 1px solid #edf2f7;
+
+            .accordion-item {
+                background: transparent !important;
+                border: none !important;
+                margin-bottom: 1rem;
+
+                h6 {
+                    margin-bottom: 0.75rem;
+                    
+                    b {
+                        font-family: var(--co-font-heading);
+                        color: var(--co-text-primary);
+                        font-size: 1.1rem;
+                        font-weight: 700;
+                    }
+                }
+
+                .form-check {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 0.5rem;
+
+                    input[type="checkbox"] {
+                        width: 16px;
+                        height: 16px;
+                        accent-color: var(--co-burgundy) !important;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        margin-right: 8px;
+                    }
+
+                    label {
+                        color: #4a5568;
+                        font-family: var(--co-font-body);
+                        font-size: 0.9rem;
+                        cursor: pointer;
+                        
+                        &:hover {
+                            color: var(--co-burgundy);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Modern Search Bar on Shop grid top header
+.o_wsale_products_searchbar_form {
+    margin-bottom: 1.5rem !important;
+    
+    .input-group {
+        border: 1.5px solid #e2e8f0 !important;
+        background-color: #f8fafc !important;
+        border-radius: 30px !important;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.01) !important;
+        transition: all 0.2s ease;
+        padding: 2px;
+        
+        &:focus-within {
+            border-color: var(--co-burgundy) !important;
+            box-shadow: 0 0 0 3px rgba(144, 27, 44, 0.1) !important;
+            background-color: #ffffff !important;
+        }
+    }
+
+    input.search-query {
+        background: transparent !important;
+        border: none !important;
+        height: 42px !important;
+        font-family: var(--co-font-body);
+        font-size: 0.95rem;
+        color: #2d3748 !important;
+        padding-left: 1.25rem !important;
+        
+        &:focus {
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        
+        &::placeholder {
+            color: #a0aec0;
+        }
+    }
+
+    .oe_search_button {
+        background: transparent !important;
+        border: none !important;
+        color: #718096 !important;
+        padding-right: 1.25rem !important;
+        font-size: 1.1rem;
+        transition: color 0.2s ease;
+        
+        &:hover {
+            color: var(--co-burgundy) !important;
+        }
+    }
+}

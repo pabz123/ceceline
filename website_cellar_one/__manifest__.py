@@ -33,10 +33,10 @@
         'views/website_templates.xml',
         'views/product_templates.xml',
         'views/footer_template.xml',
-        # 'views/signup_templates.xml',  # TODO: re-verify against actual auth_signup.signup
-        #                                  structure for this Odoo build before re-enabling —
-        #                                  same xpath-mismatch risk as navbar/footer/product
-        #                                  templates had. Tracked as a Day-2 follow-up.
+        'views/homepage.xml',
+        'views/auth_templates.xml',
+        'views/shop_filters.xml',
+        'views/cart_checkout_templates.xml',
         'data/website_data.xml',
         'data/mail_templates.xml',
     ],
@@ -54,10 +54,13 @@
             'website_cellar_one/static/src/scss/hero.scss',
             'website_cellar_one/static/src/scss/product_cards.scss',
             'website_cellar_one/static/src/scss/product_detail.scss',
+            'website_cellar_one/static/src/scss/shop_filters.scss',
+            'website_cellar_one/static/src/scss/cart_checkout.scss',
             'website_cellar_one/static/src/scss/ratings.scss',
             'website_cellar_one/static/src/scss/stock_badges.scss',
             'website_cellar_one/static/src/scss/footer.scss',
             'website_cellar_one/static/src/scss/age_gate.scss',
+            'website_cellar_one/static/src/scss/auth.scss',
             'website_cellar_one/static/src/scss/responsive.scss',
             # JavaScript
             'website_cellar_one/static/src/js/age_gate.js',

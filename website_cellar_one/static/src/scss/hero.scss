@@ -238,3 +238,267 @@
         }
     }
 }
+
+// ── Circular Categories Strip ─────────────────────────────────
+.co-category-strip {
+    .co-category-circle-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+        &:hover {
+            transform: translateY(-6px);
+            
+            .co-category-circle {
+                border-color: var(--co-gold) !important;
+                box-shadow: 0 10px 25px rgba(212, 175, 55, 0.22) !important;
+                background-color: var(--co-cream) !important;
+            }
+            
+            h6 {
+                color: var(--co-burgundy) !important;
+            }
+        }
+    }
+
+    .co-category-circle {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background-color: $color-white;
+        border: 2px solid $color-gray-200;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+}
+
+// ── Perks & Benefits Row ──────────────────────────────────────
+.co-homepage-perks {
+    background: $color-white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+
+    .co-perk-item {
+        transition: transform 0.3s ease;
+        &:hover {
+            transform: translateY(-2px);
+        }
+    }
+    .co-perk-icon {
+        background: #faf7f2;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+}
+
+// ── Pinterest card zoom hover effects ────────────────────────
+.co-pinterest-card {
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(26, 10, 14, 0.15) !important;
+        
+        .co-zoom-img {
+            transform: scale(1.06);
+        }
+    }
+}
+
+// ── Brand story & CTA button ──────────────────────────────────
+.co-story-img-wrapper {
+    img {
+        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    &:hover img {
+        transform: scale(1.04);
+    }
+}
+.co-story-btn:hover {
+    background-color: var(--co-burgundy) !important;
+    border-color: var(--co-burgundy) !important;
+    color: white !important;
+    box-shadow: 0 8px 20px rgba(92,26,46,0.15);
+}
+
+// ── Testimonials ──────────────────────────────────────────────
+.co-testimonials {
+    .card {
+        border: 1px solid rgba(28, 11, 15, 0.04) !important;
+        transition: all 0.3s ease;
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(28, 11, 15, 0.03) !important;
+        }
+    }
+}
+
+// ── Editorial Hero ───────────────────────────────────────────
+.co-editorial-hero {
+    .co-hero-btn {
+        &:hover {
+            background-color: var(--co-cream) !important;
+            border-color: var(--co-cream) !important;
+            color: var(--co-burgundy-dark) !important;
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15) !important;
+        }
+    }
+    
+    .co-hero-showcase-container {
+        &:hover {
+            .co-showcase-image-wrapper img {
+                transform: scale(1.05);
+            }
+        }
+    }
+}
+
+// ── Flagship Bottle Showcase ─────────────────────────────────
+.co-bottle-showcase {
+    background-color: $color-white;
+
+    .co-showcase-callout {
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        padding: $spacing-md;
+        border-radius: $radius-md;
+        background: transparent;
+        
+        &:hover {
+            transform: translateY(-3px);
+            background: #fbf9f6;
+        }
+
+        h5 {
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+            font-family: var(--co-font-heading);
+        }
+        p {
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+    }
+
+    .co-showcase-bottle-wrapper {
+        z-index: 1;
+
+        img {
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            &:hover {
+                transform: translateY(-8px) scale(1.03);
+            }
+        }
+    }
+
+    .co-bottle-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 160px;
+        height: 160px;
+        background: radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, rgba(212, 175, 55, 0) 70%);
+        transform: translate(-50%, -50%);
+        z-index: -1;
+        pointer-events: none;
+    }
+}
+
+// ── Vineyard Promo Banner ─────────────────────────────────────
+.co-vineyard-promo {
+    overflow: hidden;
+    
+    .co-promo-glass-card {
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4) !important;
+            border-color: rgba(212, 175, 55, 0.6) !important;
+        }
+        
+        a:hover {
+            background-color: var(--co-gold) !important;
+            border-color: var(--co-gold) !important;
+            color: #1c1c1e !important;
+        }
+    }
+}
+
+// ── Heritage Timeline ─────────────────────────────────────────
+.co-heritage-timeline {
+    .co-timeline-node {
+        transition: all 0.3s ease;
+    }
+    
+    .col-md-4:hover {
+        .co-timeline-node {
+            transform: scale(1.25);
+            background-color: var(--co-gold) !important;
+            border-color: var(--co-burgundy) !important;
+        }
+        h3 {
+            color: var(--co-gold) !important;
+        }
+    }
+}
+
+// ── Luxury Hero CTAs ──────────────────────────────────────────
+.co-hero-cta-primary {
+    transition: all 0.3s ease;
+    &:hover {
+        background-color: var(--co-cream) !important;
+        border-color: var(--co-cream) !important;
+        color: #111111 !important;
+        box-shadow: 0 10px 30px rgba(197, 168, 128, 0.3) !important;
+        transform: translateY(-2px);
+    }
+}
+
+// ── Dynamic Home Product Cards Grid ──────────────────────────
+.co-home-prod-cell {
+    border-right: 1px solid rgba(197, 168, 128, 0.1) !important;
+    border-bottom: 1px solid rgba(197, 168, 128, 0.1) !important;
+    position: relative;
+    cursor: pointer;
+    
+    .co-home-prod-img-wrap img {
+        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(197, 168, 128, 0.12) !important;
+        z-index: 2;
+        border-color: rgba(197, 168, 128, 0.3) !important;
+        
+        .co-home-prod-img-wrap img {
+            transform: scale(1.05) translateY(-5px);
+        }
+        
+        h5 {
+            color: var(--co-gold-dark) !important;
+        }
+    }
+}
+
+// Ensure the category circle link uses golden borders and rotates slightly on hover
+.co-category-circle-link {
+    &:hover {
+        .co-category-circle {
+            border-color: var(--co-gold) !important;
+            transform: scale(1.08) rotate(3deg);
+            box-shadow: 0 8px 25px rgba(197, 168, 128, 0.25) !important;
+        }
+    }
+}
+
+
+

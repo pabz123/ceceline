@@ -40,33 +40,52 @@
        Menu Editor UI in under a minute — no code change needed.
   ════════════════════════════════════════════════════════ -->
 
+  <!-- Delete Odoo default menus to keep it clean like cecelinewines.com -->
+  <delete model="website.menu" search="[('name', 'in', ['Blog', 'Deals', 'Contact Us', 'Contact us', 'Home', 'BEER &amp; CIDER'])]"/>
+
   <record id="menu_wines" model="website.menu">
     <field name="name">Wines</field>
     <field name="url">/shop/category/wines-7</field>
     <field name="parent_id" ref="website.main_menu"/>
-    <field name="sequence">15</field>
+    <field name="sequence">10</field>
   </record>
 
   <record id="menu_spirits" model="website.menu">
     <field name="name">Spirits</field>
     <field name="url">/shop/category/spirits-8</field>
     <field name="parent_id" ref="website.main_menu"/>
-    <field name="sequence">25</field>
+    <field name="sequence">20</field>
   </record>
 
-  <record id="menu_beer_cider" model="website.menu">
-    <field name="name">Beer &amp; Cider</field>
+  <record id="menu_beer" model="website.menu">
+    <field name="name">Beer</field>
     <field name="url">/shop/category/beer-9</field>
     <field name="parent_id" ref="website.main_menu"/>
-    <field name="sequence">35</field>
+    <field name="sequence">30</field>
   </record>
 
-  <record id="menu_deals" model="website.menu">
-    <field name="name">Deals</field>
-    <field name="url">/shop?on_sale=1</field>
+  <record id="menu_cider" model="website.menu">
+    <field name="name">Cider</field>
+    <field name="url">/shop/category/cider-10</field>
     <field name="parent_id" ref="website.main_menu"/>
-    <field name="sequence">45</field>
+    <field name="sequence">40</field>
   </record>
+
+  <record id="menu_brands" model="website.menu">
+    <field name="name">Brands</field>
+    <field name="url">/shop</field>
+    <field name="parent_id" ref="website.main_menu"/>
+    <field name="sequence">50</field>
+  </record>
+
+  <record id="menu_find_us" model="website.menu">
+    <field name="name">Find Us</field>
+    <field name="url">/location</field>
+    <field name="parent_id" ref="website.main_menu"/>
+    <field name="sequence">60</field>
+  </record>
+
+
 
 
   <!-- ═══════════════════════════════════════════════════════
@@ -103,4 +122,10 @@
   </record>
   -->
 
+  <!-- Force product comment and ratings view to be active -->
+  <record id="website_sale.product_comment" model="ir.ui.view">
+    <field name="active">True</field>
+  </record>
+
 </odoo>
+

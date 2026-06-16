@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Shopping Cart Lines -->
+  <template id="custom_cart_lines" inherit_id="website_sale.cart_lines" name="Cellar One Cart Lines">
+    <xpath expr="//div[@id='cart_products']" position="attributes">
+      <attribute name="class" add="co-cart-table" separator=" "/>
+    </xpath>
+  </template>
+
+  <!-- Checkout Layout Override (optional, inject a class if needed) -->
+  <template id="custom_checkout_layout" inherit_id="website_sale.checkout_layout" name="Cellar One Checkout Layout">
+    <xpath expr="//div[hasclass('oe_website_sale')]" position="attributes">
+      <attribute name="class" add="co-premium-checkout-flow" separator=" "/>
+    </xpath>
+  </template>
+
+</odoo>
