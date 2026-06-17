@@ -57,76 +57,90 @@
 
 
     <!-- ═══════════════════════════════════════════════════════
-         NAVBAR — Two Tier Restructure
+         NAVBAR — Site-wide header replacement
+
+         Odoo can switch between several header templates from the
+         Website editor.  Inheriting only website.template_header_default
+         means this custom navbar disappears as soon as another header
+         variant (or a customized database copy) is active.  Replacing
+         website.layout's stable <header id="top"> anchor keeps the
+         Cellar One navigation visible for every public page.
     ════════════════════════════════════════════════════════ -->
     <template id="custom_two_tier_navbar"
-              inherit_id="website.template_header_default"
+              inherit_id="website.layout"
               name="Cellar One Navbar">
-      
-      <!-- Completely replace the default o_main_nav desktop container -->
-      <xpath expr="//div[@id='o_main_nav']" position="replace">
-        <div id="o_main_nav" class="o_main_nav container d-flex align-items-center justify-content-between py-3">
-           
-           <!-- Left: Exact Logo (Composite Red Logo) -->
-           <a href="/" class="co-navbar-brand d-flex align-items-center text-decoration-none" style="margin-right: 2rem; gap: 4px;">
-               <img src="/website_cellar_one/static/src/img/logo/cecelin_footer.png" alt="Icon" style="height: 50px; width: auto; object-fit: contain;" loading="lazy"></img>
-               <img src="/website_cellar_one/static/src/img/logo/ce_logo.png" alt="Cellar One" style="height: 45px; width: auto; object-fit: contain;" loading="lazy"></img>
-           </a>
 
-           <!-- Center: Navigation Menus -->
-           <div class="co-navbar-menu d-none d-lg-flex mx-auto">
-               <t t-call="website.navbar_nav">
-                   <t t-set="_nav_class" t-valuef=""/>
-                   <t t-foreach="website.menu_id.child_id" t-as="submenu">
-                       <t t-call="website.submenu">
-                           <t t-set="item_class" t-valuef="nav-item mx-2"/>
-                           <t t-set="link_class" t-valuef="nav-link fw-bold text-uppercase text-dark"/>
-                       </t>
-                   </t>
-               </t>
-           </div>
+      <xpath expr="//header[@id='top']" position="replace">
+        <header id="top" class="co-site-header">
+          <nav class="navbar navbar-expand-lg co-navbar" aria-label="Main navigation">
+            <div id="o_main_nav" class="o_main_nav container d-flex align-items-center">
 
-           <!-- Right: Actions (WhatsApp, Cart, Wishlist, Account) -->
-           <div class="co-navbar-actions d-flex align-items-center gap-4">
-               <a t-if="not request.env.user._is_public() and (request.session.get('website_sale_cart_quantity') or (website.sale_get_order() and website.sale_get_order().cart_quantity))"
-                  href="https://wa.me/256749057433" target="_blank" rel="noopener"
-                  class="co-nav-icon-btn d-flex align-items-center gap-2 text-success fw-bold text-decoration-none">
-                  <i class="fa fa-whatsapp fs-5"/> <span class="d-none d-xl-inline">Order</span>
-               </a>
-               
-               <a href="/shop/wishlist" class="co-nav-icon-btn position-relative text-dark text-decoration-none">
-                  <i class="fa fa-heart-o fs-5"/>
-                  <t t-set="wish_qty" t-value="0"/>
-                  <span class="co-nav-badge d-none" t-esc="wish_qty"/>
-               </a>
+              <!-- Left: Cellar One composite logo -->
+              <a href="/" class="co-navbar-brand d-flex align-items-center text-decoration-none" aria-label="Cellar One home">
+                <img src="/website_cellar_one/static/src/img/logo/cecelin_footer.png" alt="" class="co-navbar-brand__mark" loading="lazy"/>
+                <img src="/website_cellar_one/static/src/img/logo/ce_logo.png" alt="Cellar One" class="co-navbar-brand__wordmark" loading="lazy"/>
+              </a>
 
-               <a href="/shop/cart" class="co-nav-icon-btn position-relative text-dark text-decoration-none">
-                  <i class="fa fa-shopping-cart fs-5"/>
-                  <t t-set="cart_qty" t-value="request.session.get('website_sale_cart_quantity', website.sale_get_order().cart_quantity if website.sale_get_order() else 0)"/>
-                  <span class="co-nav-badge" t-if="cart_qty &gt; 0" t-esc="cart_qty"/>
-               </a>
+              <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#co_main_nav_collapse" aria-controls="co_main_nav_collapse"
+                      aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
 
-               <t t-if="request.env.user._is_public()">
-                   <a href="/web/login" class="co-nav-icon-btn text-dark text-decoration-none">
-                      <i class="fa fa-user-o fs-5"/>
-                   </a>
-               </t>
-               <t t-else="">
-                   <div class="dropdown co-nav-account-dropdown">
-                       <a href="#" class="co-nav-icon-btn text-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
-                          <i class="fa fa-user-o fs-5"/>
-                       </a>
-                       <div class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2">
-                           <a href="/my/account" class="dropdown-item">My Account</a>
-                           <a href="/web/session/logout?redirect=/" class="dropdown-item text-danger">Sign Out</a>
-                       </div>
-                   </div>
-               </t>
-           </div>
-        </div>
+              <!-- Center: Website menu items from Website > Site > Menu Editor -->
+              <div id="co_main_nav_collapse" class="collapse navbar-collapse co-navbar-collapse">
+                <div class="co-navbar-menu mx-lg-auto">
+                  <t t-call="website.navbar_nav">
+                    <t t-set="_nav_class" t-valuef="navbar-nav align-items-lg-center"/>
+                    <t t-foreach="website.menu_id.child_id" t-as="submenu">
+                      <t t-call="website.submenu">
+                        <t t-set="item_class" t-valuef="nav-item mx-lg-1"/>
+                        <t t-set="link_class" t-valuef="nav-link fw-bold text-uppercase"/>
+                      </t>
+                    </t>
+                  </t>
+                </div>
+
+                <!-- Right: Actions (WhatsApp, Wishlist, Cart, Account) -->
+                <div class="co-navbar-actions d-flex align-items-center gap-3 ms-lg-4">
+                  <a href="https://wa.me/256749057433" target="_blank" rel="noopener"
+                     class="co-nav-icon-btn co-nav-whatsapp d-flex align-items-center gap-2 text-decoration-none"
+                     aria-label="Order on WhatsApp">
+                    <i class="fa fa-whatsapp"/> <span class="d-none d-xl-inline">Order</span>
+                  </a>
+
+                  <a href="/shop/wishlist" class="co-nav-icon-btn position-relative text-decoration-none" aria-label="Wishlist">
+                    <i class="fa fa-heart-o"/>
+                  </a>
+
+                  <a href="/shop/cart" class="co-nav-icon-btn position-relative text-decoration-none" aria-label="Shopping cart">
+                    <i class="fa fa-shopping-cart"/>
+                    <t t-set="cart_qty" t-value="request.session.get('website_sale_cart_quantity', website.sale_get_order().cart_quantity if website.sale_get_order() else 0)"/>
+                    <span class="co-nav-badge" t-if="cart_qty &gt; 0" t-esc="cart_qty"/>
+                  </a>
+
+                  <t t-if="request.env.user._is_public()">
+                    <a href="/web/login" class="co-nav-account-link text-decoration-none">Sign In</a>
+                  </t>
+                  <t t-else="">
+                    <div class="dropdown co-nav-account-dropdown">
+                      <a href="#" class="co-nav-icon-btn text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-label="My account">
+                        <i class="fa fa-user-o"/>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2">
+                        <a href="/my/account" class="dropdown-item">My Account</a>
+                        <a href="/web/session/logout?redirect=/" class="dropdown-item text-danger">Sign Out</a>
+                      </div>
+                    </div>
+                  </t>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </header>
       </xpath>
     </template>
-    
+
     <!-- ═══════════════════════════════════════════════════════
          FIND US / LOCATION PAGE
     ════════════════════════════════════════════════════════ -->
