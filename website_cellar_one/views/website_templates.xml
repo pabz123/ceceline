@@ -68,7 +68,8 @@
     ════════════════════════════════════════════════════════ -->
     <template id="custom_two_tier_navbar"
               inherit_id="website.layout"
-              name="Cellar One Navbar">
+              name="Cellar One Navbar"
+              priority="90">
 
       <xpath expr="//header[@id='top']" position="replace">
         <header id="top" class="co-site-header">
