@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
+import json
+import logging
+import werkzeug
+
 from odoo import http, _
 from odoo.http import request
 from odoo.addons.auth_signup.controllers.main import AuthSignupHome
 from odoo.exceptions import UserError
-import werkzeug
-import json
-import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class CellarOneController(http.Controller):
@@ -117,8 +120,6 @@ class CellarOneController(http.Controller):
 
         return {'success': True}
 
-
-_logger = logging.getLogger(__name__)
 
 class CellarOneAuthSignupHome(AuthSignupHome):
 

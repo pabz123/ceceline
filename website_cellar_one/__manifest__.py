@@ -37,6 +37,7 @@
         'views/auth_templates.xml',
         'views/shop_filters.xml',
         'views/cart_checkout_templates.xml',
+        'views/signup_templates.xml',
         'data/website_data.xml',
         'data/mail_templates.xml',
     ],

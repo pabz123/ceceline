@@ -2,82 +2,25 @@
 <odoo>
 
   <!-- ═══════════════════════════════════════════════════════
-       SIGNUP PAGE — Styled registration form
+       Signup PAGE styling is owned by
+       views/auth_templates.xml (id="custom_signup"), which
+       inherits auth_signup.signup and replaces the form.
+       This file holds the standalone post-submission pages.
+
+       The signup FORM itself is intentionally NOT redefined
+       here — auth_signup.signup wraps its content in a
+       <form class="oe_signup_form">, not a <div>, so the
+       previous xpath "//div[hasclass('oe_signup_form')]" never
+       matched. Defining the styling twice (once per file)
+       would also cause Odoo to apply both inherit chains and
+       produce nested markup.
   ════════════════════════════════════════════════════════ -->
-  <template id="signup" inherit_id="auth_signup.signup" name="Cellar One Signup">
-    <xpath expr="//div[hasclass('oe_signup_form')]" position="replace">
 
-      <div class="container py-5">
-        <div class="row justify-content-center">
-          <div class="col-md-5">
-
-            <div class="text-center mb-4">
-              <div style="font-family:var(--co-font-heading);font-size:1.5rem;font-weight:700;color:var(--co-burgundy);">
-                Cellar <span style="color:var(--co-gold-dark);">One</span>
-              </div>
-              <h2 style="font-size:1.5rem;margin-top:12px;">Create Your Account</h2>
-              <p style="color:var(--co-text-secondary);font-size:0.9rem;">
-                A verification email will be sent to confirm your address.
-              </p>
-            </div>
-
-            <div class="card border-0 shadow-sm" style="border-radius:var(--co-radius-card);">
-              <div class="card-body p-4">
-                <form class="oe_signup_form" action="/web/signup" method="post">
-                  <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                  <t t-if="redirect">
-                    <input type="hidden" name="redirect" t-att-value="redirect"/>
-                  </t>
-
-                  <div class="mb-3">
-                    <label for="name" style="font-size:0.8125rem;font-weight:600;color:var(--co-text-secondary);">Full Name</label>
-                    <input type="text" id="name" name="name" class="form-control"
-                           placeholder="Your full name" required="required"
-                           style="border-radius:8px;border:1.5px solid var(--co-border);padding:10px 14px;"/>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="login" style="font-size:0.8125rem;font-weight:600;color:var(--co-text-secondary);">Email Address</label>
-                    <input type="email" id="login" name="login" class="form-control"
-                           placeholder="you@example.com" required="required"
-                           style="border-radius:8px;border:1.5px solid var(--co-border);padding:10px 14px;"/>
-                  </div>
-
-                  <div class="mb-4">
-                    <label for="password" style="font-size:0.8125rem;font-weight:600;color:var(--co-text-secondary);">Password</label>
-                    <input type="password" id="password" name="password" class="form-control"
-                           placeholder="Min. 8 characters" required="required" minlength="8"
-                           style="border-radius:8px;border:1.5px solid var(--co-border);padding:10px 14px;"/>
-                  </div>
-
-                  <button type="submit" class="btn-co-primary w-100 justify-content-center"
-                          style="border-radius:8px;">
-                    Create Account
-                  </button>
-                </form>
-              </div>
-            </div>
-
-            <p class="text-center mt-3" style="font-size:0.875rem;color:var(--co-text-secondary);">
-              Already have an account?
-              <a href="/web/login" style="color:var(--co-burgundy);font-weight:500;">Sign in</a>
-            </p>
-
-            <p class="text-center mt-2" style="font-size:0.75rem;color:var(--co-text-muted);">
-              By creating an account you agree to our
-              <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>.
-              You must be 18+ to register.
-            </p>
-
-          </div>
-        </div>
-      </div>
-
-    </xpath>
-  </template>
 
   <!-- ═══════════════════════════════════════════════════════
        EMAIL VERIFICATION PENDING PAGE
+       Rendered after signup submission, before the user has
+       clicked the verification link in their mailbox.
   ════════════════════════════════════════════════════════ -->
   <template id="email_confirm_pending" name="Cellar One Email Confirm Pending">
     <t t-call="website.layout">
@@ -94,6 +37,28 @@
         </p>
         <div style="margin-top:2rem;">
           <a href="/" class="btn-co-outline">Back to Home</a>
+        </div>
+      </div>
+    </t>
+  </template>
+
+  <!-- ═══════════════════════════════════════════════════════
+       EMAIL VERIFIED SUCCESS PAGE
+       Rendered after the user clicks the verification link
+       and the controller activates their account.
+  ════════════════════════════════════════════════════════ -->
+  <template id="email_verified_success" name="Cellar One Email Verified Success">
+    <t t-call="website.layout">
+      <div class="container py-5 text-center">
+        <div style="font-size:3rem;margin-bottom:1rem;">✅</div>
+        <h2 style="font-family:var(--co-font-heading);">You're Verified</h2>
+        <p style="color:var(--co-text-secondary);max-width:480px;margin:1rem auto;">
+          Your email is confirmed and your account is now active.
+          Welcome to Cellar One — Uganda's premier wines &amp; spirits destination.
+        </p>
+        <div style="margin-top:2rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+          <a href="/shop" class="btn-co-primary">Start Shopping</a>
+          <a href="/my/account" class="btn-co-outline">My Account</a>
         </div>
       </div>
     </t>
