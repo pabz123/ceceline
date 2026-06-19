@@ -25,11 +25,18 @@
         <attribute name="class" add="co-card-img" separator=" "/>
       </xpath>
 
-      <!-- Badges: Best Seller / New Arrival, placed top-left over the image.
+      <!-- Badges: Best Seller / New Arrival / Discount, placed top-left over the image.
            cellar_is_best_seller / cellar_is_new_arrival are optional fields
            added by this module — if a product doesn't have them set
            (e.g. on the production catalog before this module adds the
            fields' default), this block simply renders nothing. -->
+      <!-- Fix broken product images (e.g. "image.png" 500 error) by providing
+           a safe fallback. The onerror attribute is passed through by Odoo's
+           image widget from the span to the rendered <img>. -->
+      <xpath expr="//span[hasclass('oe_product_image_img_wrapper')]" position="attributes">
+        <attribute name="onerror">this.onerror=null;this.src='/website_cellar_one/static/src/img/placeholder.svg';</attribute>
+      </xpath>
+
       <xpath expr="//div[hasclass('oe_product_image')]/a" position="inside">
         <div class="co-card-badges">
           <t t-if="product.cellar_is_best_seller">
@@ -37,6 +44,10 @@
           </t>
           <t t-if="product.cellar_is_new_arrival">
             <span class="co-badge co-badge-burgundy">New</span>
+          </t>
+          <t t-if="combination_info and combination_info.get('has_discounted_price')">
+            <t t-set="discount_pct" t-value="int(round((combination_info['list_price'] - combination_info['price']) / combination_info['list_price'] * 100)) if combination_info['list_price'] else 0"/>
+            <span t-if="discount_pct > 0" class="co-badge" style="background: #C0392B; color: #FFFFFF;">-<t t-esc="discount_pct"/>%</span>
           </t>
         </div>
       </xpath>
@@ -186,11 +197,13 @@
          grid, and interactive star-picker form.
     ════════════════════════════════════════════════════════ -->
     <template id="product_comment_cellar_one" inherit_id="website_sale.product_comment" name="Cellar One Custom Discussion and Rating">
-        <xpath expr="//div[@id='o_product_page_reviews_content']" position="replace">
-            <div id="o_product_page_reviews_content" class="collapse show mt-4">
-                
-                <!-- Ratings Scorecard & Star breakdown -->
-                <div class="co-rating-summary" id="co-rating-summary" t-att-data-product-tmpl-id="product.id">
+        <xpath expr="//section[@id='o_product_page_reviews']" position="replace">
+            <section id="o_product_page_reviews" class="container pt32 pb32" data-anchor='true'>
+                <h3 class="mb32 fw-bold" style="font-family: var(--co-font-heading); color: var(--co-burgundy);">Customer Reviews</h3>
+                <div id="o_product_page_reviews_content" class="mt-4">
+                    
+                    <!-- Ratings Scorecard & Star breakdown -->
+                    <div class="co-rating-summary" id="co-rating-summary" t-att-data-product-tmpl-id="product.id">
                     
                     <!-- Left column: Big Scorecard -->
                     <div class="co-rating-summary__score">
@@ -296,8 +309,22 @@
                     </div>
                 </div>
 
-            </div>
+                </div>
+            </section>
         </xpath>
+    </template>
+
+    <!-- ═══════════════════════════════════════════════════════
+         HIDE BREADCRUMB on shop/category pages
+         Removes "Products > Wines" breadcrumb from the shop
+         listing — user requested hiding it.
+    ════════════════════════════════════════════════════════ -->
+    <template id="products_breadcrumb_cellar_one"
+              inherit_id="website_sale.products_breadcrumb"
+              name="Hide Products Breadcrumb">
+      <xpath expr="//ol" position="attributes">
+        <attribute name="t-if">False</attribute>
+      </xpath>
     </template>
 
   </data>

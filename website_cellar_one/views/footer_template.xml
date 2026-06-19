@@ -113,7 +113,12 @@
                     <li><a href="/faq">FAQ</a></li>
                     <li><a href="/contactus">Contact Us</a></li>
                     <li><a href="/location">Find Us</a></li>
-                    <li><a href="/web/login">Sign In</a></li>
+                    <t t-if="request.env.user._is_public()">
+                      <li><a href="#" data-bs-toggle="modal" data-bs-target="#coAuthModal">Sign In</a></li>
+                    </t>
+                    <t t-else="">
+                      <li><a href="/my/account">My Account</a></li>
+                    </t>
                   </ul>
                 </div>
 

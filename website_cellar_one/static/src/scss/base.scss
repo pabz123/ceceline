@@ -104,6 +104,25 @@ a {
     }
 }
 
+// ─── Standalone section heading parts (used inline in homepage) ─
+.co-section-label {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--co-gold-dark);
+    margin-bottom: $spacing-sm;
+}
+
+.co-section-title {
+    font-family: var(--co-font-heading);
+    color: $color-charcoal;
+    font-weight: 700;
+    font-size: 2.2rem;
+    letter-spacing: -0.01em;
+}
+
 // ─── Gold divider accent ─────────────────────────────────────
 .co-divider {
     display: block;
@@ -190,6 +209,11 @@ a {
     }
 }
 
+// ─── Hide Benelux pricelist dropdown ─────────────────────────
+.o_pricelist_dropdown {
+    display: none !important;
+}
+
 // ─── Image lazy load fade-in ─────────────────────────────────
 img[loading="lazy"] {
     transition: opacity $transition-slow;
@@ -260,6 +284,199 @@ img[loading="lazy"] {
         &:hover {
             background: rgba($color-white, 0.2);
             transform: scale(1.05);
-        }
     }
+}
+
+// ─────────────────────────────────────────────────────────────
+//  CATEGORY DECORATION CARDS — sidebar hero on shop pages
+//  Each product category gets a unique gradient/icon/copy card
+//  in the col-3 sidebar area. Styles are driven by the
+//  .co-deco-card + category modifier class.
+// ─────────────────────────────────────────────────────────────
+.co-category-deco {
+    margin-top: 1.5rem;
+}
+
+.co-deco-card {
+    border-radius: 16px;
+    padding: 1.75rem 1.25rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+
+    .co-deco-icon {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+        opacity: 0.9;
+    }
+
+    .co-deco-title {
+        font-family: var(--co-font-heading);
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+        line-height: 1.3;
+    }
+
+    .co-deco-subtitle {
+        font-size: 0.78rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        opacity: 0.85;
+        line-height: 1.4;
+    }
+
+    .co-deco-text {
+        font-size: 0.78rem;
+        line-height: 1.5;
+        margin-bottom: 0;
+        opacity: 0.75;
+    }
+
+    .co-deco-accent {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        border-radius: 0 0 16px 16px;
+    }
+}
+
+// Category color variants
+.co-deco-home {
+    background: linear-gradient(135deg, #2d0a14 0%, #5C1A2E 50%, #8B2E4A 100%);
+    color: #faf8f5;
+    .co-deco-accent { background: linear-gradient(90deg, #C5A880, #9E8259); }
+}
+
+.co-deco-wines {
+    background: linear-gradient(135deg, #3d1a2e 0%, #6B2140 50%, #8B3A62 100%);
+    color: #faf8f5;
+    .co-deco-accent { background: linear-gradient(90deg, #C5A880, #D4B896); }
+}
+
+.co-deco-red-wines {
+    background: linear-gradient(135deg, #4a0e0e 0%, #8B1A1A 50%, #C0392B 100%);
+    color: #fffaf0;
+    .co-deco-accent { background: #ffd700; }
+}
+
+.co-deco-white-wines {
+    background: linear-gradient(135deg, #f5e6c8 0%, #faf3e0 50%, #fff8e7 100%);
+    color: #5C1A2E;
+    .co-deco-accent { background: #C5A880; }
+}
+
+.co-deco-sparkling {
+    background: linear-gradient(135deg, #f0e6c8 0%, #faf0d8 50%, #fffae8 100%);
+    color: #5C1A2E;
+    .co-deco-accent { background: #D4A017; }
+}
+
+.co-deco-rose {
+    background: linear-gradient(135deg, #f0c8d8 0%, #f8d8e8 50%, #ffe8f0 100%);
+    color: #5C1A2E;
+    .co-deco-accent { background: #e88aa0; }
+}
+
+.co-deco-spirits {
+    background: linear-gradient(135deg, #2d1a0a 0%, #5C3A1A 50%, #8B5A2E 100%);
+    color: #faf8f5;
+    .co-deco-accent { background: #D4A017; }
+}
+
+.co-deco-whisky {
+    background: linear-gradient(135deg, #3d2a12 0%, #6B4A20 50%, #8B6930 100%);
+    color: #faf8f5;
+    .co-deco-accent { background: #C5A880; }
+}
+
+.co-deco-gin {
+    background: linear-gradient(135deg, #1a3d2a 0%, #2d6B40 50%, #3a8B55 100%);
+    color: #faf8f5;
+    .co-deco-accent { background: #D4A017; }
+}
+
+.co-deco-vodka {
+    background: linear-gradient(135deg, #1a2d3d 0%, #2a4a6B 50%, #3a6a8B 100%);
+    color: #faf8f5;
+    .co-deco-accent { background: #C5C8D0; }
+}
+
+.co-deco-rum {
+    background: linear-gradient(135deg, #3d2a15 0%, #6B4A25 50%, #8B6A35 100%);
+    color: #faf8f5;
+    .co-deco-accent { background: #D4A017; }
+}
+
+.co-deco-beer {
+    background: linear-gradient(135deg, #e8c840 0%, #f0d860 50%, #f8e880 100%);
+    color: #3d2a10;
+    .co-deco-accent { background: #8B6914; }
+}
+
+.co-deco-cider {
+    background: linear-gradient(135deg, #7ab84a 0%, #8FD050 50%, #a8e860 100%);
+    color: #1a3d10;
+    .co-deco-accent { background: #4a8B20; }
+}
+
+.co-deco-default {
+    background: linear-gradient(135deg, #3a3a4a 0%, #5a5a6a 50%, #7a7a8a 100%);
+    color: #faf8f5;
+    .co-deco-accent { background: #C5A880; }
+}
+
+// ─────────────────────────────────────────────────────────────
+//  PRODUCT DETAIL PAGE DECORATION — vertical accent bar
+//  Placed left of the product details on desktop. Shows a
+//  category-specific icon + label.
+// ─────────────────────────────────────────────────────────────
+.co-product-deco {
+    flex: 0 0 auto;
+    width: 48px;
+    margin-right: 1rem;
+    position: relative;
+
+    .co-product-deco-inner {
+        position: sticky;
+        top: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .co-deco-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        font-size: 1.2rem;
+        color: var(--co-burgundy);
+        background: rgba($color-burgundy-700, 0.06);
+        border: 1px solid rgba($color-burgundy-700, 0.1);
+    }
+
+    .co-deco-line {
+        width: 1.5px;
+        height: 40px;
+        background: linear-gradient(to bottom, var(--co-burgundy), rgba($color-burgundy-700, 0.15));
+        border-radius: 1px;
+    }
+
+    .co-deco-label {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--co-burgundy);
+        white-space: nowrap;
+    }
+}
 }

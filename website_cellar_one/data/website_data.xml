@@ -45,37 +45,30 @@
 
   <record id="menu_wines" model="website.menu">
     <field name="name">Wines</field>
-    <field name="url">/shop/category/wines-7</field>
+    <field name="url">/shop/category/wines-27</field>
     <field name="parent_id" ref="website.main_menu"/>
     <field name="sequence">10</field>
   </record>
 
   <record id="menu_spirits" model="website.menu">
     <field name="name">Spirits</field>
-    <field name="url">/shop/category/spirits-8</field>
+    <field name="url">/shop/category/spirits-28</field>
     <field name="parent_id" ref="website.main_menu"/>
     <field name="sequence">20</field>
   </record>
 
   <record id="menu_beer" model="website.menu">
     <field name="name">Beer</field>
-    <field name="url">/shop/category/beer-9</field>
+    <field name="url">/shop/category/beer-34</field>
     <field name="parent_id" ref="website.main_menu"/>
     <field name="sequence">30</field>
   </record>
 
   <record id="menu_cider" model="website.menu">
     <field name="name">Cider</field>
-    <field name="url">/shop/category/cider-10</field>
+    <field name="url">/shop/category/cider-35</field>
     <field name="parent_id" ref="website.main_menu"/>
     <field name="sequence">40</field>
-  </record>
-
-  <record id="menu_brands" model="website.menu">
-    <field name="name">Brands</field>
-    <field name="url">/shop</field>
-    <field name="parent_id" ref="website.main_menu"/>
-    <field name="sequence">50</field>
   </record>
 
   <record id="menu_find_us" model="website.menu">
@@ -83,6 +76,66 @@
     <field name="url">/location</field>
     <field name="parent_id" ref="website.main_menu"/>
     <field name="sequence">60</field>
+  </record>
+
+  <!-- ── Sub-menus for dropdown navigation ──────────────── -->
+  <!-- Wines → children -->
+  <!-- Wines → children -->
+  <record id="menu_wines_red" model="website.menu">
+    <field name="name">Red Wines</field>
+    <field name="url">/shop/category/wines-red-wines-31</field>
+    <field name="parent_id" ref="menu_wines"/>
+    <field name="sequence">10</field>
+  </record>
+
+  <record id="menu_wines_white" model="website.menu">
+    <field name="name">White Wines</field>
+    <field name="url">/shop/category/wines-white-wines-32</field>
+    <field name="parent_id" ref="menu_wines"/>
+    <field name="sequence">20</field>
+  </record>
+
+  <record id="menu_wines_sparkling" model="website.menu">
+    <field name="name">Sparkling Wines</field>
+    <field name="url">/shop/category/wines-sparkling-wines-33</field>
+    <field name="parent_id" ref="menu_wines"/>
+    <field name="sequence">30</field>
+  </record>
+
+  <record id="menu_wins_rose" model="website.menu">
+    <field name="name">Rosé Wines</field>
+    <field name="url">/shop/category/wines-rose-wines-48</field>
+    <field name="parent_id" ref="menu_wines"/>
+    <field name="sequence">40</field>
+  </record>
+
+  <!-- Spirits → children -->
+  <record id="menu_spirits_whisky" model="website.menu">
+    <field name="name">Whisky</field>
+    <field name="url">/shop/category/spirits-whisky-49</field>
+    <field name="parent_id" ref="menu_spirits"/>
+    <field name="sequence">10</field>
+  </record>
+
+  <record id="menu_spirits_gin" model="website.menu">
+    <field name="name">Gin</field>
+    <field name="url">/shop/category/spirits-gin-50</field>
+    <field name="parent_id" ref="menu_spirits"/>
+    <field name="sequence">20</field>
+  </record>
+
+  <record id="menu_spirits_vodka" model="website.menu">
+    <field name="name">Vodka</field>
+    <field name="url">/shop/category/spirits-vodka-51</field>
+    <field name="parent_id" ref="menu_spirits"/>
+    <field name="sequence">30</field>
+  </record>
+
+  <record id="menu_spirits_rum" model="website.menu">
+    <field name="name">Rum</field>
+    <field name="url">/shop/category/spirits-rum-52</field>
+    <field name="parent_id" ref="menu_spirits"/>
+    <field name="sequence">40</field>
   </record>
 
 

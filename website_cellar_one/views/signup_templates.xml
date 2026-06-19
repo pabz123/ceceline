@@ -43,6 +43,43 @@
   </template>
 
   <!-- ═══════════════════════════════════════════════════════
+       OTP VERIFICATION PENDING PAGE
+  ════════════════════════════════════════════════════════ -->
+  <template id="signup_otp_verification" name="Cellar One OTP Verification">
+    <t t-call="website.layout">
+      <div class="container py-5 text-center">
+        <div style="font-size:3rem;margin-bottom:1rem;">📩</div>
+        <h2 style="font-family:var(--co-font-heading);">Verify Your Email</h2>
+        <p style="color:var(--co-text-secondary);max-width:480px;margin:1rem auto;">
+          We've sent a 6-digit verification code to <strong t-esc="login"/>.
+          Please enter it below to activate your account.
+        </p>
+
+        <form action="/web/signup/verify_otp" method="post" style="max-width: 320px; margin: 0 auto;">
+            <input type="hidden" name="login" t-att-value="login"/>
+            <div class="mb-3">
+                <input type="text" name="otp" class="form-control form-control-lg text-center fw-bold" 
+                       placeholder="000000" maxlength="6" pattern="\d{6}" required="required" 
+                       style="letter-spacing: 0.5rem; font-size: 1.5rem; border-radius: 8px;"/>
+            </div>
+            
+            <p class="alert alert-danger p-2" t-if="error" role="alert">
+              <t t-esc="error"/>
+            </p>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold" 
+                    style="border-radius: 8px; background: var(--co-burgundy); border: none;">Verify &amp; Continue</button>
+        </form>
+
+        <p style="color:var(--co-text-muted);font-size:0.875rem; margin-top: 1.5rem;">
+          Didn't receive it? Check your spam folder or
+          <a href="/web/signup" style="color:var(--co-burgundy);">signup again</a>.
+        </p>
+      </div>
+    </t>
+  </template>
+
+  <!-- ═══════════════════════════════════════════════════════
        EMAIL VERIFIED SUCCESS PAGE
        Rendered after the user clicks the verification link
        and the controller activates their account.

@@ -2,8 +2,14 @@
 import json
 import logging
 import werkzeug
+import random
+import re
 
-from odoo import http, _
+from datetime import timedelta
+
+from werkzeug.urls import url_encode
+
+from odoo import http, _, fields
 from odoo.http import request
 from odoo.addons.auth_signup.controllers.main import AuthSignupHome
 from odoo.exceptions import UserError
@@ -14,10 +20,32 @@ _logger = logging.getLogger(__name__)
 class CellarOneController(http.Controller):
 
     # ─────────────────────────────────────────────
+    # Homepage — serve our custom template directly
+    # to avoid Odoo's page-serving fallback chain
+    # that redirects to the first menu item.
+    # ─────────────────────────────────────────────
+    @http.route('/', type='http', auth='public', website=True, sitemap=True)
+    def index(self, **kw):
+        return request.render('website.homepage')
+
+    # ─────────────────────────────────────────────
     # Stock availability JSON endpoint
     # Called by stock_badge.js to get live qty
     # GET /cellar/stock/<int:product_id>
     # ─────────────────────────────────────────────
+    @http.route('/cellar/oauth_providers', type='json', auth='public', website=True)
+    def get_oauth_providers(self, **kwargs):
+        """ Returns fully constructed OAuth links to avoid QWeb TypeError """
+        try:
+            # Reusing auth_oauth controller logic securely
+            from odoo.addons.auth_oauth.controllers.main import OAuthLogin
+            oauth_controller = OAuthLogin()
+            providers = oauth_controller.list_providers()
+            return {'providers': providers}
+        except Exception as e:
+            _logger.error("Failed to load OAuth providers: %s", e)
+            return {'providers': []}
+
     @http.route('/cellar/stock/<int:product_id>', type='json', auth='public', website=True)
     def get_stock(self, product_id, **kwargs):
         product = request.env['product.product'].sudo().search(
@@ -132,6 +160,10 @@ class CellarOneAuthSignupHome(AuthSignupHome):
 
         if 'error' not in qcontext and request.httprequest.method == 'POST':
             try:
+                login = qcontext.get('login')
+                if not login or not re.match(r"[^@]+@[^@]+\.[^@]+", login):
+                    raise UserError(_("Please enter a valid email address."))
+
                 if not request.env['ir.http']._verify_request_recaptcha_token('signup'):
                     raise UserError(_("Suspicious activity detected by Google reCaptcha."))
 
@@ -140,7 +172,7 @@ class CellarOneAuthSignupHome(AuthSignupHome):
                 # Fetch the created user
                 User = request.env['res.users']
                 user_sudo = User.sudo().search(
-                    User._get_login_domain(qcontext.get('login')), order=User._get_login_order(), limit=1
+                    User._get_login_domain(login), order=User._get_login_order(), limit=1
                 )
                 
                 if user_sudo:
@@ -150,19 +182,21 @@ class CellarOneAuthSignupHome(AuthSignupHome):
                     # Log them out from the auto-authenticated session
                     request.session.logout()
                     
-                    # Generate signup token
-                    user_sudo.partner_id.sudo().signup_prepare(signup_type="signup")
+                    # Generate 6-digit OTP
+                    otp_code = str(random.randint(100000, 999999))
+                    expiration = fields.Datetime.to_datetime(fields.Datetime.now()) + timedelta(minutes=15)
+                    user_sudo.partner_id.sudo().write({
+                        'cellar_otp_code': otp_code,
+                        'cellar_otp_expiration': expiration,
+                    })
                     
-                    # Send verification mail
+                    # Send verification mail with OTP
                     template = request.env.ref('website_cellar_one.mail_template_email_verification', raise_if_not_found=False)
                     if template:
-                        # Construct verification URL
-                        base_url = request.env['ir.config_parameter'].sudo().get_param('web.base.url')
-                        verify_url = f"{base_url}/web/signup/verify?token={user_sudo.partner_id.signup_token}"
-                        template.sudo().with_context(token_url=verify_url).send_mail(user_sudo.id, force_send=True)
+                        template.sudo().with_context(otp_code=otp_code).send_mail(user_sudo.id, force_send=True)
                     
-                    # Redirect to email pending confirmation page
-                    return request.redirect('/email_confirm_pending')
+                    # Redirect to OTP verification page
+                    return request.redirect(f'/web/signup/otp?{url_encode({"login": login})}')
                 
             except UserError as e:
                 qcontext['error'] = e.args[0]
@@ -177,6 +211,49 @@ class CellarOneAuthSignupHome(AuthSignupHome):
         response.headers['X-Frame-Options'] = 'SAMEORIGIN'
         response.headers['Content-Security-Policy'] = "frame-ancestors 'self'"
         return response
+
+    @http.route('/web/signup/otp', type='http', auth='public', website=True)
+    def web_signup_otp(self, login, **kwargs):
+        return request.render('website_cellar_one.signup_otp_verification', {'login': login, 'error': kwargs.get('error')})
+
+    @http.route('/web/signup/verify_otp', type='http', auth='public', website=True, methods=['POST'], csrf=False)
+    def web_signup_verify_otp(self, login, otp, **kwargs):
+        User = request.env['res.users'].sudo()
+        user = User.search([('login', '=', login)], limit=1)
+        
+        if not user or not user.partner_id.cellar_otp_code:
+            return request.redirect(f'/web/signup/otp?{url_encode({"login": login, "error": "invalid"})}')
+
+        partner = user.partner_id
+        if partner.cellar_otp_code == otp:
+            now = fields.Datetime.to_datetime(fields.Datetime.now())
+            if partner.cellar_otp_expiration and fields.Datetime.to_datetime(partner.cellar_otp_expiration) < now:
+                return request.render('website_cellar_one.signup_otp_verification', {
+                    'login': login,
+                    'error': _("OTP has expired. Please signup again.")
+                })
+
+            # Activate user
+            user.write({'active': True})
+
+            # Clear OTP
+            partner.write({
+                'cellar_otp_code': False,
+                'cellar_otp_expiration': False
+            })
+
+            # Log user in
+            request.session.uid = user.id
+            request.session.login = user.login
+            request.session.modified = True
+            request.update_env(user=user)
+
+            return request.redirect('/email_verified_success')
+
+        return request.render('website_cellar_one.signup_otp_verification', {
+            'login': login,
+            'error': _("Invalid verification code. Please try again.")
+        })
 
     @http.route('/email_confirm_pending', type='http', auth='public', website=True)
     def email_confirm_pending(self, **kwargs):

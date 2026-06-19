@@ -27,6 +27,9 @@
             <input type="password" name="password" id="password" class="form-control" required="required" autocomplete="current-password" placeholder="Enter your password" t-att-autofocus="'autofocus' if login else None" maxlength="4096" style="height: 48px; border-radius: 8px;"/>
           </div>
 
+          <!-- Required by auth_oauth module -->
+          <div class="o_login_auth"/>
+
           <p class="alert alert-danger" t-if="error" role="alert">
               <t t-esc="error"/>
           </p>
@@ -83,6 +86,9 @@
             <input type="password" name="confirm_password" id="confirm_password" class="form-control" required="required" placeholder="Repeat your password" style="height: 48px; border-radius: 8px;"/>
             <div id="password-error" class="text-danger mt-1 d-none" style="font-size: 0.8rem;">Passwords do not match.</div>
           </div>
+
+          <!-- Required by auth_oauth module -->
+          <div class="o_login_auth"/>
 
           <p class="alert alert-danger" t-if="error" role="alert">
               <t t-esc="error"/>

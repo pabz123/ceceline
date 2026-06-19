@@ -47,16 +47,18 @@
 
             <!-- CTA Button -->
             <div style="text-align:center;margin-bottom:32px;">
-              <a href="{{ ctx.get('token_url', '/') }}"
-                 style="display:inline-block;background:#D4AF37;color:#16161A;
-                        font-weight:700;font-size:15px;padding:14px 36px;
-                        border-radius:9999px;text-decoration:none;letter-spacing:0.02em;">
-                Verify My Email
-              </a>
+              <div style="display:inline-block;background:#F9F2DD;color:#16161A;
+                        font-weight:700;font-size:32px;padding:16px 40px;
+                        border-radius:12px;border: 2px dashed #D4AF37; letter-spacing: 12px; font-family: monospace;">
+                {{ ctx.get('otp_code', '000000') }}
+              </div>
+              <p style="color:#8E8E93;font-size:14px;margin-top: 16px;">
+                Enter this 6-digit code on the verification page.
+              </p>
             </div>
 
             <p style="color:#8E8E93;font-size:13px;text-align:center;line-height:1.6;">
-              This link expires in 24 hours. If you didn't create an account,
+              This code expires in 15 minutes. If you didn't create an account,
               you can safely ignore this email.
             </p>
           </td>

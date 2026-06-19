@@ -8,7 +8,26 @@
     </xpath>
   </template>
 
-  <!-- Checkout Layout Override (optional, inject a class if needed) -->
+  <!-- Empty Cart State -->
+  <template id="custom_empty_cart" inherit_id="website_sale.cart_lines" name="Cellar One Empty Cart">
+    <xpath expr="//div[hasclass('js_cart_lines', 'alert', 'alert-info')]" position="replace">
+      <!-- Custom Empty State -->
+      <div class="oe_cart col-12 text-center py-5" t-if="not website_sale_order or not website_sale_order.website_order_line">
+        <div class="mb-4">
+          <i class="fa fa-shopping-basket" style="font-size: 4rem; color: var(--co-gray-300);"></i>
+        </div>
+        <h2 class="fw-bold mb-3" style="font-family: var(--co-font-heading); color: var(--co-burgundy);">Your cart is empty</h2>
+        <p class="text-muted mb-4 mx-auto" style="max-width: 400px;">
+          Discover exceptional vintages and rare spirits handpicked by our expert sommeliers.
+        </p>
+        <a href="/shop" class="btn btn-primary px-5 py-3 fw-bold" style="background-color: var(--co-burgundy); border-color: var(--co-burgundy); border-radius: 9999px;">
+          Explore Catalog
+        </a>
+      </div>
+    </xpath>
+  </template>
+
+  <!-- Checkout Layout Override -->
   <template id="custom_checkout_layout" inherit_id="website_sale.checkout_layout" name="Cellar One Checkout Layout">
     <xpath expr="//div[hasclass('oe_website_sale')]" position="attributes">
       <attribute name="class" add="co-premium-checkout-flow" separator=" "/>

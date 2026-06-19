@@ -57,52 +57,107 @@
 
 
     <!-- ═══════════════════════════════════════════════════════
-         NAVBAR — Site-wide header replacement
+         NAVBAR — Two-tier luxury header
+         Tier 1: Thin dark top bar (contact, tagline, quick links)
+         Tier 2: Sticky white main bar (logo, dynamic nav, actions)
 
-         Odoo can switch between several header templates from the
-         Website editor.  Inheriting only website.template_header_default
-         means this custom navbar disappears as soon as another header
-         variant (or a customized database copy) is active.  Replacing
-         website.layout's stable <header id="top"> anchor keeps the
-         Cellar One navigation visible for every public page.
+         Replaces //header[@id='top'] directly — the stable anchor
+         that Odoo 17 guarantees in website.layout.
+
+         Nav items are pulled from website.menu_id.child_id (the
+         menu tree defined in data/website_data.xml), so the site
+         owner can reorder / edit them via Website > Site > Menu
+         Editor at any time.
+
+         Sub-menus appear as dropdowns automatically when a menu
+         record has child entries.
     ════════════════════════════════════════════════════════ -->
     <template id="custom_two_tier_navbar"
               inherit_id="website.layout"
               name="Cellar One Navbar"
-              priority="99">
+              priority="2000">
 
-      <xpath expr="//header[@id='top']" position="replace">
+      <xpath expr="//div[@id='wrapwrap']/header" position="replace">
+
         <header id="top" class="co-site-header">
-          <div class="co-navbar" role="navigation" aria-label="Main navigation">
+
+          <!-- ═══ TOP BAR (Desktop only) ═══ -->
+          <div class="co-topbar d-none d-lg-flex align-items-center">
+            <div class="container d-flex align-items-center justify-content-between">
+              <div class="co-topbar-left d-flex align-items-center gap-3">
+                <span class="co-topbar-tagline"><i class="fa fa-star" style="font-size: 8px; vertical-align: middle; color: var(--co-gold);"/> Uganda's Premier Wines &amp; Spirits Boutique</span>
+                <a href="/location" class="co-topbar-link"><i class="fa fa-map-marker"/> Find Us</a>
+              </div>
+              <div class="co-topbar-right d-flex align-items-center gap-3">
+                <a href="https://wa.me/256749057433" target="_blank" class="co-topbar-link"><i class="fa fa-whatsapp"/> Order on WhatsApp</a>
+                <span class="co-topbar-divider">|</span>
+                <t t-if="request.env.user._is_public()">
+                  <a href="#" class="co-topbar-link" data-bs-toggle="modal" data-bs-target="#coAuthModal">Sign In</a>
+                </t>
+                <t t-else="">
+                  <a href="/my/account" class="co-topbar-link">My Account</a>
+                </t>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══ MAIN NAV BAR ═══ -->
+          <nav class="navbar navbar-expand-lg co-navbar" aria-label="Main navigation">
             <div id="o_main_nav" class="o_main_nav container d-flex align-items-center">
 
-              <!-- Left: Cellar One composite logo -->
+              <!-- Logo -->
               <a href="/" class="co-navbar-brand d-flex align-items-center text-decoration-none" aria-label="Cellar One home">
                 <img src="/website_cellar_one/static/src/img/logo/cecelin_footer.png" alt="" class="co-navbar-brand__mark" loading="lazy"/>
                 <img src="/website_cellar_one/static/src/img/logo/ce_logo.png" alt="Cellar One" class="co-navbar-brand__wordmark" loading="lazy"/>
               </a>
 
+              <!-- Mobile hamburger -->
               <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
                       data-bs-target="#co_main_nav_collapse" aria-controls="co_main_nav_collapse"
                       aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
 
-              <!-- Center: Website menu items from Website > Site > Menu Editor -->
+              <!-- Collapsible area -->
               <div id="co_main_nav_collapse" class="collapse navbar-collapse co-navbar-collapse">
                 <div class="co-navbar-menu mx-lg-auto">
-                  <t t-call="website.navbar_nav">
-                    <t t-set="_nav_class" t-valuef="navbar-nav align-items-lg-center"/>
-                    <t t-foreach="website.menu_id.child_id" t-as="submenu">
-                      <t t-call="website.submenu">
-                        <t t-set="item_class" t-valuef="nav-item mx-lg-1"/>
-                        <t t-set="link_class" t-valuef="nav-link fw-bold text-uppercase"/>
+                  <ul class="navbar-nav align-items-lg-center">
+                    <t t-foreach="website.menu_id.child_id" t-as="menu">
+                      <t t-if="menu.child_id">
+                        <li class="nav-item dropdown mx-lg-1 co-mega-nav-item">
+                          <a class="nav-link fw-bold text-uppercase dropdown-toggle" t-att-href="menu.url" aria-expanded="false" t-esc="menu.name"/>
+                          <div class="dropdown-menu co-megadropdown shadow-sm border-0 p-0">
+                            <div class="co-megadropdown-inner">
+                              <t t-set="sub_count" t-value="len(menu.child_id)"/>
+                              <t t-set="half" t-value="int(sub_count / 2) + (sub_count % 2)"/>
+                              <t t-set="col1" t-value="menu.child_id[:half]"/>
+                              <t t-set="col2" t-value="menu.child_id[half:]"/>
+                              <div class="co-megadropdown-col">
+                                <t t-foreach="col1" t-as="sub">
+                                  <a t-att-href="sub.url" class="co-mega-link" t-esc="sub.name"/>
+                                </t>
+                              </div>
+                              <t t-if="col2">
+                                <div class="co-megadropdown-col">
+                                  <t t-foreach="col2" t-as="sub">
+                                    <a t-att-href="sub.url" class="co-mega-link" t-esc="sub.name"/>
+                                  </t>
+                                </div>
+                              </t>
+                            </div>
+                          </div>
+                        </li>
+                      </t>
+                      <t t-else="">
+                        <li class="nav-item mx-lg-1">
+                          <a class="nav-link fw-bold text-uppercase" t-att-href="menu.url" t-esc="menu.name"/>
+                        </li>
                       </t>
                     </t>
-                  </t>
+                  </ul>
                 </div>
 
-                <!-- Right: Actions (WhatsApp, Wishlist, Cart, Account) -->
+                <!-- Actions: WhatsApp · Wishlist · Cart · Account -->
                 <div class="co-navbar-actions d-flex align-items-center gap-3 ms-lg-4">
                   <a href="https://wa.me/256749057433" target="_blank" rel="noopener"
                      class="co-nav-icon-btn co-nav-whatsapp d-flex align-items-center gap-2 text-decoration-none"
@@ -110,23 +165,26 @@
                     <i class="fa fa-whatsapp"/> <span class="d-none d-xl-inline">Order</span>
                   </a>
 
-                  <a href="/shop/wishlist" class="co-nav-icon-btn position-relative text-decoration-none" aria-label="Wishlist">
+                  <a href="/shop/wishlist" class="co-nav-icon-btn position-relative text-decoration-none o_wsale_wishlist" aria-label="Wishlist">
                     <i class="fa fa-heart-o"/>
+                    <t t-set="wishcount" t-value="len(request.env['product.wishlist'].sudo().current())"/>
+                    <span t-attf-class="co-nav-badge o_wsale_wishlist_number #{'d-none' if not wishcount else ''}" t-esc="wishcount"/>
                   </a>
 
                   <a href="/shop/cart" class="co-nav-icon-btn position-relative text-decoration-none" aria-label="Shopping cart">
                     <i class="fa fa-shopping-cart"/>
-                    <t t-set="cart_qty" t-value="request.session.get('website_sale_cart_quantity', website.sale_get_order().cart_quantity if website.sale_get_order() else 0)"/>
-                    <span class="co-nav-badge" t-if="cart_qty &gt; 0" t-esc="cart_qty"/>
+                    <t t-set="cart_qty" t-value="website.sale_get_order().cart_quantity if website.sale_get_order() else 0"/>
+                    <span t-attf-class="co-nav-badge o_cart_quantity #{'d-none' if not cart_qty else ''}" t-esc="cart_qty"/>
                   </a>
 
                   <t t-if="request.env.user._is_public()">
-                    <a href="/web/login" class="co-nav-account-link text-decoration-none">Sign In</a>
+                    <a href="#" class="co-nav-account-link text-decoration-none d-none d-lg-inline-block" data-bs-toggle="modal" data-bs-target="#coAuthModal">Sign In</a>
                   </t>
                   <t t-else="">
                     <div class="dropdown co-nav-account-dropdown">
-                      <a href="#" class="co-nav-icon-btn text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-label="My account">
+                      <a href="#" class="co-nav-icon-btn text-decoration-none dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown" aria-label="My account">
                         <i class="fa fa-user-o"/>
+                        <span class="small d-none d-lg-inline" t-esc="request.env.user.partner_id.display_name or ''"/>
                       </a>
                       <div class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2">
                         <a href="/my/account" class="dropdown-item">My Account</a>
@@ -137,8 +195,128 @@
                 </div>
               </div>
             </div>
-          </div>
+          </nav>
         </header>
+      </xpath>
+    </template>
+
+    <!-- ═══════════════════════════════════════════════════════
+         AUTH MODAL — 'On-top' Login & Signup (Compact Version)
+    ════════════════════════════════════════════════════════ -->
+    <template id="auth_modal_addition" inherit_id="website.layout" name="Cellar One Auth Modal">
+      <xpath expr="//div[@id='wrapwrap']" position="inside">
+        <div class="modal fade" id="coAuthModal" tabindex="-1" aria-labelledby="coAuthModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden; min-height: 520px;">
+              <div class="modal-body p-0">
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close" style="z-index: 10;"></button>
+                
+                <div class="row g-0" style="min-height: 520px;">
+                  <!-- Left side: Visual (Desktop only) -->
+                  <div class="col-lg-5 d-none d-lg-block" style="background: url('/website_cellar_one/static/src/img/cat_wines.png') center/cover no-repeat;">
+                    <div class="h-100 w-100 d-flex flex-column justify-content-end p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);">
+                      <h4 class="text-white fw-bold mb-2">Unlock the Cellar</h4>
+                      <p class="text-white-50 small mb-0">Join our exclusive circle for premium releases.</p>
+                    </div>
+                  </div>
+                  
+                  <!-- Right side: Form -->
+                  <div class="col-lg-7 p-4">
+                    <div id="authFormsContainer" class="d-flex flex-column justify-content-center h-100">
+                        <!-- Login Form -->
+                        <div id="modalLoginForm">
+                            <div class="text-center mb-4">
+                              <img src="/website_cellar_one/static/src/img/logo/ce_logo.png" alt="Cellar One" style="height: 40px; margin-bottom: 0.5rem;"/>
+                              <h4 class="fw-bold">Welcome Back</h4>
+                            </div>
+
+                            <t t-set="oauth_providers" t-value="request.env['auth.oauth.provider'].sudo().search([('enabled', '=', True)])"/>
+                            <t t-if="oauth_providers">
+                                <div class="d-flex flex-column gap-2 mb-3 co-oauth-container">
+                                    <!-- Populated dynamically via JS to securely build the auth link -->
+                                    <div class="text-center text-muted small"><i class="fa fa-circle-o-notch fa-spin"></i> Loading secure login...</div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <hr class="flex-grow-1"/>
+                                    <span class="px-2 text-muted small">or</span>
+                                    <hr class="flex-grow-1"/>
+                                </div>
+                            </t>
+                            
+                            <form action="/web/login" method="post" class="oe_login_form">
+                              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                              <input type="hidden" name="redirect" value="/"/>
+                              <div class="mb-3">
+                                <label class="form-label small fw-bold text-muted">Email</label>
+                                <input type="email" name="login" class="form-control" placeholder="your@email.com" required="required" style="border-radius: 8px;"/>
+                              </div>
+                              <div class="mb-3">
+                                <label class="form-label small fw-bold text-muted">Password</label>
+                                <input type="password" name="password" class="form-control" placeholder="••••••••" required="required" style="border-radius: 8px;"/>
+                              </div>
+                              <button type="submit" class="btn btn-primary w-100 py-2 fw-bold" style="border-radius: 8px; background: var(--co-burgundy); border: none;">Sign In</button>
+                            </form>
+                            
+                            <div class="text-center mt-4 pt-3 border-top">
+                              <p class="text-muted small mb-0">No account? <a href="#" onclick="document.getElementById('modalLoginForm').style.display='none'; document.getElementById('modalSignupForm').style.display='block';" class="fw-bold" style="color: var(--co-burgundy);">Create one</a></p>
+                            </div>
+                        </div>
+
+                        <!-- Signup Form (Compact) -->
+                        <div id="modalSignupForm" style="display: none;">
+                            <div class="text-center mb-3">
+                              <img src="/website_cellar_one/static/src/img/logo/ce_logo.png" alt="Cellar One" style="height: 35px; margin-bottom: 0.5rem;"/>
+                              <h4 class="fw-bold">Join Us</h4>
+                            </div>
+
+                            <t t-if="oauth_providers">
+                                <div class="d-flex flex-column gap-2 mb-2 co-oauth-container-signup">
+                                    <!-- Populated dynamically via JS -->
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <hr class="flex-grow-1 m-0"/>
+                                    <span class="px-2 text-muted" style="font-size: 0.75rem;">or email</span>
+                                    <hr class="flex-grow-1 m-0"/>
+                                </div>
+                            </t>
+                            
+                            <form action="/web/signup" method="post" class="oe_signup_form">
+                              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                              <input type="hidden" name="redirect" value="/"/>
+                              <div class="row g-2 mb-2">
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-muted mb-1">Full Name</label>
+                                    <input type="text" name="name" class="form-control form-control-sm" placeholder="Name" required="required" style="border-radius: 6px;"/>
+                                </div>
+                              </div>
+                              <div class="mb-2">
+                                <label class="form-label small fw-bold text-muted mb-1">Email</label>
+                                <input type="email" name="login" class="form-control form-control-sm" placeholder="Email" required="required" style="border-radius: 6px;"/>
+                              </div>
+                              <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label small fw-bold text-muted mb-1">Password</label>
+                                    <input type="password" name="password" class="form-control form-control-sm" placeholder="Password" required="required" minlength="8" style="border-radius: 6px;"/>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small fw-bold text-muted mb-1">Confirm</label>
+                                    <input type="password" name="confirm_password" class="form-control form-control-sm" placeholder="Confirm" required="required" style="border-radius: 6px;"/>
+                                </div>
+                              </div>
+                              <button type="submit" class="btn btn-primary w-100 py-2 fw-bold" style="border-radius: 8px; background: var(--co-burgundy); border: none;">Sign Up</button>
+                            </form>
+                            
+                            <div class="text-center mt-3 pt-2 border-top">
+                              <p class="text-muted small mb-0">Have an account? <a href="#" onclick="document.getElementById('modalSignupForm').style.display='none'; document.getElementById('modalLoginForm').style.display='block';" class="fw-bold" style="color: var(--co-burgundy);">Sign In</a></p>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </xpath>
     </template>
 
@@ -430,6 +608,226 @@
         <field name="is_published">True</field>
         <field name="active">True</field>
     </record>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         CATEGORY DECORATIONS — sidebar hero cards
+         Fills the empty col-3 sidebar on shop/category pages.
+         Injected into #products_grid_before so it appears on
+         every product-listing page, styled by .co-category-deco
+         SCSS rules. Each category gets a unique color scheme,
+         icon, and descriptive copy.
+    ════════════════════════════════════════════════════════ -->
+    <template id="shop_category_decoration"
+              inherit_id="website_sale.products"
+              name="Category Decoration - Sidebar Card">
+
+      <xpath expr="//aside[@id='products_grid_before']//div[hasclass('products_attributes_filters')]" position="after">
+
+        <div class="co-category-deco" t-att-data-category="category and category.id or 0">
+
+          <!-- ── All Products (root /shop) ──────────────────── -->
+          <t t-if="not category">
+            <div class="co-deco-card co-deco-home">
+              <div class="co-deco-icon"><i class="fa fa-star"/></div>
+              <h4 class="co-deco-title">Cellar One</h4>
+              <p class="co-deco-subtitle">Uganda's Premier Wines &amp; Spirits Boutique</p>
+              <p class="co-deco-text">Discover our curated selection of fine wines, premium spirits, beers, and ciders from around the world.</p>
+              <div class="co-deco-accent"/>
+            </div>
+          </t>
+
+          <!-- ── Wines ──────────────────────────────────────── -->
+          <t t-elif="category.id == 27">
+            <div class="co-deco-card co-deco-wines">
+              <div class="co-deco-icon"><i class="fa fa-glass"/></div>
+              <h4 class="co-deco-title">Explore Our Wines</h4>
+              <p class="co-deco-subtitle">From Old World classics to New World treasures</p>
+              <p class="co-deco-text">Browse our carefully curated wine selection — reds, whites, sparkling, and rosé from renowned vineyards across the globe.</p>
+              <div class="co-deco-accent"/>
+            </div>
+          </t>
+
+          <!-- ── Red Wines ──────────────────────────────────── -->
+          <t t-elif="category.id == 31">
+            <div class="co-deco-card co-deco-red-wines">
+              <div class="co-deco-icon"><i class="fa fa-tint"/></div>
+              <h4 class="co-deco-title">Red Wines</h4>
+              <p class="co-deco-subtitle">Bold, complex, unforgettable</p>
+              <p class="co-deco-text">From Cabernet Sauvignon to Merlot — explore our collection of full-bodied reds perfect for every occasion.</p>
+              <div class="co-deco-accent"/>
+            </div>
+          </t>
+
+          <!-- ── White Wines ────────────────────────────────── -->
+          <t t-elif="category.id == 32">
+            <div class="co-deco-card co-deco-white-wines">
+              <div class="co-deco-icon"><i class="fa fa-sun-o"/></div>
+              <h4 class="co-deco-title">White Wines</h4>
+              <p class="co-deco-subtitle">Crisp, elegant, refreshing</p>
+              <p class="co-deco-text">Discover our selection of exquisite white wines — from buttery Chardonnays to crisp Sauvignon Blancs.</p>
+              <div class="co-deco-accent"/>
+            </div>
+          </t>
+
+          <!-- ── Sparkling Wines ────────────────────────────── -->
+          <t t-elif="category.id == 33">
+            <div class="co-deco-card co-deco-sparkling">
+              <div class="co-deco-icon"><i class="fa fa-birthday-cake"/></div>
+              <h4 class="co-deco-title">Sparkling Wines</h4>
+              <p class="co-deco-subtitle">Celebrate life's moments</p>
+              <p class="co-deco-text">From Champagne to Prosecco — our sparkling wine selection adds elegance to any celebration.</p>
+              <div class="co-deco-accent"/>
+            </div>
+          </t>
+
+          <!-- ── Rosé Wines ─────────────────────────────────── -->
+          <t t-elif="category.id == 48">
+            <div class="co-deco-card co-deco-rose">
+              <div class="co-deco-icon"><i class="fa fa-heart"/></div>
+              <h4 class="co-deco-title">Rosé Wines</h4>
+              <p class="co-deco-subtitle">Delicate, romantic, vibrant</p>
+              <p class="co-deco-text">Explore our rosé collection — from dry Provençal styles to fruit-forward New World favourites.</p>
+              <div class="co-deco-accent"/>
+            </div>
+          </t>
+
+          <!-- ── Spirits ────────────────────────────────────── -->
+          <t t-elif="category.id == 28">
+            <div class="co-deco-card co-deco-spirits">
+              <div class="co-deco-icon"><i class="fa fa-trophy"/></div>
+              <h4 class="co-deco-title">Premium Spirits</h4>
+              <p class="co-deco-subtitle">The world's finest, at your doorstep</p>
+              <p class="co-deco-text">Discover our hand-picked collection of whiskies, gins, vodkas, and rums from the world's most respected distilleries.</p>
+              <div class="co-deco-accent"/>
+            </div>
+          </t>
+
+          <!-- ── Whisky ─────────────────────────────────────── -->
+          <t t-elif="category.id == 49">
+            <div class="co-deco-card co-deco-whisky">
+              <div class="co-deco-icon"><i class="fa fa-fire"/></div>
+              <h4 class="co-deco-title">Whisky</h4>
+              <p class="co-deco-subtitle">Aged to perfection</p>
+              <p class="co-deco-text">From Scotch single malts to Kentucky bourbon — explore our curated whisky selection for every palate.</p>
+              <div class="co-deco-accent"/>
+            </div>
+          </t>
+
+          <!-- ── Gin ────────────────────────────────────────── -->
+          <t t-elif="category.id == 50">
+            <div class="co-deco-card co-deco-gin">
+              <div class="co-deco-icon"><i class="fa fa-leaf"/></div>
+              <h4 class="co-deco-title">Gin</h4>
+              <p class="co-deco-subtitle">Crafted with botanicals</p>
+              <p class="co-deco-text">Discover our gin collection — from classic London Dry to contemporary craft gins infused with exotic botanicals.</p>
+              <div class="co-deco-accent"/>
+            </div>
+          </t>
+
+          <!-- ── Vodka ──────────────────────────────────────── -->
+          <t t-elif="category.id == 51">
+            <div class="co-deco-card co-deco-vodka">
+              <div class="co-deco-icon"><i class="fa fa-snowflake-o"/></div>
+              <h4 class="co-deco-title">Vodka</h4>
+              <p class="co-deco-subtitle">Pure and smooth</p>
+              <p class="co-deco-text">Explore our premium vodka selection — from classic grain spirits to modern artisan expressions.</p>
+              <div class="co-deco-accent"/>
+            </div>
+          </t>
+
+          <!-- ── Rum ────────────────────────────────────────── -->
+          <t t-elif="category.id == 52">
+            <div class="co-deco-card co-deco-rum">
+              <div class="co-deco-icon"><i class="fa fa-umbrella"/></div>
+              <h4 class="co-deco-title">Rum</h4>
+              <p class="co-deco-subtitle">Tropical warmth in every sip</p>
+              <p class="co-deco-text">From light Caribbean rums to dark aged varieties — our rum selection brings sunshine to your glass.</p>
+              <div class="co-deco-accent"/>
+            </div>
+          </t>
+
+          <!-- ── Beer ───────────────────────────────────────── -->
+          <t t-elif="category.id == 34">
+            <div class="co-deco-card co-deco-beer">
+              <div class="co-deco-icon"><i class="fa fa-beer"/></div>
+              <h4 class="co-deco-title">Beer</h4>
+              <p class="co-deco-subtitle">Crafted for enjoyment</p>
+              <p class="co-deco-text">Browse our beer selection — from crisp lagers to robust stouts, featuring both international favourites and local brews.</p>
+              <div class="co-deco-accent"/>
+            </div>
+          </t>
+
+          <!-- ── Cider ──────────────────────────────────────── -->
+          <t t-elif="category.id == 35">
+            <div class="co-deco-card co-deco-cider">
+              <div class="co-deco-icon"><i class="fa fa-apple"/></div>
+              <h4 class="co-deco-title">Cider</h4>
+              <p class="co-deco-subtitle">Crisp orchard freshness</p>
+              <p class="co-deco-text">Discover our refreshing cider collection — from traditional dry ciders to modern fruit-infused varieties.</p>
+              <div class="co-deco-accent"/>
+            </div>
+          </t>
+
+          <!-- ── Fallback ───────────────────────────────────── -->
+          <t t-else="">
+            <div class="co-deco-card co-deco-default">
+              <div class="co-deco-icon"><i class="fa fa-tag"/></div>
+              <h4 class="co-deco-title"><t t-esc="category.name"/></h4>
+              <p class="co-deco-subtitle">Explore our collection</p>
+              <p class="co-deco-text">Browse our curated selection of fine beverages at Cellar One.</p>
+              <div class="co-deco-accent"/>
+            </div>
+          </t>
+
+        </div>
+      </xpath>
+    </template>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         PRODUCT DETAIL PAGE DECORATION — matching the
+         product's primary category. Placed as a sidebar
+         accent in the product detail layout.
+    ════════════════════════════════════════════════════════ -->
+    <template id="product_detail_decoration"
+              inherit_id="website_sale.product"
+              name="Product Detail Page - Category Decoration">
+
+      <xpath expr="//div[@id='product_details']" position="before">
+        <t t-set="product_cat" t-value="product.public_categ_ids and product.public_categ_ids[0] or False"/>
+        <div class="co-product-deco d-none d-lg-block" t-att-data-category="product_cat and product_cat.id or 0">
+          <div class="co-product-deco-inner">
+            <t t-if="not product_cat">
+              <span class="co-deco-icon"><i class="fa fa-star"/></span>
+            </t>
+            <t t-elif="product_cat.id == 27">
+              <span class="co-deco-icon"><i class="fa fa-glass"/></span>
+            </t>
+            <t t-elif="product_cat.id == 31">
+              <span class="co-deco-icon"><i class="fa fa-tint"/></span>
+            </t>
+            <t t-elif="product_cat.id == 32">
+              <span class="co-deco-icon"><i class="fa fa-sun-o"/></span>
+            </t>
+            <t t-elif="product_cat.id == 33">
+              <span class="co-deco-icon"><i class="fa fa-birthday-cake"/></span>
+            </t>
+            <t t-elif="product_cat.id == 48">
+              <span class="co-deco-icon"><i class="fa fa-heart"/></span>
+            </t>
+            <t t-elif="product_cat.id == 28">
+              <span class="co-deco-icon"><i class="fa fa-trophy"/></span>
+            </t>
+            <t t-else="">
+              <span class="co-deco-icon"><i class="fa fa-tag"/></span>
+            </t>
+            <div class="co-deco-line"/>
+            <span class="co-deco-label" t-esc="product_cat and product_cat.name or 'Cellar One'"/>
+          </div>
+        </div>
+      </xpath>
+    </template>
 
   </data>
 </odoo>

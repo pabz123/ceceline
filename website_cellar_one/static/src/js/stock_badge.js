@@ -13,36 +13,41 @@ const STATUS_CLASSES = {
 };
 
 publicWidget.registry.CellarOneStockBadge = publicWidget.Widget.extend({
-    selector: '.co-stock-badge[data-stock-product-id]',
+    selector: '.co-stock-badge',
 
     start() {
         const productId = parseInt(this.el.dataset.stockProductId, 10);
         if (productId) {
             this._fetchStock(productId);
+        } else {
+            // Product has no valid variant
+            this.el.classList.remove('loading');
+            this.el.classList.add('out-of-stock');
+            const lbl = this.el.querySelector('.co-stock-label');
+            if (lbl) lbl.textContent = 'Unavailable';
         }
         return this._super(...arguments);
     },
 
-    async _fetchStock(productId) {
-        try {
-            const res = await fetch(`/cellar/stock/${productId}`, {
-                method:  'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body:    JSON.stringify({ jsonrpc: '2.0', method: 'call', id: 1, params: {} }),
-            });
-            const json = await res.json();
-            const data = json.result || {};
+    _fetchStock(productId) {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 8000);
 
-            // Remove loading + previous status
+        fetch(`/cellar/stock/${productId}`, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ jsonrpc: '2.0', method: 'call', id: 1, params: {} }),
+            signal:  controller.signal,
+        })
+        .then(res => res.json())
+        .then(json => {
+            clearTimeout(timeout);
+            const data = json.result || {};
             this.el.classList.remove('in-stock', 'low-stock', 'out-of-stock', 'loading');
             const statusClass = STATUS_CLASSES[data.status] || 'out-of-stock';
             this.el.classList.add(statusClass);
-
-            // Update label
             const lbl = this.el.querySelector('.co-stock-label');
             if (lbl) lbl.textContent = data.label || 'Unavailable';
-
-            // Disable Add-to-Cart if OOS
             if (data.status === 'out_of_stock') {
                 const form = this.el.closest('form');
                 const addBtn = form?.querySelector('.a-submit, .o_add_to_cart_btn, #add_to_cart');
@@ -52,13 +57,15 @@ publicWidget.registry.CellarOneStockBadge = publicWidget.Widget.extend({
                     addBtn.title = 'This product is currently out of stock';
                 }
             }
-        } catch (err) {
+        })
+        .catch(err => {
+            clearTimeout(timeout);
             console.warn('[CellarOne] Stock fetch failed for product', productId, err);
             this.el.classList.remove('loading');
             this.el.classList.add('out-of-stock');
             const lbl = this.el.querySelector('.co-stock-label');
             if (lbl) lbl.textContent = 'Check availability';
-        }
+        });
     },
 });
 

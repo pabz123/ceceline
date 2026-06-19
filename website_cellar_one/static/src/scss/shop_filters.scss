@@ -156,6 +156,85 @@
     }
 }
 
+// ── Search autocomplete dropdown ─────────────────────────────
+.o_searchbar_form {
+    .o_dropdown_menu {
+        border: 1px solid $color-gray-200;
+        border-radius: $radius-lg;
+        box-shadow: $shadow-hover;
+        margin-top: 4px;
+        padding: $spacing-xs 0;
+        background: $color-white;
+        z-index: $z-dropdown;
+
+        .dropdown-item {
+            padding: $spacing-sm $spacing-md;
+            transition: background $transition-fast;
+
+            &:hover {
+                background: $color-gold-100;
+            }
+
+            .o_search_result_item {
+                .o_image_64_contain {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: $radius-sm;
+                    object-fit: contain;
+                }
+
+                .o_search_result_item_detail {
+                    .h6 {
+                        font-size: 0.875rem;
+                        font-weight: 600;
+                        color: $color-charcoal;
+                        margin-bottom: 2px;
+                    }
+
+                    p {
+                        font-size: 0.8rem;
+                        color: $color-gray-400;
+                        margin: 0;
+                    }
+                }
+
+                .text-danger.text-nowrap {
+                    color: $color-burgundy-700 !important;
+                }
+
+                b.text-nowrap {
+                    color: $color-burgundy-700;
+                    font-size: 0.875rem;
+                }
+            }
+        }
+
+        .dropdown-item-text {
+            padding: $spacing-sm $spacing-md;
+            color: $color-gray-400;
+            font-size: 0.85rem;
+
+            .s_searchbar_fuzzy_submit {
+                color: $color-burgundy-600;
+                font-weight: 600;
+            }
+        }
+
+        button.dropdown-item[type="submit"] {
+            color: $color-burgundy-600;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+            border-top: 1px solid $color-gray-200;
+            padding: $spacing-sm $spacing-md;
+
+            &:hover {
+                background: $color-gold-100;
+            }
+        }
+    }
+}
+
 // Modern Search Bar on Shop grid top header
 .o_wsale_products_searchbar_form {
     margin-bottom: 1.5rem !important;

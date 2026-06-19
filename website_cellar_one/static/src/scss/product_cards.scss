@@ -23,8 +23,8 @@
     
     tbody {
         display: grid !important;
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: $spacing-lg;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: $spacing-xl;
         width: 100%;
     }
 
@@ -37,6 +37,12 @@
         width: 100% !important;
         padding: 0 !important;
         height: 100%;
+    }
+
+    @media (max-width: #{$bp-desktop}) {
+        tbody {
+            gap: $spacing-lg;
+        }
     }
 
     @media (max-width: #{$bp-mobile}) {
@@ -56,18 +62,20 @@
 // ── Card root ────────────────────────────────────────────────
 .co-product-card.oe_product_cart {
     background: #ffffff;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    border-radius: $radius-lg !important;
+    border: 1px solid $color-gray-200 !important;
+    box-shadow: $shadow-card !important;
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.3s ease,
+                border-color 0.3s ease;
     flex-direction: column;
     text-decoration: none;
 
     &:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(0,0,0,0.08);
-        border-color: #cbd5e1;
+        transform: translateY(-6px);
+        box-shadow: $shadow-hover;
+        border-color: $color-gold-400 !important;
 
         .oe_product_image_img_wrapper img,
         .oe_product_image_img_wrapper {
@@ -75,6 +83,7 @@
         }
     }
 }
+
 
 // ── Image area ───────────────────────────────────────────────
 .co-product-card .co-card-img.oe_product_image {
@@ -91,17 +100,33 @@
         transition: transform $transition-slow;
         width: 100%;
         height: 100%;
+        position: relative;
+
+        // Placeholder gradient + icon behind all product images
+        &::before {
+            content: '🍷';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            opacity: 0.15;
+            background: linear-gradient(135deg, $color-gray-100, $color-gold-100);
+            z-index: 0;
+        }
 
         img {
             object-fit: contain;
             width: 100%;
             height: 100%;
             transition: transform $transition-slow;
+            position: relative;
+            z-index: 1;
             
-            // Fix for Odoo's blurry default placeholder image when products have no images
+            // Hide Odoo's default placeholder so the ::before shows through
             &[src*="placeholder"] {
-                object-fit: scale-down !important;
-                opacity: 0.2;
+                opacity: 0;
             }
         }
     }
@@ -131,26 +156,26 @@
 
 // ── Card body ────────────────────────────────────────────────
 .co-product-card .co-card-body.o_wsale_product_information {
-    padding: $spacing-md;
-    gap: 4px;
+    padding: $spacing-md $spacing-md $spacing-sm;
+    gap: 3px;
 
     .co-card-category {
-        font-size: 0.6875rem;
+        font-size: 0.675rem;
         font-weight: 600;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
         color: $color-gold-600;
         display: block;
-        margin-bottom: 2px;
+        margin-bottom: 1px;
     }
 
     // Product name — native element, restyled
     .o_wsale_products_item_title {
-        margin-bottom: 2px;
+        margin-bottom: 1px;
 
         a {
             font-family: var(--co-font-heading);
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             line-height: 1.3;
             color: $color-charcoal;
@@ -164,9 +189,9 @@
     }
 
     .co-card-meta {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         color: $color-gray-400;
-        margin-bottom: 2px;
+        margin-bottom: 1px;
     }
 
     // Price row — native element, restyled
@@ -176,9 +201,9 @@
 
         .product_price {
             .h6 {
-                font-size: 1.15rem;
+                font-size: 1.1rem;
                 font-weight: 700;
-                color: #e53e3e; // Red price matching Pinterest
+                color: $color-burgundy-700 !important;
                 font-family: var(--co-font-body);
                 margin: 0;
             }
@@ -221,7 +246,15 @@
 
 // ── Stock badge slot — our addition ──────────────────────────
 .co-product-card .co-stock-badge {
-    margin-top: $spacing-xs;
+    margin-top: 2px;
+    font-size: 0.65rem;
+    padding: 2px 7px;
+    line-height: 1.3;
+
+    .co-stock-dot {
+        width: 5px;
+        height: 5px;
+    }
 }
 
 // ── Quick-add button (native .o_wsale_product_btn) with luxury hover transition ──
@@ -303,5 +336,186 @@
     .co-empty-icon { font-size: 3rem; margin-bottom: $spacing-md; }
     h3 { font-size: 1.25rem; color: $color-charcoal; margin-bottom: $spacing-sm; }
     p  { color: $color-gray-400; font-size: 0.9rem; }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  HOMEPAGE PRODUCT CELLS — Featured Vintages grid
+// ═══════════════════════════════════════════════════════════════
+
+.co-home-grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -8px;
+    gap: 0;
+}
+
+.co-home-prod-cell {
+    flex: 0 0 25%;
+    max-width: 25%;
+    padding: 8px;
+
+    @media (max-width: #{$bp-tablet}) {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    @media (max-width: 500px) {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+.co-home-prod-cell > a {
+    display: block;
+    background: $color-white;
+    border: 1px solid rgba(197, 168, 128, 0.15);
+    border-radius: $radius-lg;
+    padding: 20px 20px 24px;
+    text-align: center;
+    transition:
+        transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.4s ease,
+        border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--co-gold), var(--co-gold-dark), var(--co-gold));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1;
+    }
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.07);
+        border-color: rgba(197, 168, 128, 0.35);
+
+        &::before {
+            opacity: 1;
+        }
+
+        .co-home-prod-img {
+            transform: scale(1.08);
+        }
+    }
+}
+
+.co-home-prod-img-wrap {
+    width: 100%;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 14px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    background: $color-gray-100;
+    border-radius: $radius-sm;
+
+    // Placeholder gradient + icon behind all homepage product images
+    &::before {
+        content: '🍷';
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        opacity: 0.15;
+        background: linear-gradient(135deg, $color-gray-100, $color-gold-100);
+        z-index: 0;
+    }
+
+    img {
+        position: relative;
+        z-index: 1;
+
+        &[src*="placeholder"] {
+            opacity: 0;
+        }
+    }
+}
+
+.co-home-prod-img {
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.6s ease;
+}
+
+.co-home-fallback-img {
+    background: $color-gray-100;
+    border-radius: $radius-sm;
+}
+
+.co-home-prod-category {
+    display: block;
+    color: $color-gray-400;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.co-home-prod-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-top: $spacing-xs;
+    color: $color-charcoal;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: var(--co-font-body);
+}
+
+.co-home-prod-rating {
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    margin: $spacing-sm 0;
+
+    .co-home-star {
+        color: #e0e0e0;
+
+        &.filled {
+            color: var(--co-gold);
+        }
+    }
+
+    .co-home-rating-count {
+        color: $color-gray-400;
+        font-size: 0.75rem;
+        margin-left: 4px;
+    }
+}
+
+.co-home-prod-price {
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-top: $spacing-xs;
+
+    .co-price-sale {
+        color: var(--co-danger);
+        margin-right: 8px;
+    }
+
+    .co-price-original {
+        color: $color-gray-400;
+        text-decoration: line-through;
+        font-size: 0.85rem;
+        font-weight: 400;
+    }
+
+    .co-price-regular {
+        color: var(--co-gold-dark);
+    }
 }
 

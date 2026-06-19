@@ -450,46 +450,7 @@
     }
 }
 
-// ── Luxury Hero CTAs ──────────────────────────────────────────
-.co-hero-cta-primary {
-    transition: all 0.3s ease;
-    &:hover {
-        background-color: var(--co-cream) !important;
-        border-color: var(--co-cream) !important;
-        color: #111111 !important;
-        box-shadow: 0 10px 30px rgba(197, 168, 128, 0.3) !important;
-        transform: translateY(-2px);
-    }
-}
-
-// ── Dynamic Home Product Cards Grid ──────────────────────────
-.co-home-prod-cell {
-    border-right: 1px solid rgba(197, 168, 128, 0.1) !important;
-    border-bottom: 1px solid rgba(197, 168, 128, 0.1) !important;
-    position: relative;
-    cursor: pointer;
-    
-    .co-home-prod-img-wrap img {
-        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    
-    &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(197, 168, 128, 0.12) !important;
-        z-index: 2;
-        border-color: rgba(197, 168, 128, 0.3) !important;
-        
-        .co-home-prod-img-wrap img {
-            transform: scale(1.05) translateY(-5px);
-        }
-        
-        h5 {
-            color: var(--co-gold-dark) !important;
-        }
-    }
-}
-
-// Ensure the category circle link uses golden borders and rotates slightly on hover
+// ── Category circle hover enhancement ──────────────────────────
 .co-category-circle-link {
     &:hover {
         .co-category-circle {
@@ -500,5 +461,124 @@
     }
 }
 
+// ═══════════════════════════════════════════════════════════════
+//  DECORATIVE ELEMENTS — Luxury editorial accents
+// ═══════════════════════════════════════════════════════════════
 
+// Gold border frame for the luxury hero
+.co-luxury-hero {
+    .co-hero-gold-border {
+        position: absolute;
+        inset: 20px;
+        border: 1px solid rgba($color-gold-400, 0.25);
+        pointer-events: none;
+        z-index: 1;
+    }
+}
 
+// Left ornamental vine decoration
+.co-hero-decoration {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.08;
+
+    &--left {
+        left: 0;
+        background: radial-gradient(ellipse at 0% 50%, $color-gold-400 0%, transparent 70%);
+    }
+
+    &--right {
+        right: 0;
+        background: radial-gradient(ellipse at 100% 50%, $color-gold-400 0%, transparent 70%);
+    }
+}
+
+// Hero ambient glow enhancements
+.co-hero-ambient-glow {
+    position: absolute;
+    top: -10%;
+    right: -10%;
+    width: 50%;
+    height: 60%;
+    background: radial-gradient(circle, rgba($color-gold-400, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+// Spotlight gold frame
+.co-spotlight-frame {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: calc(100% - 30px);
+    height: calc(100% - 30px);
+    border: 1px solid var(--co-gold);
+    z-index: 1;
+    pointer-events: none;
+    border-radius: $radius-sm;
+    transition: all 0.4s ease;
+}
+
+.co-hero-spotlight:hover .co-spotlight-frame {
+    transform: scale(1.02);
+    border-color: rgba($color-gold-400, 0.6);
+}
+
+// Subtle corner flourishes (SVG-free, pure CSS)
+.co-corner-flourish {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.15;
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        background: $color-gold-400;
+    }
+
+    &::before {
+        width: 20px;
+        height: 1.5px;
+    }
+
+    &::after {
+        width: 1.5px;
+        height: 20px;
+    }
+
+    &--tl { top: 10px; left: 10px; }
+    &--tl::before { top: 0; left: 0; }
+    &--tl::after { top: 0; left: 0; }
+
+    &--tr { top: 10px; right: 10px; }
+    &--tr::before { top: 0; right: 0; }
+    &--tr::after { top: 0; right: 0; }
+
+    &--bl { bottom: 10px; left: 10px; }
+    &--bl::before { bottom: 0; left: 0; }
+    &--bl::after { bottom: 0; left: 0; }
+
+    &--br { bottom: 10px; right: 10px; }
+    &--br::before { bottom: 0; right: 0; }
+    &--br::after { bottom: 0; right: 0; }
+}
+
+// Hero CTA primary button enhancement
+.co-hero-cta-primary {
+    transition: all 0.3s ease;
+    &:hover {
+        background-color: var(--co-cream) !important;
+        border-color: var(--co-cream) !important;
+        color: #111111 !important;
+        box-shadow: 0 10px 30px rgba(197, 168, 128, 0.3) !important;
+        transform: translateY(-2px);
+    }
+}

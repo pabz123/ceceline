@@ -127,9 +127,9 @@ publicWidget.registry.CellarOneRatingSummary = publicWidget.Widget.extend({
                 });
                 const json = await res.json();
                 if (json.result?.success) {
-                    this._showFeedback(form, '✓ Thank you! Your review has been submitted.', false);
+                    this._showFeedback(form, '✓ Thank you! Your review has been submitted. Refreshing...', false);
                     form.reset();
-                    setTimeout(() => this._loadSummary(productTmplId), 800);
+                    setTimeout(() => window.location.reload(), 1000);
                 } else {
                     this._showFeedback(form, json.result?.error || 'Something went wrong.', true);
                 }

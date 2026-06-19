@@ -26,6 +26,9 @@
         'mail',
         'stock',
         'auth_signup',
+        'auth_oauth',
+        'website_mass_mailing',
+        'website_sale_wishlist',
     ],
 
     'data': [
@@ -68,6 +71,8 @@
             'website_cellar_one/static/src/js/stock_badge.js',
             'website_cellar_one/static/src/js/ratings.js',
             'website_cellar_one/static/src/js/navbar.js',
+            'website_cellar_one/static/src/js/auth_modal.js',
+            'website_cellar_one/static/src/js/image_fallback.js',
         ],
     },
 
