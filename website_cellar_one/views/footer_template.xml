@@ -39,7 +39,8 @@
                       action="/website_mass_mailing/subscribe" method="post"
                       onsubmit="return false;">
                   <input type="email" name="email"
-                         placeholder="your@email.com" required="required"/>
+                         placeholder="your@email.com" required="required"
+                         aria-label="Email address for newsletter"/>
                   <button type="submit">Subscribe</button>
                 </form>
               </div>
@@ -66,7 +67,7 @@
                   <div class="co-whatsapp-ctас">
                     <a href="https://wa.me/256749057433" target="_blank" rel="noopener"
                        class="co-wa-btn">
-                      <div class="co-wa-icon"><i class="fa fa-whatsapp"/></div>
+                      <div class="co-wa-icon"><i class="fa fa-whatsapp" aria-hidden="true"/></div>
                       <div>
                         <strong>+256 749 057 433</strong>
                         <span class="co-wa-location">Kampala</span>
@@ -74,7 +75,7 @@
                     </a>
                     <a href="https://wa.me/256749062744" target="_blank" rel="noopener"
                        class="co-wa-btn">
-                      <div class="co-wa-icon"><i class="fa fa-whatsapp"/></div>
+                      <div class="co-wa-icon"><i class="fa fa-whatsapp" aria-hidden="true"/></div>
                       <div>
                         <strong>+256 749 062 744</strong>
                         <span class="co-wa-location">Jinja</span>
@@ -122,17 +123,17 @@
                   <h5>Find Us</h5>
 
                   <div class="co-contact-item">
-                    <span class="co-contact-icon"><i class="fa fa-map-marker"/></span>
+                    <span class="co-contact-icon"><i class="fa fa-map-marker" aria-hidden="true"/></span>
                     <span>Kirabo Complex - Ground Floor, Plot No 2101, Bukoto Kisasi Road, Kampala, Uganda</span>
                   </div>
                   <div class="co-contact-item">
-                    <span class="co-contact-icon"><i class="fa fa-envelope"/></span>
+                    <span class="co-contact-icon"><i class="fa fa-envelope" aria-hidden="true"/></span>
                     <a href="mailto:admin@cecelinebeverages.com" style="color:inherit;">
                       admin@cecelinebeverages.com
                     </a>
                   </div>
                   <div class="co-contact-item">
-                    <span class="co-contact-icon"><i class="fa fa-clock-o"/></span>
+                    <span class="co-contact-icon"><i class="fa fa-clock-o" aria-hidden="true"/></span>
                     <span>Mon–Sat 9am–8pm · Sun 10am–6pm</span>
                   </div>
 
@@ -167,15 +168,15 @@
                 <!-- Social icons (real links from live site) -->
                 <div class="co-social-icons">
                   <a href="https://www.facebook.com/profile.php?id=61581820687239" target="_blank"
-                     rel="noopener" class="co-social-icon" title="Facebook"><i class="fa fa-facebook"/></a>
+                     rel="noopener" class="co-social-icon" title="Facebook" aria-label="Visit our Facebook page"><i class="fa fa-facebook" aria-hidden="true"/></a>
                   <a href="https://www.instagram.com/cecelinebeveragesug/" target="_blank"
-                     rel="noopener" class="co-social-icon" title="Instagram"><i class="fa fa-instagram"/></a>
+                     rel="noopener" class="co-social-icon" title="Instagram" aria-label="Visit our Instagram page"><i class="fa fa-instagram" aria-hidden="true"/></a>
                   <a href="https://x.com/cecelineug" target="_blank"
-                     rel="noopener" class="co-social-icon" title="X / Twitter"><i class="fa fa-twitter"/></a>
+                     rel="noopener" class="co-social-icon" title="X / Twitter" aria-label="Visit our Twitter / X page"><i class="fa fa-twitter" aria-hidden="true"/></a>
                   <a href="https://www.youtube.com/@cecelinebeveragesug" target="_blank"
-                     rel="noopener" class="co-social-icon" title="YouTube"><i class="fa fa-youtube-play"/></a>
+                     rel="noopener" class="co-social-icon" title="YouTube" aria-label="Visit our YouTube channel"><i class="fa fa-youtube-play" aria-hidden="true"/></a>
                   <a href="https://wa.me/256749057433" target="_blank"
-                     rel="noopener" class="co-social-icon" title="WhatsApp"><i class="fa fa-whatsapp"/></a>
+                     rel="noopener" class="co-social-icon" title="WhatsApp" aria-label="Chat with us on WhatsApp"><i class="fa fa-whatsapp" aria-hidden="true"/></a>
                 </div>
 
               </div>
