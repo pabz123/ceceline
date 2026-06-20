@@ -49,7 +49,7 @@
         <!-- Lightbox (used by product gallery hover/zoom, ratings.js) -->
         <div id="co-lightbox" class="co-lightbox">
           <img class="co-lightbox__img" src="" alt="Product image"/>
-          <button class="co-lightbox__close" aria-label="Close">✕</button>
+          <button class="co-lightbox__close" aria-label="Close Lightbox" title="Close Lightbox">✕</button>
         </div>
 
       </xpath>

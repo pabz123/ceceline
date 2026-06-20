@@ -284,6 +284,13 @@ img[loading="lazy"] {
         &:hover {
             background: rgba($color-white, 0.2);
             transform: scale(1.05);
+        }
+
+        &:focus-visible {
+            outline: 2px solid $color-gold-400;
+            outline-offset: 2px;
+            background: rgba($color-white, 0.2);
+        }
     }
 }
 
